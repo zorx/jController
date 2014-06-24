@@ -1,0 +1,40 @@
+<script src="../lib/jquery-1.11.1.min.js"></script>
+<script src="../src/jController.js"></script>
+
+
+<canvas id="canvas" width="300" height="300"></canvas>
+
+<script>
+$(function() {
+  
+	// Add arc to canvas
+	$.jController.arc({
+		x:"100",
+		y:"120",
+		r:"50",
+		sAngle:"0",
+		eAngle:2*Math.PI
+	});
+
+	// Add rect to jController
+	$.jController.rect({
+		x:"12",
+		y:"12",
+		width:"150",
+		height:"150",
+		// Events
+		click:function(){
+			alert("Clicked !")
+		}
+	});
+
+	// How to use
+	$("canvas").jController({
+		//Events
+		click:function(){
+			alert("clicked");
+		}
+	});
+
+});
+</script>
