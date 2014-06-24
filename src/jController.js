@@ -56,7 +56,22 @@ $.jController.addPlugin = function(plugin)
     }
 }
 
-//@TODO use the same method as addPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
+/*
+@TODO use the same method as addPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
+We can use .on & .trigger from jquery cf : http://api.jquery.com/trigger/
+Each plugin can use either the default event or a specific one (so we have to edit addPlugin)
+
+Ex of event :
+$.jController.addEvent({
+	name:"click",
+	fn : function()
+	{
+		
+	}
+
+});
+
+*/
 
 // -------- PLUGINS ----------
 
