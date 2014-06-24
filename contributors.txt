@@ -1,4 +1,4 @@
 # Main developers
 
-Amine OUDJEHIH	<amine.oudjehih@gmail.com>
-Sacha WILT		<sacha.wilt@gmail.com>
+Amine OUDJEHIH <amine.oudjehih@gmail.com>
+Sacha WILT <sacha.wilt@gmail.com>
