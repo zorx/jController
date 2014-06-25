@@ -30,6 +30,7 @@ $.fn.jController = function (callback) {
 
 	})
 
+	var 
 	var renderAll = function () {
 
 		// For each declared plugin
@@ -37,10 +38,17 @@ $.fn.jController = function (callback) {
 
 			// Not render yet
 			if (!p._render && p.paramsList.length != 0) {
+
 				// Construct and render each one
 				$.each(p.paramsList, function(i, params) {
 					// @TODO : handle default params by using
 					// $.extend({}, default, params) for missing params
+
+					// looking for events on params
+					if(typeof $.jController._events[pName] === "object") {
+
+						console.log(pValue,i,p,name);
+					}
 
 					// Render plugin
 					p.render(context, params);

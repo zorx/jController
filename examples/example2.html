@@ -7,6 +7,7 @@
 	<script type="text/javascript"><!--
 	$(function() {
 	
+	/*
 		// Add circle to canvas
 		$.jController.circle({
 			x: "275",
@@ -42,7 +43,7 @@
 			w: "165",
 			h: "185",
 		});
-		
+	
 		// Add rect to jController
 		$.jController.rect({
 			x: "15",
@@ -54,7 +55,7 @@
 				alert("Clicked !")
 			}
 		});
-
+*/
 		// Add circle to canvas
 		$.jController.circle({
 			x: "275",
@@ -72,11 +73,12 @@
 			}
 		});
 
-		var c = document.getElementById('controller');
-		c.addEventListener("mouseover", function(){
+		$("canvas#controller").on("mouseover", function(){
 
 			console.log($.jController._listeners.mouseover.response.clientX);
-		}, false);
+		});
+
+		
 
 	});
 	--></script>
