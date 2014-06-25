@@ -167,7 +167,7 @@ $.jController.registerPlugin({
 $.jController.registerPlugin({
 	name : "circle",
 	render : function(ctx, params) {
-		$.jController.circle({
+		$.jController.arc({
 			x: "275",
 			y: "150",
 			r: "20",
