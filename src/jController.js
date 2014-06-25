@@ -78,10 +78,20 @@ $.jController.registerPlugin({
 	name : "arc",
 	render : function(ctx, params) {
 		ctx.beginPath();
-		ctx.arc(params.x,params.y,params.r,params.sAngle,params.eAngle);
+		ctx.arc(params.x, params.y, params.r, params.sAngle, params.eAngle);
 		ctx.stroke();
 	},
 
+})
+
+// Add circle plugin
+$.jController.registerPlugin({
+	name : "circle",
+	render : function(ctx, params) {
+		ctx.beginPath();
+		ctx.arc(params.x, params.y, params.r, 0, 2 * Math.PI);
+		ctx.stroke();
+	},
 })
 
 // Add rect plugin
@@ -89,7 +99,7 @@ $.jController.registerPlugin({
 
 	name:"rect",
 	render : function(ctx, params) {
-		ctx.rect(params.x,params.y,params.width,params.height);
+		ctx.rect(params.x, params.y, params.width, params.height);
 		ctx.stroke();
 	},
 

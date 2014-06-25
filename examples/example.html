@@ -7,21 +7,41 @@
 	<script type="text/javascript"><!--
 	$(function() {
 	
-		// Add arc to canvas
-		$.jController.arc({
-			x:"100",
-			y:"120",
-			r:"50",
-			sAngle:"0",
-			eAngle:2*Math.PI
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "50",
+			r: "20",
 		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "225",
+			y: "100",
+			r: "20",
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "325",
+			y: "100",
+			r: "20",
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "150",
+			r: "20",
+		});
+
 
 		// Add rect to jController
 		$.jController.rect({
-			x:"12",
-			y:"12",
-			width:"150",
-			height:"150",
+			x: "15",
+			y: "15",
+			width: "150",
+			height: "170",
 			// Events
 			click:function(){
 				alert("Clicked !")
@@ -52,7 +72,7 @@
 	</style>
 </head>
 <body>
-	<canvas id="controller" width="300" height="300"></canvas>
+	<canvas id="controller" width="400" height="200"></canvas>
 </body>
 </html>
 
