@@ -42,6 +42,7 @@
 			w: "165",
 			h: "185",
 		});
+		
 		// Add rect to jController
 		$.jController.rect({
 			x: "15",
@@ -54,6 +55,15 @@
 			}
 		});
 
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "150",
+			r: "20",
+			click:function(){
+				alert("Clicked !")
+			}
+		});
 		// How to use
 		$("canvas#controller").jController({
 			//Events
