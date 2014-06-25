@@ -32,16 +32,15 @@ $.fn.jController = function (callback) {
 
 	// Retrieve All events from params
 
-	var retrieveEvents = function(params,index,pluginObject,pluginName) {
+	var retrieveEvents = function(params,index,pluginName) {
 
 		$.each(params,function(paramName,paramValue){
 
 			// looking for events on params
+			if(typeof $.jController._events[paramName] === "object" && typeof paramValue === "function") {
 
-			if(typeof $.jController._events[paramName] === "object") {
-
-				// paramValue is the callback
-				console.log(paramValue,index,pluginObject,pluginName);
+				// paramValue in this case is callback
+				console.log(paramName,index,paramValue,pluginName);
 			}
 			
 		});
@@ -50,25 +49,25 @@ $.fn.jController = function (callback) {
 	var renderAll = function () {
 
 		// For each declared plugin
-		$.each($.jController._plugins, function(name, p) {
+		$.each($.jController._plugins, function(pluginName, pluginObject) {
 
 			// Not render yet
-			if (!p._render && p.paramsList.length != 0) {
+			if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
 
 				// Construct and render each one
-				$.each(p.paramsList, function(i, params) {
+				$.each(pluginObject.paramsList, function(index, params) {
 					// @TODO : handle default params by using
 					// $.extend({}, default, params) for missing params
 
 					// Retrieve All events from params
-					retrieveEvents(params,i,p,name);
+					retrieveEvents(params,index,pluginName);
 
 					// Render plugin
-					p.render(context, params);
+					pluginObject.render(context, params);
 
 				})
 
-				$.jController._plugins[name]._render = true;
+				$.jController._plugins[pluginName].isRender = true;
 				
 				renderAll();
 			}
@@ -82,7 +81,20 @@ $.fn.jController = function (callback) {
 	return this;
 }
 
+/* -- Listeners config -- */
 
+// Retrieve all listeners
+$.jController.getAllListeners = function() {
+
+	return $.jController._listeners;
+}
+
+// Retrieve listener by name
+$.jController.getListener = function(name) {
+
+	// return the event if exists otherwise null
+	return (typeof $.jController._listeners[name] === "object") ? $.jController._listeners[name] : null;
+}
 
 // Register Listener
 $.jController.registerListener = function(listener) {
@@ -101,6 +113,22 @@ $.jController.registerListener = function(listener) {
 
 	}
 
+}
+
+/* -- Events config -- */
+
+
+// Retrieve all events
+$.jController.getAllEvents = function() {
+
+	return $.jController._events;
+}
+
+// Retrieve events by name
+$.jController.getEvent = function(name) {
+
+	// return the event if exists otherwise null
+	return (typeof $.jController._events[name] === "object") ? $.jController._events[name] : null;
 }
 
 // Register Event
@@ -122,6 +150,21 @@ $.jController.registerEvent = function(event) {
 
 }
 
+/* -- Plugins config  -- */
+
+// Retrieve all plugins
+$.jController.getAllPlugins = function() {
+
+	return $.jController._plugins;
+}
+
+// Retrieve plugin by name
+$.jController.getPlugin = function(name) {
+
+	// return the plugin if exists otherwise null
+	return (typeof $.jController._plugins[name] === "object") ? $.jController._plugins[name] : null;
+}
+
 // Register Plugin
 $.jController.registerPlugin = function(plugin) {
 	
@@ -137,7 +180,7 @@ $.jController.registerPlugin = function(plugin) {
 		$.jController._plugins[plugin.name].render = plugin.render;
 
 		// Plugin already rendered ?
-		$.jController._plugins[plugin.name]._render = false;
+		$.jController._plugins[plugin.name].isRender = false;
 		
 		// Add plugin function
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
@@ -148,7 +191,7 @@ $.jController.registerPlugin = function(plugin) {
 	
 }
 
-// -------- Listeners ----------
+// -------- Create Listeners ----------
 
 // "click" Listener
 
@@ -181,13 +224,13 @@ All events must send true/false
 
 */
 
-// -------- Events ----------
+// -------- Create Events ----------
 
 // "click" event
 $.jController.registerEvent({
 	name : "click",
 	listener : "click",
-	fn : function(ctx, params, listener) {
+	fn : function(params, listener) {
 		var x0 = params.x
 		var y0 = params.y;
 		var r  = params.r;
@@ -199,7 +242,7 @@ $.jController.registerEvent({
 	}
 });
 
-// -------- PLUGINS ----------
+// -------- Create PLUGINS ----------
 
 // Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
 

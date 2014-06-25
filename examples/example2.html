@@ -61,8 +61,17 @@
 			x: "275",
 			y: "150",
 			r: "20",
-			click:function(){
+			click:function(e){
 				alert("Clicked !")
+			}
+		});
+
+		$.jController.circle({
+			x: "50",
+			y: "50",
+			r: "40",
+			click:function(e){
+				alert("Clicked too !")
 			}
 		});
 		// How to use
@@ -79,9 +88,13 @@
 		});
 */
 
-		
+		$(document).on( "jeveuxfairenimp jeveuxencorefaire", function(e,p1) {
+  console.log(p1);
+});
+$(document).trigger( "jeveuxencorefaire",[5] );
 
 	});
+
 	--></script>
 	<style type="text/css">
 		html, body {
