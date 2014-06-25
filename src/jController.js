@@ -4,12 +4,33 @@ $.jController = new Object();
 // jController plugins list (private) [@TODO]
 $.jController._plugins = new Object();
 
+// jController Listener list (private) [@TODO]
+$.jController._listeners = new Object();
+
+// jController Events list (private) [@TODO]
+$.jController._Events = new Object();
+
+// jController Properties list (private) [@TODO]
+$.jController._Properties = new Object();
+
+
+
 // jQuery jController function definition
 $.fn.jController = function (callback) {
  
+ 	var _canvas = this;
 	// Get canvas context
-	var ctx = this[0].getContext("2d");
+	var ctx = _canvas[0].getContext("2d");
 	
+	// For each declared listener
+	$.each($.jController._listeners, function(name, listener) {
+
+		// start listener and save the response at $.jController._listeners[name].response
+		listener.fn(_canvas,function(e){$.jController._listeners[name].response=e;});
+
+	})
+
+
 	// For each declared plugin
 	$.each($.jController._plugins, function(name, p) {
 
@@ -27,7 +48,26 @@ $.fn.jController = function (callback) {
 	return this;
 }
 
-// Add new plugin
+// Register Listener
+$.jController.registerListener = function(listener) {
+	
+	// Check wether the name has been set
+	if (listener.name) {
+
+		// Create new object of listener
+		$.jController._listeners[listener.name] = new Object();
+		
+		// Register listener function into _listeners[name].render
+		$.jController._listeners[listener.name].fn = listener.fn;
+
+		// init response to null
+		$.jController._listeners[listener.name].response = null;
+
+	}
+
+}
+
+// Register Plugin
 $.jController.registerPlugin = function(plugin) {
 	
 	// Check wether the name has been set
@@ -47,8 +87,21 @@ $.jController.registerPlugin = function(plugin) {
 			$.jController._plugins[plugin.name].paramsList.push (params)
 		}
 	}
-
 }
+
+
+
+
+// "click" Listener
+
+$.jController.registerListener({
+	name:"click",
+	fn : function(canvas,callback)
+	{
+		canvas.click(callback);
+	}
+});
+
 
 /*
 @TODO use the same method as registerPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
@@ -56,9 +109,11 @@ We can use .on & .trigger from jquery cf : http://api.jquery.com/trigger/
 Each plugin can use either the default event or a specific one (so we have to edit registerPlugin)
 
 Ex of event :
-$.jController.addEvent({
+
+$.jController.registerEvent({
 	name:"click",
-	render : function()
+	listener : "click",
+	fn : function(ctx,fn)
 	{
 		
 	}
@@ -66,6 +121,7 @@ $.jController.addEvent({
 });
 
 */
+
 
 // -------- PLUGINS ----------
 

@@ -63,6 +63,12 @@
 			}
 		});
 
+		var c = document.getElementById('controller');
+		c.addEventListener("mouseover", function(){
+
+			console.log($.jController._listeners.click.response);
+		}, false);
+
 	});
 	--></script>
 	<style type="text/css">
