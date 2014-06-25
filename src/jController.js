@@ -8,10 +8,10 @@ $.jController._plugins = new Object();
 $.jController._listeners = new Object();
 
 // jController Events list (private) [@TODO]
-$.jController._Events = new Object();
+$.jController._events = new Object();
 
 // jController Properties list (private) [@TODO]
-$.jController._Properties = new Object();
+$.jController._properties = new Object();
 
 // jQuery jController function definition
 $.fn.jController = function (callback) {
@@ -30,7 +30,6 @@ $.fn.jController = function (callback) {
 
 	})
 
-	var 
 	var renderAll = function () {
 
 		// For each declared plugin
@@ -44,11 +43,16 @@ $.fn.jController = function (callback) {
 					// @TODO : handle default params by using
 					// $.extend({}, default, params) for missing params
 
-					// looking for events on params
-					if(typeof $.jController._events[pName] === "object") {
+					$.each(params,function(pName,pValue){
 
-						console.log(pValue,i,p,name);
-					}
+						// looking for events on params
+
+						if(typeof $.jController._events[pName] === "object") {
+
+							console.log(pValue,i,p,name);
+						}
+						
+					});
 
 					// Render plugin
 					p.render(context, params);
@@ -97,13 +101,13 @@ $.jController.registerEvent = function(event) {
 	if (event.name) {
 
 		// Create new object of event
-		$.jController._Events[event.name] = new Object();
+		$.jController._events[event.name] = new Object();
 		
-		// Register event function into _Events[name].render
-		$.jController._Events[event.name].fn = event.fn;
+		// Register event function into _events[name].render
+		$.jController._events[event.name].fn = event.fn;
 
 		// init response to null
-		$.jController._Events[event.name].response = null;
+		$.jController._events[event.name].response = null;
 
 	}
 
