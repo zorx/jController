@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jController example</title>
+	<script src="../lib/jquery-1.11.1.min.js"></script>
+	<script src="../src/jController.js"></script>
+	<script type="text/javascript"><!--
+	$(function() {
+	
+	/*
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "50",
+			r: "20",
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "225",
+			y: "100",
+			r: "20",
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "325",
+			y: "100",
+			r: "20",
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "150",
+			r: "20",
+		});
+
+		// Add line to canvas
+		$.jController.line({
+			x: "15",
+			y: "15",
+			w: "165",
+			h: "185",
+		});
+	*/
+		// Add rect to jController
+		$.jController.rect({
+			x: "15",
+			y: "15",
+			w: "150",
+			h: "170",
+			// Events
+			click:function(){
+				alert("Clicked !")
+			}
+		});
+
+		// How to use
+		$("canvas#controller").jController({
+			//Events
+			click:function(){
+				alert("clicked");
+			}
+		});
+
+		var c = document.getElementById('controller');
+		c.addEventListener("mouseover", function(){
+
+			console.log($.jController._listeners.mouseover.response.clientX);
+		}, false);
+
+	});
+	--></script>
+	<style type="text/css">
+		html, body {
+			background-color: #eee;
+		}
+
+		canvas#controller {
+			display: block;
+			margin: 20px auto;
+			background-color: #fff;
+			border: 1px solid #ccc;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="controller" width="400" height="200"></canvas>
+</body>
+</html>
+
+
+
+
