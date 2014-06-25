@@ -30,8 +30,8 @@ $.fn.jController = function (callback) {
 
 	})
 
-	// Retrieve All events and check for events from params
-	
+	// Retrieve All events from params
+
 	var retrieveEvents = function(params,i,p,name) {
 
 		$.each(params,function(pName,pValue){
@@ -59,7 +59,7 @@ $.fn.jController = function (callback) {
 					// @TODO : handle default params by using
 					// $.extend({}, default, params) for missing params
 
-					// Retrieve All events and check for events from params
+					// Retrieve All events from params
 					retrieveEvents(params,i,p,name);
 
 					// Render plugin
