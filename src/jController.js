@@ -1,214 +1,235 @@
-// jController object
-$.jController = new Object();
+// create closure
+(function($) {
 
-// jController plugins list (private) [@TODO]
-$.jController._plugins = new Object();
+	// jController object
+	$.jController = new Object();
 
-// jController Listener list (private) [@TODO]
-$.jController._listeners = new Object();
+	// jController plugins list (private)
+	var _plugins = new Object();
 
-// jController Events list (private) [@TODO]
-$.jController._events = new Object();
+	// jController Listener list (private)
+	var _listeners = new Object();
 
-// jController Properties list (private) [@TODO]
-$.jController._properties = new Object();
+	// jController Properties list (private)
+	var _properties = new Object();
 
-// jQuery jController function definition
-$.fn.jController = function (callback) {
- 
-	// Get canvas & context
- 	var _canvas = this;
-	var context = _canvas[0].getContext("2d");
-	
-	// For each declared listener
-	$.each($.jController._listeners, function(name, listener) {
+	// jQuery jController function definition
+	$.fn.jController = function (callback) {
+	 
+		// Get canvas & context
+	 	var canvasObj = this;
+		var context = canvasObj[0].getContext("2d");
+		
+		// For each declared listener
+		$.each(_listeners, function(name, listener) {
 
-		// Start listener and save response
-		listener.fn(_canvas, function(e) {
-			$.jController._listeners[name].response = e;
+			// Start listener and save response
+			listener.fn(canvasObj, function(e) {
+				_listeners[name].response = e;
+			})
+
 		})
 
-	})
+		// Retrieve All events from params
 
-	// Retrieve All events from params
+		var retrieveEvents = function(params,index,pluginName) {
 
-	var retrieveEvents = function(params,index,pluginName) {
+			$.each(params,function(paramName,paramValue){
 
-		$.each(params,function(paramName,paramValue){
+				// looking for events on params
+				if($.jController.isEvent(pluginName,paramName) && $.isFunction(paramValue)) {
 
-			// looking for events on params
-			if(typeof $.jController._events[paramName] === "object" && typeof paramValue === "function") {
-
-				// paramValue in this case is a callback
-				console.log(paramName,index,paramValue,pluginName);
-			}
-			
-		});
-	}
-
-	var renderAll = function () {
-
-		// For each declared plugin
-		$.each($.jController._plugins, function(pluginName, pluginObject) {
-
-			// Not render yet
-			if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
-
-				// Construct and render each one
-				$.each(pluginObject.paramsList, function(index, params) {
-					// @TODO : handle default params by using
-					// $.extend({}, default, params) for missing params
-
-					// Retrieve All events from params
-					retrieveEvents(params,index,pluginName);
-
-					// Render plugin
-					pluginObject.render(context, params);
-
-				})
-
-				$.jController._plugins[pluginName].isRender = true;
+					// paramValue in this case is a callback
+					console.log(paramName,index,paramValue,pluginName);
+				}
 				
-				renderAll();
+			});
+		}
+
+		var renderAll = function () {
+
+			// For each declared plugin
+			$.each(_plugins, function(pluginName, pluginObject) {
+
+				// Not render yet
+				if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
+
+					// Construct and render each one
+					$.each(pluginObject.paramsList, function(index, params) {
+						// @TODO : handle default params by using
+						// $.extend({}, default, params) for missing params
+
+						// Retrieve All events from params
+						retrieveEvents(params,index,pluginName);
+
+						// Render plugin
+						pluginObject.render(context, params);
+
+					})
+
+					_plugins[pluginName].isRender = true;
+					
+					renderAll();
+				}
+
+			})
+		}
+
+		// Recusively render everything
+		renderAll();
+
+		return this;
+	}
+
+	/* -- Trigger -- */
+
+	$.jController.getTriggerPrefix = function()
+	{
+		var prefix = "jController"; // Prefix that jController will use to create triggers
+
+		return prefix;
+	}
+
+	$.jController.trigger = function(params) {
+
+		// Default trigger params
+		var defaults = {
+
+			event:null, // The event that will be triggered
+			plugin:null, // Which type of plugin will be triggered
+			index:null, // Which index of plugin will be triggered
+			data:["jController"] // Data to send, by default jController will be sent
+
+		};
+
+		// merge default & params
+		var opt = $.extend({}, defaults, params);
+		var eventName = (opt.event != null) ? "_"+opt.event : "";
+		var pluginName = (opt.plugin != null) ? "_"+opt.plugin : "";
+		var index = (opt.index != null) ? "_"+opt.index : "";
+
+		// Sent a trigger using jQuery
+		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName+opt.data);
+
+	}
+
+	/* -- Listeners config -- */
+
+	// Retrieve all listeners
+	$.jController.getAllListeners = function() {
+
+		return _listeners;
+	}
+
+	// Retrieve listener by name
+	$.jController.getListener = function(name) {
+
+		// return the listener if exists otherwise null
+		return ($.jController.isListener(name)) ? _listeners[name] : null;
+	}
+
+	// Check wether a listener exists or nor
+	$.jController.isListener = function(name) {
+
+		return ($.isPlainObject(_listeners[name]));
+	}
+
+
+	// Register Listener
+	$.jController.registerListener = function(listener) {
+		
+		// Check wether the name has been set
+		if (listener.name) {
+
+			// Create new object of listener
+			_listeners[listener.name] = {
+
+				fn 		 : listener.fn, 		// Register listener function
+				response : null 				// init response to null
 			}
 
-		})
-	}
-
-	// Recusively render everything
-	renderAll();
-
-	return this;
-}
-
-/* -- Listeners config -- */
-
-// Retrieve all listeners
-$.jController.getAllListeners = function() {
-
-	return $.jController._listeners;
-}
-
-// Retrieve listener by name
-$.jController.getListener = function(name) {
-
-	// return the event if exists otherwise null
-	return ($.jController.getListener(name)) ? $.jController._listeners[name] : null;
-}
-
-// Check wether a listener exists or nor
-$.jController.isListener = function(name) {
-
-	return (typeof $.jController._listeners[name] === "object");
-}
-
-
-// Register Listener
-$.jController.registerListener = function(listener) {
-	
-	// Check wether the name has been set
-	if (listener.name) {
-
-		// Create new object of listener
-		$.jController._listeners[listener.name] = new Object();
-		
-		// Register listener function
-		$.jController._listeners[listener.name].fn = listener.fn;
-
-		// init response to null
-		$.jController._listeners[listener.name].response = null;
-
-	}
-
-}
-
-/* -- Events config -- */
-
-
-// Retrieve all events
-$.jController.getAllEvents = function() {
-
-	return $.jController._events;
-}
-
-// Retrieve events by name
-$.jController.getEvent = function(name) {
-
-	// return the event if exists otherwise null
-	return ($.jController.isEvent(name)) ? $.jController._events[name] : null;
-}
-
-// Check wether an Event exists or nor
-$.jController.isEvent = function(name) {
-
-	return (typeof $.jController._events[name] === "object");
-}
-
-// Register Event
-$.jController.registerEvent = function(event) {
-	
-	// Check wether the name has been set
-	if (event.name) {
-
-		// Create new object of event
-		$.jController._events[event.name] = new Object();
-		
-		// Register event function into _events[name].render
-		$.jController._events[event.name].fn = event.fn;
-
-		// init response to null
-		$.jController._events[event.name].response = null;
-
-	}
-
-}
-
-/* -- Plugins config  -- */
-
-// Retrieve all plugins
-$.jController.getAllPlugins = function() {
-
-	return $.jController._plugins;
-}
-
-// Retrieve plugin by name
-$.jController.getPlugin = function(name) {
-
-	// return the plugin if exists otherwise null
-	return ($.jController.isPlugin(name)) ? $.jController._plugins[name] : null;
-}
-
-// Check wether a Plugin exists or nor
-$.jController.isPlugin = function(name) {
-
-	return (typeof $.jController._plugins[name] === "object");
-}
-
-// Register Plugin
-$.jController.registerPlugin = function(plugin) {
-	
-	// Check wether the name has been set
-	if (plugin.name) {
-		// Create new object of plugin
-		$.jController._plugins[plugin.name] = new Object();
-
-		// With params (list)
-		$.jController._plugins[plugin.name].paramsList = [];
-
-		// Register plugin rendering function
-		$.jController._plugins[plugin.name].render = plugin.render;
-
-		// Plugin already rendered ?
-		$.jController._plugins[plugin.name].isRender = false;
-		
-		// Add plugin function
-		// Ex : $.jController.arc({[...]}) adds an arc into the controller
-		$.jController[plugin.name] = function(params) {
-			$.jController._plugins[plugin.name].paramsList.push (params)
 		}
+
 	}
-	
-}
+
+	/* -- Events config -- */
+
+
+	// Retrieve all events of PluginName
+	$.jController.getAllEvents = function(pluginName) {
+
+		return ($.jController.isPlugin(pluginName) && 
+			$.isPlainObject($.jController.getPlugin(pluginName).events))
+			? $.jController.getPlugin(pluginName).events
+			: null;
+	}
+
+	// Retrieve a specific pluginName
+	$.jController.getEvent = function(pluginName,eventName) {
+
+		// return the event if exists otherwise null
+		return ($.jController.isEvent(pluginName,eventName)) 
+			? _plugins[pluginName].events[eventName] 
+			: null;
+	}
+
+	// Check wether a pluginName Event exists or nor
+	$.jController.isEvent = function(pluginName,eventName) {
+
+		return ($.jController.isPlugin(pluginName) && 
+			$.isPlainObject(_plugins[pluginName].events) &&
+			$.isFunction(_plugins[pluginName].events[eventName])
+			)
+	}
+
+	/* -- Plugins config  -- */
+
+	// Retrieve all plugins
+	$.jController.getAllPlugins = function() {
+
+		return _plugins;
+	}
+
+	// Retrieve plugin by name
+	$.jController.getPlugin = function(name) {
+
+		// return the plugin if exists otherwise null
+		return ($.jController.isPlugin(name)) ? _plugins[name] : null;
+	}
+
+	// Check wether a Plugin exists or nor
+	$.jController.isPlugin = function(name) {
+
+		return ($.isPlainObject(_plugins[name]));
+	}
+
+	// Register Plugin
+	$.jController.registerPlugin = function(plugin) {
+		
+		// Check wether the name has been set
+		if (plugin.name) {
+
+			// Create new object of plugin
+			_plugins[plugin.name] = {
+
+				paramsList : [],				// With params (list)
+				render 	   : plugin.render,		// Register plugin rendering function
+				events 	   : plugin.events,		// Register plugin events
+				isRender   : false,				// Plugin already rendered ?
+			}
+
+			// Add plugin function
+			// Ex : $.jController.arc({[...]}) adds an arc into the controller
+			$.jController[plugin.name] = function(params) {
+				_plugins[plugin.name].paramsList.push (params)
+			}
+		}
+		
+	}
+// end of closure
+})(jQuery);
+
+// End Of Kernel
 
 // -------- Create Listeners ----------
 
@@ -243,24 +264,6 @@ All events must send true/false
 
 */
 
-// -------- Create Events ----------
-
-// "click" event
-$.jController.registerEvent({
-	name : "click",
-	listener : "click",
-	fn : function(params, listener) {
-		var x0 = params.x
-		var y0 = params.y;
-		var r  = params.r;
-
-		var x1 = listener.clientX;
-		var y1 = listener.clientY;
-		
-		return (Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)) < r);
-	}
-});
-
 // -------- Create PLUGINS ----------
 
 // Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
@@ -277,7 +280,12 @@ $.jController.registerPlugin({
 
 // Circle plugin (based on Arc)
 $.jController.registerPlugin({
+	
+	// Plugin Name
 	name : "circle",
+
+	// Render Plugin
+
 	render : function(ctx, params) {
 		$.jController.arc({
 			x: params.x,
@@ -287,6 +295,26 @@ $.jController.registerPlugin({
 			angleEnd: 2 * Math.PI,
 		})
 	},
+
+	// Plugin Events
+	events : {
+
+		click : function(params){
+			var listener = $.jController.getListener("click").response;
+
+			var x0 = params.x
+			var y0 = params.y;
+			var r  = params.r;
+
+			var x1 = listener.clientX;
+			var y1 = listener.clientY;
+			
+			return (Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)) < r)
+		},
+		mouseover : function (e,params){
+			$.jController.getListener("mouseover");
+		}
+	}
 })
 
 // Line plugin

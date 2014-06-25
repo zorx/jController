@@ -81,20 +81,21 @@
 				alert("clicked");
 			}
 		});
-/*
+
 		$("canvas#controller").on("mouseover", function(){
 
-			console.log($.jController._listeners.mouseover.response.clientX);
+			console.log($.jController.getListener("mouseover").response.clientX);
 		});
-*/
+
 
 		$(document).on( "jeveuxfairenimp jeveuxencorefaire", function(e,p1) {
   console.log(p1);
 });
-$(document).trigger( "jeveuxencorefaire",[5] );
+		var x=[""];
+$(document).trigger( "jeveuxencorefaire",x );
 
 	});
-
+console.log($.jController.getAllEvents("arc"));
 	--></script>
 	<style type="text/css">
 		html, body {
