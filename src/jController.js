@@ -32,15 +32,16 @@ $.fn.jController = function (callback) {
 
 	// Retrieve All events from params
 
-	var retrieveEvents = function(params,i,p,name) {
+	var retrieveEvents = function(params,index,pluginObject,pluginName) {
 
-		$.each(params,function(pName,pValue){
+		$.each(params,function(paramName,paramValue){
 
 			// looking for events on params
 
-			if(typeof $.jController._events[pName] === "object") {
+			if(typeof $.jController._events[paramName] === "object") {
 
-				console.log(pValue,i,p,name);
+				// paramValue is the callback
+				console.log(paramValue,index,pluginObject,pluginName);
 			}
 			
 		});
