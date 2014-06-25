@@ -39,7 +39,7 @@ $.fn.jController = function (callback) {
 			// looking for events on params
 			if(typeof $.jController._events[paramName] === "object" && typeof paramValue === "function") {
 
-				// paramValue in this case is callback
+				// paramValue in this case is a callback
 				console.log(paramName,index,paramValue,pluginName);
 			}
 			
@@ -93,8 +93,15 @@ $.jController.getAllListeners = function() {
 $.jController.getListener = function(name) {
 
 	// return the event if exists otherwise null
-	return (typeof $.jController._listeners[name] === "object") ? $.jController._listeners[name] : null;
+	return ($.jController.getListener(name)) ? $.jController._listeners[name] : null;
 }
+
+// Check wether a listener exists or nor
+$.jController.isListener = function(name) {
+
+	return (typeof $.jController._listeners[name] === "object");
+}
+
 
 // Register Listener
 $.jController.registerListener = function(listener) {
@@ -128,7 +135,13 @@ $.jController.getAllEvents = function() {
 $.jController.getEvent = function(name) {
 
 	// return the event if exists otherwise null
-	return (typeof $.jController._events[name] === "object") ? $.jController._events[name] : null;
+	return ($.jController.isEvent(name)) ? $.jController._events[name] : null;
+}
+
+// Check wether an Event exists or nor
+$.jController.isEvent = function(name) {
+
+	return (typeof $.jController._events[name] === "object");
 }
 
 // Register Event
@@ -162,7 +175,13 @@ $.jController.getAllPlugins = function() {
 $.jController.getPlugin = function(name) {
 
 	// return the plugin if exists otherwise null
-	return (typeof $.jController._plugins[name] === "object") ? $.jController._plugins[name] : null;
+	return ($.jController.isPlugin(name)) ? $.jController._plugins[name] : null;
+}
+
+// Check wether a Plugin exists or nor
+$.jController.isPlugin = function(name) {
+
+	return (typeof $.jController._plugins[name] === "object");
 }
 
 // Register Plugin
