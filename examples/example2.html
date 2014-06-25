@@ -62,7 +62,7 @@
 			y: "150",
 			r: "20",
 			click:function(e){
-				alert("Clicked !")
+				alert("Small circle is Clicked !")
 			}
 		});
 
@@ -71,31 +71,18 @@
 			y: "50",
 			r: "40",
 			click:function(e){
-				alert("Clicked too !")
+				alert("Big circle is Clicked !")
 			}
 		});
 		// How to use
 		$("canvas#controller").jController({
 			//Events
 			click:function(){
-				alert("clicked");
+				alert("Something is clicked");
 			}
 		});
 
-		$("canvas#controller").on("mouseover", function(){
-
-			console.log($.jController.getListener("mouseover").response.clientX);
-		});
-
-
-		$(document).on( "jeveuxfairenimp jeveuxencorefaire", function(e,p1) {
-  console.log(p1);
-});
-		var x=[""];
-$(document).trigger( "jeveuxencorefaire",x );
-
 	});
-console.log($.jController.getAllEvents("arc"));
 	--></script>
 	<style type="text/css">
 		html, body {

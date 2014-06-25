@@ -1,17 +1,15 @@
+// Begin jController Kernel
 // create closure
 (function($) {
 
 	// jController object
-	$.jController = new Object();
+	$.jController = {};
 
 	// jController plugins list (private)
-	var _plugins = new Object();
-
-	// jController Listener list (private)
-	var _listeners = new Object();
+	var _plugins = {};
 
 	// jController Properties list (private)
-	var _properties = new Object();
+	var _properties = {};
 
 	// jQuery jController function definition
 	$.fn.jController = function (callback) {
@@ -19,19 +17,8 @@
 		// Get canvas & context
 	 	var canvasObj = this;
 		var context = canvasObj[0].getContext("2d");
-		
-		// For each declared listener
-		$.each(_listeners, function(name, listener) {
-
-			// Start listener and save response
-			listener.fn(canvasObj, function(e) {
-				_listeners[name].response = e;
-			})
-
-		})
 
 		// Retrieve All events from params
-
 		var retrieveEvents = function(params,index,pluginName) {
 
 			$.each(params,function(paramName,paramValue){
@@ -39,8 +26,13 @@
 				// looking for events on params
 				if($.jController.isEvent(pluginName,paramName) && $.isFunction(paramValue)) {
 
+					// paramName in this case is an eventName
+					var eventName = paramName;
+
 					// paramValue in this case is a callback
-					console.log(paramName,index,paramValue,pluginName);
+					var callback = paramValue;
+
+					$.jController.getPlugin(pluginName).events[eventName](canvasObj,params,callback);
 				}
 				
 			});
@@ -67,8 +59,10 @@
 
 					})
 
+					// Object render
 					_plugins[pluginName].isRender = true;
 					
+					// render All (allows us to call a plugin into another )
 					renderAll();
 				}
 
@@ -110,45 +104,6 @@
 
 		// Sent a trigger using jQuery
 		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName+opt.data);
-
-	}
-
-	/* -- Listeners config -- */
-
-	// Retrieve all listeners
-	$.jController.getAllListeners = function() {
-
-		return _listeners;
-	}
-
-	// Retrieve listener by name
-	$.jController.getListener = function(name) {
-
-		// return the listener if exists otherwise null
-		return ($.jController.isListener(name)) ? _listeners[name] : null;
-	}
-
-	// Check wether a listener exists or nor
-	$.jController.isListener = function(name) {
-
-		return ($.isPlainObject(_listeners[name]));
-	}
-
-
-	// Register Listener
-	$.jController.registerListener = function(listener) {
-		
-		// Check wether the name has been set
-		if (listener.name) {
-
-			// Create new object of listener
-			_listeners[listener.name] = {
-
-				fn 		 : listener.fn, 		// Register listener function
-				response : null 				// init response to null
-			}
-
-		}
 
 	}
 
@@ -229,40 +184,8 @@
 // end of closure
 })(jQuery);
 
-// End Of Kernel
+// End jController Kernel
 
-// -------- Create Listeners ----------
-
-// "click" Listener
-
-$.jController.registerListener({
-	name:"click",
-	fn : function(canvas,callback)
-	{
-		canvas.click(callback);
-	}
-});
-
-// "mouseover" Listener
-$.jController.registerListener({
-	name:"mouseover",
-	fn : function(canvas,callback)
-	{
-		canvas.mouseover(callback);
-	}
-});
-
-
-/*
-@TODO use the same method as registerPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
-We can use .on & .trigger from jquery cf : http://api.jquery.com/trigger/
-Each plugin can use either the default event or a specific one (so we have to edit registerPlugin)
-
-All events must send true/false
-
-
-
-*/
 
 // -------- Create PLUGINS ----------
 
@@ -285,34 +208,40 @@ $.jController.registerPlugin({
 	name : "circle",
 
 	// Render Plugin
-
 	render : function(ctx, params) {
+
 		$.jController.arc({
 			x: params.x,
 			y: params.y,
 			r: params.r,
 			angleStart: 0,
-			angleEnd: 2 * Math.PI,
+			angleEnd: 2 * Math.PI
 		})
 	},
 
 	// Plugin Events
 	events : {
 
-		click : function(params){
-			var listener = $.jController.getListener("click").response;
+		click : function(canvas,params,callback){
 
-			var x0 = params.x
-			var y0 = params.y;
-			var r  = params.r;
+			canvas.on("click",{params:params,callback:callback},function(e){
 
-			var x1 = listener.clientX;
-			var y1 = listener.clientY;
-			
-			return (Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)) < r)
+				var clickedX = e.pageX - this.offsetLeft;
+    			var clickedY = e.pageY - this.offsetTop;
+
+				var r  = e.data.params.r;
+				var dx = clickedX - e.data.params.x;
+        		var dy = clickedY - e.data.params.y;
+
+				if (Math.pow(dx,2)+Math.pow(dy,2) < Math.pow(r,2))
+				{
+					e.data.callback();
+				}
+			});
 		},
-		mouseover : function (e,params){
-			$.jController.getListener("mouseover");
+
+		mouseover : function (canvas,params,callback){
+			
 		}
 	}
 })
