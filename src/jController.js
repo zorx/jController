@@ -32,18 +32,31 @@ $.fn.jController = function (callback) {
 
 
 	// For each declared plugin
-	$.each($.jController._plugins, function(name, p) {
+	console.log($.jController._plugins.circle);
+	var each = function () {
 
-		// Construct and render each one
-		$.each(p.paramsList, function(i, params) {
+			$.each($.jController._plugins, function(name, p) {
 
-			//@TODO : Put default params by using $.extend({},default,params) to skip errors when some params are absent
+			console.log(name,p.paramsList);
+			if (!p._render && p.paramsList.length != 0)
+			{
+				// Construct and render each one
+				$.each(p.paramsList, function(i, params) {
 
-			// Render plugin
-			p.render(ctx, params);
+					//@TODO : Put default params by using $.extend({},default,params) to skip errors when some params are absent
+
+					// Render plugin
+					p.render(ctx, params);
+
+				})
+				$.jController._plugins[name]._render = true;
+				each();
+			}
+
 		})
+	}
 
-	})
+	each();
 
 	return this;
 }
@@ -80,6 +93,9 @@ $.jController.registerPlugin = function(plugin) {
 
 		// Register plugin function into _plugins[name].render
 		$.jController._plugins[plugin.name].render = plugin.render;
+
+		// whether render is called or not in this plugin
+		$.jController._plugins[plugin.name]._render = false;
 		
 		// add plugin function
 		// When we call a plugin Ex : $.jController.arc this one will insert all parameters into $.jController._plugins.arc.params
@@ -99,6 +115,15 @@ $.jController.registerListener({
 	fn : function(canvas,callback)
 	{
 		canvas.click(callback);
+	}
+});
+
+// "mouseover" Listener
+$.jController.registerListener({
+	name:"mouseover",
+	fn : function(canvas,callback)
+	{
+		canvas.mouseover(callback);
 	}
 });
 
@@ -162,6 +187,12 @@ $.jController.registerPlugin({
 $.jController.registerPlugin({
 	name: "rect",
 	render : function(ctx, params) {
+		// Add circle to canvas
+		$.jController.circle({
+			x: "225",
+			y: "100",
+			r: "20",
+		});
 		ctx.beginPath();
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();

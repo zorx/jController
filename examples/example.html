@@ -7,6 +7,7 @@
 	<script type="text/javascript"><!--
 	$(function() {
 	
+	/*
 		// Add circle to canvas
 		$.jController.circle({
 			x: "275",
@@ -42,7 +43,7 @@
 			w: "165",
 			h: "185",
 		});
-
+	*/
 		// Add rect to jController
 		$.jController.rect({
 			x: "15",
@@ -66,7 +67,7 @@
 		var c = document.getElementById('controller');
 		c.addEventListener("mouseover", function(){
 
-			console.log($.jController._listeners.click.response);
+			console.log($.jController._listeners.mouseover.response.clientX);
 		}, false);
 
 	});
