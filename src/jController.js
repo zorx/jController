@@ -1,70 +1,64 @@
-// Create jController object
+// jController object
 $.jController = new Object();
 
-// @private : _plugins object contains the function & parameters that will be used in this function
+// jController plugins list (private) [@TODO]
 $.jController._plugins = new Object();
 
-// JQuery Plugin definition.
-$.fn.jController = function( callback ) {
+// jQuery jController function definition
+$.fn.jController = function (callback) {
  
- 	// Get context of canvas
- 	var _ctx = this[0].getContext("2d");
+	// Get canvas context
+	var ctx = this[0].getContext("2d");
 	
-	// get all plugins previously used
- 	$.each($.jController._plugins,function(PluginName,p){
- 		
- 		// smaller is better isn't ?
- 		var n = PluginName;
+	// For each declared plugin
+	$.each($.jController._plugins, function(name, p) {
 
- 		// Get all params
- 		$.each(p.paramsList,function(i,params){
+		// Construct and render each one
+		$.each(p.paramsList, function(i, params) {
 
- 			//@TODO : Put default params by using $.extend({},default,params) to skip errors when some params are absent
- 			// call the plugin function with params
- 			p.fn(_ctx,params);	
- 		})
- 		
+			//@TODO : Put default params by using $.extend({},default,params) to skip errors when some params are absent
 
- 	});
+			// Render plugin
+			p.render(ctx, params);
+		})
 
- 	return this;
-};
+	})
+
+	return this;
+}
 
 // Add new plugin
-$.jController.addPlugin = function(plugin) 
-{
-	// check wether the name has been set
-    if (plugin.name)
-    {
-    	// Create new object of plugin
-    	$.jController._plugins[plugin.name] = new Object();
+$.jController.registerPlugin = function(plugin) {
+	
+	// Check wether the name has been set
+	if (plugin.name) {
+		// Create new object of plugin
+		$.jController._plugins[plugin.name] = new Object();
 
-    	//Create paramsList[] this will contain all params of PluginName
-    	$.jController._plugins[plugin.name].paramsList = []
+		// With params (list)
+		$.jController._plugins[plugin.name].paramsList = [];
 
-        // Register plugin function into _plugins[name].fn
-        $.jController._plugins[plugin.name].fn = plugin.fn;
-        
-        // add plugin function
-        // When we call a plugin Ex : $.jController.arc this one will insert all parameters into $.jController._plugins.arc.params
-        $.jController[plugin.name] = function(params)
-        {
-           $.jController._plugins[plugin.name].paramsList.push (params);
-        }
+		// Register plugin function into _plugins[name].render
+		$.jController._plugins[plugin.name].render = plugin.render;
+		
+		// add plugin function
+		// When we call a plugin Ex : $.jController.arc this one will insert all parameters into $.jController._plugins.arc.params
+		$.jController[plugin.name] = function(params) {
+			$.jController._plugins[plugin.name].paramsList.push (params)
+		}
+	}
 
-        //console.log($.jController);
-    }
 }
 
 /*
-@TODO use the same method as addPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
+@TODO use the same method as registerPlugin to create addEvent (Ex : click,touch etc..) & AddProperty (Ex : draggable:true)
 We can use .on & .trigger from jquery cf : http://api.jquery.com/trigger/
-Each plugin can use either the default event or a specific one (so we have to edit addPlugin)
+Each plugin can use either the default event or a specific one (so we have to edit registerPlugin)
 
 Ex of event :
 $.jController.addEvent({
 	name:"click",
-	fn : function()
+	render : function()
 	{
 		
 	}
@@ -79,36 +73,26 @@ $.jController.addEvent({
 // TODO : Add >> http://www.w3schools.com/tags/ref_canvas.asp
 
 // Add arc plugin
-$.jController.addPlugin({
-	name:"arc",
-	fn : function(ctx,params)
-	{
-		// Data processing
+$.jController.registerPlugin({
 
-		// smaller is better isn't ?
-		var p = params;
-
-		// canvas api
+	name : "arc",
+	render : function(ctx, params) {
 		ctx.beginPath();
-		ctx.arc(p.x,p.y,p.r,p.sAngle,p.eAngle);
+		ctx.arc(params.x,params.y,params.r,params.sAngle,params.eAngle);
 		ctx.stroke();
-	}
+	},
 
-});
+})
 
 // Add rect plugin
-$.jController.addPlugin({
-	name:"rect",
-	fn : function(ctx,params)
-	{
-		// smaller is better isn't ?
-		var p = params;
-		
-		// canvas api
-		ctx.rect(p.x,p.y,p.width,p.height);
-		ctx.stroke();
-	}
+$.jController.registerPlugin({
 
-});
+	name:"rect",
+	render : function(ctx, params) {
+		ctx.rect(params.x,params.y,params.width,params.height);
+		ctx.stroke();
+	},
+
+})
 
 //@TODO add svg plugin, transform an svg file to canvas code check http://www.professorcloud.com/svg-to-canvas/ [use Canvg library]
