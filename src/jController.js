@@ -32,12 +32,10 @@ $.fn.jController = function (callback) {
 
 
 	// For each declared plugin
-	console.log($.jController._plugins.circle);
 	var each = function () {
 
 			$.each($.jController._plugins, function(name, p) {
 
-			console.log(name,p.paramsList);
 			if (!p._render && p.paramsList.length != 0)
 			{
 				// Construct and render each one
@@ -61,6 +59,8 @@ $.fn.jController = function (callback) {
 	return this;
 }
 
+
+
 // Register Listener
 $.jController.registerListener = function(listener) {
 	
@@ -75,6 +75,25 @@ $.jController.registerListener = function(listener) {
 
 		// init response to null
 		$.jController._listeners[listener.name].response = null;
+
+	}
+
+}
+
+// Register Event
+$.jController.registerEvent = function(event) {
+	
+	// Check wether the name has been set
+	if (event.name) {
+
+		// Create new object of event
+		$.jController._Events[event.name] = new Object();
+		
+		// Register event function into _Events[name].render
+		$.jController._Events[event.name].fn = event.fn;
+
+		// init response to null
+		$.jController._Events[event.name].response = null;
 
 	}
 
@@ -133,20 +152,28 @@ $.jController.registerListener({
 We can use .on & .trigger from jquery cf : http://api.jquery.com/trigger/
 Each plugin can use either the default event or a specific one (so we have to edit registerPlugin)
 
-Ex of event :
+All events must send true/false
 
-$.jController.registerEvent({
-	name:"click",
-	listener : "click",
-	fn : function(ctx,fn)
-	{
-		
-	}
 
-});
 
 */
 
+// "click" event
+$.jController.registerEvent({
+	name:"click",
+	listener : "click",
+	fn : function(ctx,params,listener)
+	{
+		var x0 = params.x
+		var y0 = params.y;
+		var r  = params.r;
+
+		var x1 = listener.clientX;
+		var y1 = listener.clientY;
+		
+		return (Math.sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)) < r);
+	}
+});
 
 // -------- PLUGINS ----------
 
@@ -187,12 +214,7 @@ $.jController.registerPlugin({
 $.jController.registerPlugin({
 	name: "rect",
 	render : function(ctx, params) {
-		// Add circle to canvas
-		$.jController.circle({
-			x: "225",
-			y: "100",
-			r: "20",
-		});
+		
 		ctx.beginPath();
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();
