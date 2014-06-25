@@ -13,50 +13,52 @@ $.jController._Events = new Object();
 // jController Properties list (private) [@TODO]
 $.jController._Properties = new Object();
 
-
-
 // jQuery jController function definition
 $.fn.jController = function (callback) {
  
+	// Get canvas & context
  	var _canvas = this;
-	// Get canvas context
-	var ctx = _canvas[0].getContext("2d");
+	var context = _canvas[0].getContext("2d");
 	
 	// For each declared listener
 	$.each($.jController._listeners, function(name, listener) {
 
-		// start listener and save the response at $.jController._listeners[name].response
-		listener.fn(_canvas,function(e){$.jController._listeners[name].response=e;});
+		// Start listener and save response
+		listener.fn(_canvas, function(e) {
+			$.jController._listeners[name].response=e;
+		})
 
 	})
 
+	var renderAll = function () {
 
-	// For each declared plugin
-	console.log($.jController._plugins.circle);
-	var each = function () {
-
+			// For each declared plugin
 			$.each($.jController._plugins, function(name, p) {
 
-			console.log(name,p.paramsList);
+			// Not render yet
 			if (!p._render && p.paramsList.length != 0)
 			{
 				// Construct and render each one
 				$.each(p.paramsList, function(i, params) {
 
-					//@TODO : Put default params by using $.extend({},default,params) to skip errors when some params are absent
+					// @TODO : handle default params by using
+					// $.extend({}, default, params) for missing params
 
 					// Render plugin
-					p.render(ctx, params);
+					p.render(context, params);
 
 				})
+
 				$.jController._plugins[name]._render = true;
-				each();
+				
+				renderAll();
 			}
 
 		})
 	}
 
-	each();
+	// Recusively render everything
+	renderAll();
 
 	return this;
 }
@@ -70,7 +72,7 @@ $.jController.registerListener = function(listener) {
 		// Create new object of listener
 		$.jController._listeners[listener.name] = new Object();
 		
-		// Register listener function into _listeners[name].render
+		// Register listener function
 		$.jController._listeners[listener.name].fn = listener.fn;
 
 		// init response to null
@@ -91,18 +93,19 @@ $.jController.registerPlugin = function(plugin) {
 		// With params (list)
 		$.jController._plugins[plugin.name].paramsList = [];
 
-		// Register plugin function into _plugins[name].render
+		// Register plugin rendering function
 		$.jController._plugins[plugin.name].render = plugin.render;
 
-		// whether render is called or not in this plugin
+		// Plugin already rendered ?
 		$.jController._plugins[plugin.name]._render = false;
 		
-		// add plugin function
-		// When we call a plugin Ex : $.jController.arc this one will insert all parameters into $.jController._plugins.arc.params
+		// Add plugin function
+		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[plugin.name] = function(params) {
 			$.jController._plugins[plugin.name].paramsList.push (params)
 		}
 	}
+	
 }
 
 
@@ -150,29 +153,33 @@ $.jController.registerEvent({
 
 // -------- PLUGINS ----------
 
+// Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
 
-// TODO : Add >> http://www.w3schools.com/tags/ref_canvas.asp
-
-// Add arc plugin
+// Arc plugin
 $.jController.registerPlugin({
 	name : "arc",
 	render : function(ctx, params) {
 		ctx.beginPath();
-		ctx.arc(params.x, params.y, params.r, params.sAngle, params.eAngle);
+		ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
 		ctx.stroke();
 	},
 })
 
-// Add circle plugin
+// Circle plugin (based on Arc)
 $.jController.registerPlugin({
 	name : "circle",
 	render : function(ctx, params) {
-		ctx.beginPath();
-		ctx.arc(params.x, params.y, params.r, 0, 2 * Math.PI);
-		ctx.stroke();
+		$.jController.arc({
+			x: params.x,
+			y: params.y,
+			r: params.r,
+			angleStart: 0,
+			angleEnd: 2 * Math.PI,
+		})
 	},
 })
 
+// Line plugin
 $.jController.registerPlugin({
 	name : "line",
 	render : function(ctx, params) {
@@ -187,16 +194,10 @@ $.jController.registerPlugin({
 $.jController.registerPlugin({
 	name: "rect",
 	render : function(ctx, params) {
-		// Add circle to canvas
-		$.jController.circle({
-			x: "225",
-			y: "100",
-			r: "20",
-		});
 		ctx.beginPath();
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();
 	},
 })
 
-//@TODO add svg plugin, transform an svg file to canvas code check http://www.professorcloud.com/svg-to-canvas/ [use Canvg library]
+// @TODO : SVG plugin, Image plugin, etc.
