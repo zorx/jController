@@ -30,6 +30,20 @@ $.fn.jController = function (callback) {
 
 	})
 
+	var retrieveParams = function(params,i,p,name) {
+
+		$.each(params,function(pName,pValue){
+
+			// looking for events on params
+
+			if(typeof $.jController._events[pName] === "object") {
+
+				console.log(pValue,i,p,name);
+			}
+			
+		});
+	}
+
 	var renderAll = function () {
 
 		// For each declared plugin
@@ -43,16 +57,8 @@ $.fn.jController = function (callback) {
 					// @TODO : handle default params by using
 					// $.extend({}, default, params) for missing params
 
-					$.each(params,function(pName,pValue){
-
-						// looking for events on params
-
-						if(typeof $.jController._events[pName] === "object") {
-
-							console.log(pValue,i,p,name);
-						}
-						
-					});
+					// Retrieve All paramaters and check for events
+					retrieveParams(params,i,p,name);
 
 					// Render plugin
 					p.render(context, params);
