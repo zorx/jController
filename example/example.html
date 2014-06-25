@@ -1,40 +1,49 @@
-<script src="../lib/jquery-1.11.1.min.js"></script>
-<script src="../src/jController.js"></script>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jController example</title>
+	<script src="../lib/jquery-1.11.1.min.js"></script>
+	<script src="../src/jController.js"></script>
+	<script type="text/javascript"><!--
+	$(function() {
+	
+		// Add arc to canvas
+		$.jController.arc({
+			x:"100",
+			y:"120",
+			r:"50",
+			sAngle:"0",
+			eAngle:2*Math.PI
+		});
 
+		// Add rect to jController
+		$.jController.rect({
+			x:"12",
+			y:"12",
+			width:"150",
+			height:"150",
+			// Events
+			click:function(){
+				alert("Clicked !")
+			}
+		});
 
-<canvas id="canvas" width="300" height="300"></canvas>
+		// How to use
+		$("canvas#controller").jController({
+			//Events
+			click:function(){
+				alert("clicked");
+			}
+		});
 
-<script>
-$(function() {
-  
-	// Add arc to canvas
-	$.jController.arc({
-		x:"100",
-		y:"120",
-		r:"50",
-		sAngle:"0",
-		eAngle:2*Math.PI
 	});
+	--></script>
+</head>
+<body>
+	<canvas id="controller" width="300" height="300"></canvas>
+</body>
+</html>
 
-	// Add rect to jController
-	$.jController.rect({
-		x:"12",
-		y:"12",
-		width:"150",
-		height:"150",
-		// Events
-		click:function(){
-			alert("Clicked !")
-		}
-	});
 
-	// How to use
-	$("canvas").jController({
-		//Events
-		click:function(){
-			alert("clicked");
-		}
-	});
 
-});
-</script>
+
