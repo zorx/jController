@@ -35,13 +35,20 @@
 			r: "20",
 		});
 
+		// Add line to canvas
+		$.jController.line({
+			x: "15",
+			y: "15",
+			w: "165",
+			h: "185",
+		});
 
 		// Add rect to jController
 		$.jController.rect({
 			x: "15",
 			y: "15",
-			width: "150",
-			height: "170",
+			w: "150",
+			h: "170",
 			// Events
 			click:function(){
 				alert("Clicked !")

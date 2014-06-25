@@ -74,14 +74,12 @@ $.jController.addEvent({
 
 // Add arc plugin
 $.jController.registerPlugin({
-
 	name : "arc",
 	render : function(ctx, params) {
 		ctx.beginPath();
 		ctx.arc(params.x, params.y, params.r, params.sAngle, params.eAngle);
 		ctx.stroke();
 	},
-
 })
 
 // Add circle plugin
@@ -94,15 +92,24 @@ $.jController.registerPlugin({
 	},
 })
 
-// Add rect plugin
 $.jController.registerPlugin({
-
-	name:"rect",
+	name : "line",
 	render : function(ctx, params) {
-		ctx.rect(params.x, params.y, params.width, params.height);
+		ctx.beginPath();
+		ctx.moveTo(params.x, params.y);
+		ctx.lineTo(params.w, params.h);
 		ctx.stroke();
 	},
+})
 
+// Add rect plugin
+$.jController.registerPlugin({
+	name: "rect",
+	render : function(ctx, params) {
+		ctx.beginPath();
+		ctx.rect(params.x, params.y, params.w, params.h);
+		ctx.stroke();
+	},
 })
 
 //@TODO add svg plugin, transform an svg file to canvas code check http://www.professorcloud.com/svg-to-canvas/ [use Canvg library]
