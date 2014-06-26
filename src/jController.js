@@ -6,14 +6,14 @@
 	// jController object
 	$.jController = {};
 
+	// Index of objets
+	$.jController.internal = {};
+
 	// jController plugins list (private)
 	var _plugins = {};
 
 	// jController helpers list (private)
 	var _helpers = {};
-
-	// jController Properties list (private)
-	var _properties = {};
 
 	// jQuery jController function definition
 	$.fn.jController = function (callback) {
@@ -39,7 +39,8 @@
 
 					$.jController
 						.getPlugin(plugin)
-						.events[event]($canvas, params, callback);
+						.events[event]($canvas, params, callback,index);
+
 				}
 				
 			})
@@ -51,10 +52,10 @@
 			$.each(_plugins, function(pluginName, pluginObject) {
 
 				// Not render yet
-				if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
+				if (!pluginObject.isRender && pluginObject.params.length != 0) {
 
 					// Construct and render each one
-					$.each(pluginObject.paramsList, function(index, params) {
+					$.each(pluginObject.params, function(index, params) {
 						// @TODO : handle default params by using
 						// $.extend({}, default, params) for missing params
 
@@ -90,7 +91,7 @@
  			} else {
 	 			$.getScript(list[0], function() {
 	 				import_recursive(list.slice(1), callback);
-	 			})
+	 			}).fail(function(e,b,x){console.log(x)})
  			}
  		}($.makeArray(links), callback))
 	}
@@ -200,16 +201,18 @@
 			// Create new object of plugin
 			_plugins[plugin.name] = {
 
-				paramsList : [],				// With params (list)
+				params : [],					// With params (list)
 				render 	   : plugin.render,		// Register plugin rendering function
 				events 	   : plugin.events,		// Register plugin events
 				isRender   : false,				// Plugin already rendered ?
+
 			}
 
 			// Add plugin function
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
-			$.jController[plugin.name] = function(params) {
-				_plugins[plugin.name].paramsList.push (params)
+			$.jController[plugin.name] = function(state) {
+				//_plugins[plugin.name].params.push (plugin.properties(state))
+				_plugins[plugin.name].params.push (state)
 			}
 		}
 	}

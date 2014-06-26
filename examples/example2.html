@@ -4,18 +4,27 @@
 	<title>jController example</title>
 	<script src="../lib/jquery-1.11.1.min.js"></script>
 	<script src="../src/jController.js"></script>
+
+
+
+	<script src="../src/Helpers/circles.js"></script>
+	<script src="../src/Plugins/arc.js"></script>
+	<script src="../src/Plugins/circle.js"></script>
+	<script src="../src/Plugins/line.js"></script>
+	<script src="../src/Plugins/rect.js"></script>
+
 	<script type="text/javascript"><!--
 
 	// Doesn't work on file:/// and ftp:// 
 		
 	$(function() {
-	$.jController.import(["../src/Helpers/circles.js","../src/Plugins/arc.js","../src/Plugins/circle.js","../src/Plugins/line.js","../src/Plugins/rect.js"],
-		function(){
+	
 		// Add circle to canvas
 		$.jController.circle({
 			x: "275",
 			y: "50",
 			r: "20",
+
 		});
 
 		// Add circle to canvas
@@ -23,6 +32,12 @@
 			x: "225",
 			y: "100",
 			r: "20",
+			mousein : function(){
+				alert("in");
+			},
+			mouseout : function(){
+				alert("out")
+			}
 		});
 
 		// Add circle to canvas
@@ -60,9 +75,7 @@
 			click:function(e){
 				alert("Small circle is Clicked !")
 			},
-			mousemove: function(e) {
-				console.log("moved over circle")
-			},
+			
 		});
 
 		$.jController.circle({
@@ -79,8 +92,7 @@
 			click:function(){
 				alert("Something is clicked");
 			},
-		});
-
+		
 		});
 
 	});
