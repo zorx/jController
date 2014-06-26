@@ -18,27 +18,30 @@
 	$.fn.jController = function (callback) {
 	 
 		// Get canvas & context
-	 	var canvasObj = this;
-		var context = canvasObj[0].getContext("2d");
+	 	var $canvas = this;
+		var context = $canvas[0].getContext("2d");
 
-		// Retrieve All events from params
-		var retrieveEvents = function(params,index,pluginName) {
+		// Retrieve All events from params and listen
+		var listenEvents = function(params, index, plugin) {
 
-			$.each(params,function(paramName,paramValue){
+			$.each(params, function(key, value) {
 
 				// looking for events on params
-				if($.jController.isEvent(pluginName,paramName) && $.isFunction(paramValue)) {
+				if ($.jController.isEvent(plugin, key) &&
+					$.isFunction(value)) {
 
-					// paramName in this case is an eventName
-					var eventName = paramName;
+					// key in this case is an event
+					var event = key;
 
-					// paramValue in this case is a callback
-					var callback = paramValue;
+					// value in this case is a callback
+					var callback = value;
 
-					$.jController.getPlugin(pluginName).events[eventName](canvasObj,params,callback);
+					$.jController
+						.getPlugin(plugin)
+						.events[event]($canvas, params, callback);
 				}
 				
-			});
+			})
 		}
 
 		var renderAll = function () {
@@ -55,7 +58,7 @@
 						// $.extend({}, default, params) for missing params
 
 						// Retrieve All events from params
-						retrieveEvents(params,index,pluginName);
+						listenEvents(params, index, pluginName);
 
 						// Render plugin
 						pluginObject.render(context, params);
@@ -80,64 +83,52 @@
 
 	/* -- Trigger -- */
 
-	$.jController.getTriggerPrefix = function()
-	{
-		var prefix = "jController"; // Prefix that jController will use to create triggers
-
-		return prefix;
+	$.jController.getTriggerPrefix = function() {
+		// jController own triggers prefix
+		return "jController";
 	}
 
 	$.jController.trigger = function(params) {
-
 		// Default trigger params
 		var defaults = {
-
-			event:null, // The event that will be triggered
-			plugin:null, // Which type of plugin will be triggered
-			index:null, // Which index of plugin will be triggered
-			data:["jController"] // Data to send, by default jController will be sent
-
+			event:  null, // Triggered event
+			plugin: null, // Triggered plugin type
+			index:  null, // Triggered plugin index
+			data:   []    // Sent data
 		};
 
 		// merge default & params
-		var opt = $.extend({}, defaults, params);
-		var eventName = (opt.event != null) ? "_"+opt.event : "";
-		var pluginName = (opt.plugin != null) ? "_"+opt.plugin : "";
-		var index = (opt.index != null) ? "_"+opt.index : "";
+		var options    = $.extend({}, defaults, params);
+		var eventName  = (options.event  != null) ? "_"+options.event  : "";
+		var pluginName = (options.plugin != null) ? "_"+options.plugin : "";
+		var index      = (options.index  != null) ? "_"+options.index  : "";
 
 		// Sent a trigger using jQuery
-		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName+opt.data);
-
+		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName+options.data);
 	}
 
 	/* -- Helpers config -- */
 
-
 	// Retrieve all events
 	$.jController.getAllHelpers = function() {
-
 		return _helpers;
 	}
 
 	// Retrieve events by name
 	$.jController.getHelper = function(name) {
-
 		// return the helper if exists otherwise null
 		return ($.jController.isHelper(name)) ? _helpers[name] : null;
 	}
 
 	// Check wether an Event exists or nor
 	$.jController.isHelper = function(name) {
-
 		return ($.isFunction(_helpers[name]));
 	}
 
 	// Register Event
 	$.jController.registerHelper = function(helper) {
-		
 		// Check wether the name has been set
 		if (helper.name) {
-
 			// Register helper function
 			_helpers[helper.name] = helper.fn;
 		}
@@ -149,7 +140,6 @@
 
 	// Retrieve all events of PluginName
 	$.jController.getAllEvents = function(pluginName) {
-
 		return ($.jController.isPlugin(pluginName) && 
 			$.isPlainObject($.jController.getPlugin(pluginName).events))
 			? $.jController.getPlugin(pluginName).events
@@ -158,7 +148,6 @@
 
 	// Retrieve a specific pluginName
 	$.jController.getEvent = function(pluginName,eventName) {
-
 		// return the event if exists otherwise null
 		return ($.jController.isEvent(pluginName,eventName)) 
 			? _plugins[pluginName].events[eventName] 
@@ -167,37 +156,31 @@
 
 	// Check wether a pluginName Event exists or nor
 	$.jController.isEvent = function(pluginName,eventName) {
-
-		return ($.jController.isPlugin(pluginName) && 
+		return ($.jController.isPlugin(pluginName) &&
 			$.isPlainObject(_plugins[pluginName].events) &&
-			$.isFunction(_plugins[pluginName].events[eventName])
-			)
+			$.isFunction(_plugins[pluginName].events[eventName]))
 	}
 
 	/* -- Plugins config  -- */
 
 	// Retrieve all plugins
 	$.jController.getAllPlugins = function() {
-
 		return _plugins;
 	}
 
 	// Retrieve plugin by name
 	$.jController.getPlugin = function(name) {
-
 		// return the plugin if exists otherwise null
 		return ($.jController.isPlugin(name)) ? _plugins[name] : null;
 	}
 
 	// Check wether a Plugin exists or nor
 	$.jController.isPlugin = function(name) {
-
 		return ($.isPlainObject(_plugins[name]));
 	}
 
 	// Register Plugin
 	$.jController.registerPlugin = function(plugin) {
-		
 		// Check wether the name has been set
 		if (plugin.name) {
 
@@ -216,7 +199,6 @@
 				_plugins[plugin.name].paramsList.push (params)
 			}
 		}
-		
 	}
 // end of closure
 })(jQuery);
@@ -224,7 +206,6 @@
 // End jController Kernel
 
 // -------- Create Helpers ----------
-
 
 // inCircle helper, whether we are in a circle or not
 
@@ -263,7 +244,6 @@ $.jController.registerPlugin({
 
 	// Render Plugin
 	render : function(ctx, params) {
-
 		$.jController.arc({
 			x: params.x,
 			y: params.y,
@@ -275,11 +255,8 @@ $.jController.registerPlugin({
 
 	// Plugin Events
 	events : {
-
 		click : function(canvas,params,callback){
-
 			canvas.on("click",{params:params,callback:callback},function(e){
-
 				var inCircle = $.jController.getHelper("inCircle")
 				({
 					px : e.pageX - this.offsetLeft,
