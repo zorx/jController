@@ -8,6 +8,9 @@
 	// jController plugins list (private)
 	var _plugins = {};
 
+	// jController helpers list (private)
+	var _helpers = {};
+
 	// jController Properties list (private)
 	var _properties = {};
 
@@ -107,6 +110,40 @@
 
 	}
 
+	/* -- Helpers config -- */
+
+
+	// Retrieve all events
+	$.jController.getAllHelpers = function() {
+
+		return _helpers;
+	}
+
+	// Retrieve events by name
+	$.jController.getHelper = function(name) {
+
+		// return the helper if exists otherwise null
+		return ($.jController.isHelper(name)) ? _helpers[name] : null;
+	}
+
+	// Check wether an Event exists or nor
+	$.jController.isHelper = function(name) {
+
+		return ($.isFunction(_helpers[name]));
+	}
+
+	// Register Event
+	$.jController.registerHelper = function(helper) {
+		
+		// Check wether the name has been set
+		if (helper.name) {
+
+			// Register helper function
+			_helpers[helper.name] = helper.fn;
+		}
+	}
+
+
 	/* -- Events config -- */
 
 
@@ -186,8 +223,25 @@
 
 // End jController Kernel
 
+// -------- Create Helpers ----------
 
-// -------- Create PLUGINS ----------
+
+// inCircle helper, whether we are in a circle or not
+
+$.jController.registerHelper({
+	name : "inCircle",
+	fn : function(params) {
+		var p = params;
+
+		var r  = p.radius;
+		var dx = p.px - p.x;
+		var dy = p.py - p.y;
+		
+		return (Math.pow(dx,2)+Math.pow(dy,2) < Math.pow(r,2))
+	},
+})
+
+// -------- Create Plugins ----------
 
 // Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
 
@@ -226,14 +280,16 @@ $.jController.registerPlugin({
 
 			canvas.on("click",{params:params,callback:callback},function(e){
 
-				var clickedX = e.pageX - this.offsetLeft;
-    			var clickedY = e.pageY - this.offsetTop;
+				var inCircle = $.jController.getHelper("inCircle")
+				({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					x : e.data.params.x,
+					y : e.data.params.y,
+					radius : e.data.params.r
+				});
 
-				var r  = e.data.params.r;
-				var dx = clickedX - e.data.params.x;
-        		var dy = clickedY - e.data.params.y;
-
-				if (Math.pow(dx,2)+Math.pow(dy,2) < Math.pow(r,2))
+				if (inCircle)
 				{
 					e.data.callback();
 				}
@@ -264,7 +320,7 @@ $.jController.registerPlugin({
 		ctx.beginPath();
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();
-	},
+	}
 })
 
 // @TODO : SVG plugin, Image plugin, etc.
