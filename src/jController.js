@@ -104,7 +104,7 @@
 		var index      = (options.index  != null) ? "_"+options.index  : "";
 
 		// Sent a trigger using jQuery
-		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName+options.data);
+		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName,options.data);
 	}
 
 	/* -- Helpers config -- */
