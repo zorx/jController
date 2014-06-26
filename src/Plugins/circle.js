@@ -1,3 +1,4 @@
+
 // Circle plugin (based on Arc)
 $.jController.registerPlugin({
 	
@@ -17,26 +18,32 @@ $.jController.registerPlugin({
 
 	// Plugin Events
 	events : {
-		click : function(canvas,params,callback){
-			canvas.on("click",{params:params,callback:callback},function(e){
-				var inCircle = $.jController.getHelper("inCircle")
-				({
+		click : function($canvas, params, callback) {
+			$canvas.on("click", {params: params, callback: callback}, function(e) {
+				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					x : e.data.params.x,
-					y : e.data.params.y,
-					radius : e.data.params.r
-				});
-
-				if (inCircle)
-				{
-					e.data.callback();
+					cx : params.x,
+					cy : params.y,
+					cr : params.r,
+				})) {
+					callback(e);
 				}
 			});
 		},
 
-		mouseover : function (canvas,params,callback){
-			
+		mousemove : function ($canvas, params, callback) {
+			$canvas.on("mousemove", {params: params, callback: callback}, function(e) {
+				if ($.jController.getHelper("inCircle")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					cx : params.x,
+					cy : params.y,
+					cr : params.r,
+				})) {
+					callback(e);
+				}
+			});
 		}
 	}
 })

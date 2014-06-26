@@ -9,7 +9,7 @@
 	// Doesn't work on file:/// and ftp:// 
 		
 	$(function() {
-	$.jController.import(["../src/Helpers/incircle.js","../src/Plugins/arc.js","../src/Plugins/circle.js","../src/Plugins/line.js","../src/Plugins/rect.js"],
+	$.jController.import(["../src/Helpers/circles.js","../src/Plugins/arc.js","../src/Plugins/circle.js","../src/Plugins/line.js","../src/Plugins/rect.js"],
 		function(){
 		// Add circle to canvas
 		$.jController.circle({
@@ -32,13 +32,6 @@
 			r: "20",
 		});
 
-		// Add circle to canvas
-		$.jController.circle({
-			x: "275",
-			y: "150",
-			r: "20",
-		});
-
 		// Add line to canvas
 		$.jController.line({
 			x: "15",
@@ -56,10 +49,8 @@
 			// Events
 			click:function(){
 				alert("Clicked !")
-			}
+			},
 		});
-
-		console.log($.jController.getAllPlugins());
 
 		// Add circle to canvas
 		$.jController.circle({
@@ -68,7 +59,10 @@
 			r: "20",
 			click:function(e){
 				alert("Small circle is Clicked !")
-			}
+			},
+			mousemove: function(e) {
+				console.log("moved over circle")
+			},
 		});
 
 		$.jController.circle({
@@ -77,14 +71,14 @@
 			r: "40",
 			click:function(e){
 				alert("Big circle is Clicked !")
-			}
+			},
 		});
 		// How to use
 		$("canvas#controller").jController({
 			//Events
 			click:function(){
 				alert("Something is clicked");
-			}
+			},
 		});
 
 		});
