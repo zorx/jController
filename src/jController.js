@@ -1,3 +1,4 @@
+
 // Begin jController Kernel
 // create closure
 (function($) {
@@ -82,7 +83,6 @@
 	}
 
 	$.jController.import =  function( links, callback ) {
- 		
  		// Recursively import files and callback()
  		(function import_recursive(list, callback){
  			if (list.length == 0) {
@@ -90,11 +90,10 @@
  			} else {
 	 			$.getScript(list[0], function() {
 	 				import_recursive(list.slice(1), callback);
-	 			});
+	 			})
  			}
  		}($.makeArray(links), callback))
- 		
-	};
+	}
 
 	/* -- Trigger -- */
 
@@ -114,12 +113,13 @@
 
 		// merge default & params
 		var options    = $.extend({}, defaults, params);
-		var eventName  = (options.event  != null) ? "_"+options.event  : "";
-		var pluginName = (options.plugin != null) ? "_"+options.plugin : "";
-		var index      = (options.index  != null) ? "_"+options.index  : "";
+		var eventName  = (options.event  != null) ? "_" + options.event  : "";
+		var pluginName = (options.plugin != null) ? "_" + options.plugin : "";
+		var index      = (options.index  != null) ? "_" + options.index  : "";
+		var trigger    = $.jController.getTriggerPrefix() + eventName + pluginName;
 
 		// Sent a trigger using jQuery
-		$(document).trigger($.jController.getTriggerPrefix()+eventName+pluginName,options.data);
+		$(document).trigger(trigger, options.data);
 	}
 
 	/* -- Helpers config -- */
@@ -149,9 +149,7 @@
 		}
 	}
 
-
 	/* -- Events config -- */
-
 
 	// Retrieve all events of PluginName
 	$.jController.getAllEvents = function(pluginName) {
@@ -196,7 +194,6 @@
 
 	// Register Plugin
 	$.jController.registerPlugin = function(plugin) {
-
 		// Check wether the name has been set
 		if (plugin.name) {
 
@@ -215,14 +212,8 @@
 				_plugins[plugin.name].paramsList.push (params)
 			}
 		}
-
 	}
-// end of closure
+
 })(jQuery);
-
+// end of closure
 // End jController Kernel
-
-
-// Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
-
-// @TODO : SVG plugin, Image plugin, etc.
