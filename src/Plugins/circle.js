@@ -2,32 +2,32 @@
 // Circle plugin (based on Arc)
 $.jController.registerPlugin({
 	
-	// Plugin Name
 	name : "circle",
+
+	// note: je propose qu'on l'appelle construct (ref aux objets)
 	properties : function(params)
 	{
-		var defaults= {
-			x:0,
-			y:0,
-			r:0
-
+		var defaults = {
+			x : 0,
+			y : 0,
+			r : 0
 		}
-		return $.extend({},defaults,params);
 
+		return $.extend({}, defaults, params);
 	},
-	// Render Plugin
-	render : function(ctx, params) {
+
+	render : function(ctx, self) {
 		$.jController.arc({
-			x: params.x,
-			y: params.y,
-			r: params.r,
+			x: self.x,
+			y: self.y,
+			r: self.r,
 			angleStart: 0,
 			angleEnd: 2 * Math.PI
 		})
 	},
 
-	// Plugin Events
 	events : {
+		
 		click : function($canvas, params, callback,index) {
 			$canvas.on("click", {params: params, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
@@ -72,7 +72,7 @@ $.jController.registerPlugin({
 				}) && !$.jController.internal[e.data.index]._in) {
 					
 					$.jController.internal[e.data.index]._in=true;
-						callback(e);
+						callback(e, self);
 					
 				}
 			});
@@ -89,7 +89,7 @@ $.jController.registerPlugin({
 					cr : params.r,
 				}) && $.jController.internal[e.data.index]._in) {
 					
-					callback(e);
+					callback(e, self);
 					$.jController.internal[e.data.index]._in=false;
 
 				}
