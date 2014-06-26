@@ -81,34 +81,19 @@
 		return this;
 	}
 
-	// import plugins / helpers (Doesn't work on file:/// and ftp:// )
-	/*
-	$.jController.import = function(links) {
-		// convert links to array
-		var _links = $.makeArray( links );
-		$.map( _links, function( link, i ) {
-			$.getScript( link ).fail(function( jqxhr, settings, exception ) {
-			    console.log("jController error : Oops ! can't import this file "+link);
-			});
-		});
-*/
 	$.jController.import =  function( links, callback ) {
  		
- 		var 
- 		_links = $.makeArray( links );
-	    countAll = function() { counter++; },
-	    waitList = [],
-	    counter = 0,
-	 
-	    $.map( _links, function( link, i ) {
-	        waitList.push(
-	            $.getScript( _links, countAll )
-	        );
-	    }
-	 
-	    $.when.apply( null, waitList ).then(function() {
-	        callback && callback();
-	    });
+ 		// Recursively import files and callback()
+ 		(function import_recursive(list, callback){
+ 			if (list.length == 0) {
+ 				callback();
+ 			} else {
+	 			$.getScript(list[0], function() {
+	 				import_recursive(list.slice(1), callback);
+	 			});
+ 			}
+ 		}($.makeArray(links), callback))
+ 		
 	};
 
 	/* -- Trigger -- */
