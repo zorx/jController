@@ -5,8 +5,15 @@
 	<script src="../lib/jquery-1.11.1.min.js"></script>
 	<script src="../src/jController.js"></script>
 	<script type="text/javascript"><!--
+
+	// Doesn't work on file:/// and ftp:// 
+		
 	$(function() {
-	
+	$.jController.import(["../src/Helpers/incircle.js","../src/Plugins/arc.js","../src/Plugins/circle.js","../src/Plugins/line.js","../src/Plugins/rect.js"],
+		function(){
+
+
+			
 	/*
 		// Add circle to canvas
 		$.jController.circle({
@@ -56,6 +63,10 @@
 			}
 		});
 */
+		
+
+		console.log($.jController.getAllPlugins());
+
 		// Add circle to canvas
 		$.jController.circle({
 			x: "275",
@@ -80,6 +91,8 @@
 			click:function(){
 				alert("Something is clicked");
 			}
+		});
+
 		});
 
 	});

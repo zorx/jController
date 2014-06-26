@@ -81,6 +81,36 @@
 		return this;
 	}
 
+	// import plugins / helpers (Doesn't work on file:/// and ftp:// )
+	/*
+	$.jController.import = function(links) {
+		// convert links to array
+		var _links = $.makeArray( links );
+		$.map( _links, function( link, i ) {
+			$.getScript( link ).fail(function( jqxhr, settings, exception ) {
+			    console.log("jController error : Oops ! can't import this file "+link);
+			});
+		});
+*/
+	$.jController.import =  function( links, callback ) {
+ 		
+ 		var 
+ 		_links = $.makeArray( links );
+	    countAll = function() { counter++; },
+	    waitList = [],
+	    counter = 0,
+	 
+	    $.map( _links, function( link, i ) {
+	        waitList.push(
+	            $.getScript( _links, countAll )
+	        );
+	    }
+	 
+	    $.when.apply( null, waitList ).then(function() {
+	        callback && callback();
+	    });
+	};
+
 	/* -- Trigger -- */
 
 	$.jController.getTriggerPrefix = function() {
@@ -181,6 +211,7 @@
 
 	// Register Plugin
 	$.jController.registerPlugin = function(plugin) {
+
 		// Check wether the name has been set
 		if (plugin.name) {
 
@@ -199,105 +230,14 @@
 				_plugins[plugin.name].paramsList.push (params)
 			}
 		}
+
 	}
 // end of closure
 })(jQuery);
 
 // End jController Kernel
 
-// -------- Create Helpers ----------
-
-// inCircle helper, whether we are in a circle or not
-
-$.jController.registerHelper({
-	name : "inCircle",
-	fn : function(params) {
-		var p = params;
-
-		var r  = p.radius;
-		var dx = p.px - p.x;
-		var dy = p.py - p.y;
-		
-		return (Math.pow(dx,2)+Math.pow(dy,2) < Math.pow(r,2))
-	},
-})
-
-// -------- Create Plugins ----------
 
 // Most basic plugins (REF: http://www.w3schools.com/tags/ref_canvas.asp)
-
-// Arc plugin
-$.jController.registerPlugin({
-	name : "arc",
-	render : function(ctx, params) {
-		ctx.beginPath();
-		ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
-		ctx.stroke();
-	},
-})
-
-// Circle plugin (based on Arc)
-$.jController.registerPlugin({
-	
-	// Plugin Name
-	name : "circle",
-
-	// Render Plugin
-	render : function(ctx, params) {
-		$.jController.arc({
-			x: params.x,
-			y: params.y,
-			r: params.r,
-			angleStart: 0,
-			angleEnd: 2 * Math.PI
-		})
-	},
-
-	// Plugin Events
-	events : {
-		click : function(canvas,params,callback){
-			canvas.on("click",{params:params,callback:callback},function(e){
-				var inCircle = $.jController.getHelper("inCircle")
-				({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
-					x : e.data.params.x,
-					y : e.data.params.y,
-					radius : e.data.params.r
-				});
-
-				if (inCircle)
-				{
-					e.data.callback();
-				}
-			});
-		},
-
-		mouseover : function (canvas,params,callback){
-			
-		}
-	}
-})
-
-// Line plugin
-$.jController.registerPlugin({
-	name : "line",
-	render : function(ctx, params) {
-		ctx.beginPath();
-		ctx.moveTo(params.x, params.y);
-		ctx.lineTo(params.w, params.h);
-		ctx.stroke();
-	},
-})
-
-// Add rect plugin
-$.jController.registerPlugin({
-	name: "rect",
-	render : function(ctx, params) {
-		ctx.beginPath();
-		ctx.rect(params.x, params.y, params.w, params.h);
-		ctx.stroke();
-	}
-})
 
 // @TODO : SVG plugin, Image plugin, etc.
