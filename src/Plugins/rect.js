@@ -9,9 +9,6 @@ $.jController.registerPlugin({
 			y : 0,
 			w : 0,
 			h : 0,
-			color : "black",
-			fill : undefined,
-			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -25,6 +22,7 @@ $.jController.registerPlugin({
 			color : params.color,
 			fill  : params.fill,
 			lineWidth : params.lineWidth,
+			shadow : params.shadow,
 			draw : function (ctx) {
 				ctx.rect(params.x, params.y, params.w, params.h);
 			},

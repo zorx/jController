@@ -11,8 +11,6 @@ $.jController.registerPlugin({
 			y : 0,
 			w : 0,
 			h : 0,
-			color: "black",
-			lineWidth: 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -26,6 +24,7 @@ $.jController.registerPlugin({
 			ctx : $.jController.getContext(),
 			color : params.color,
 			lineWidth : params.lineWidth,
+			shadow : params.shadow,
 			draw : function (ctx) {
 				ctx.moveTo(params.x, params.y);
 				ctx.lineTo(params.w, params.h);

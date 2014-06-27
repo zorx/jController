@@ -10,9 +10,6 @@ $.jController.registerPlugin({
 			r : 0,
 			angleStart : 0,
 			angleEnd : Math.PI,
-			color : "black",
-			fill : undefined,
-			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -26,6 +23,7 @@ $.jController.registerPlugin({
 			color : params.color,
 			fill  : params.fill,
 			lineWidth : params.lineWidth,
+			shadow : params.shadow,
 			draw : function (ctx) {
 				ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
 			},

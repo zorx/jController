@@ -8,9 +8,6 @@ $.jController.registerPlugin({
 			x : 0,
 			y : 0,
 			r : 0,
-			color : "black",
-			fill : undefined,
-			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -27,7 +24,9 @@ $.jController.registerPlugin({
 			color: self.params.color,
 			fill: self.params.fill,
 			lineWidth: self.params.lineWidth,
+			shadow: self.params.shadow,
 		})
+
 	},
 
 	events : {
