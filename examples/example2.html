@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>jController example</title>
+	<script src="../lib/jquery-1.11.1.min.js"></script>
+	<script src="../src/jController.js"></script>
+
+
+
+	<script src="../src/Helpers/in.js"></script>
+	<script src="../src/Plugins/arc.js"></script>
+	<script src="../src/Plugins/circle.js"></script>
+	<script src="../src/Plugins/line.js"></script>
+	<script src="../src/Plugins/rect.js"></script>
+	<script src="../src/Plugins/mosaic.js"></script>
+
+	<script type="text/javascript"><!--
+
+	// Doesn't work on file:/// and ftp:// 
+		
+	$(function() {
+	
+	/*
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "50",
+			r: "20",
+
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "225",
+			y: "100",
+			r: "20",
+			mousein : function(e,self){
+				console.log("in");
+				self.params.x = 20;
+			},
+			mouseout : function(){
+				console.log("out")
+			}
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "325",
+			y: "100",
+			r: "20",
+		});
+
+		// Add line to canvas
+		$.jController.line({
+			x: "15",
+			y: "15",
+			w: "165",
+			h: "185",
+		});
+	
+		// Add rect to jController
+		$.jController.rect({
+			x: "15",
+			y: "15",
+			w: "150",
+			h: "170",
+			// Events
+			click:function(){
+				console.log("Clicked !")
+			},
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: "275",
+			y: "150",
+			r: "20",
+			click:function(e){
+				console.log("Small circle is Clicked !")
+			},
+			
+		});
+
+		$.jController.circle({
+			x: "50",
+			y: "50",
+			r: "40",
+			click:function(e){
+				console.log("Big circle is Clicked !")
+			},
+		});
+
+*/
+		$.jController.mosaic({
+	    	x : Math.sin( new Date().getTime() * 0.002 ) * 192 + 256,
+	    	y : Math.cos( new Date().getTime() * 0.002 * 0.9 ) * 192 + 256,
+	    	r:10
+		})
+		// How to use
+		$("canvas#controller").jController({
+			//Events
+			click:function(){
+				console.log("Something is clicked");
+			},
+		
+		})
+
+	});
+	--></script>
+	<style type="text/css">
+		html, body {
+			background-color: #eee;
+		}
+
+		canvas#controller {
+			display: block;
+			margin: 20px auto;
+			background-color: #fff;
+			border: 1px solid #ccc;
+		}
+	</style>
+</head>
+<body>
+	<canvas id="controller" width="512" height="512"></canvas>
+</body>
+</html>
+
+
+
+

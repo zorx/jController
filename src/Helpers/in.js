@@ -8,10 +8,7 @@
 $.jController.registerHelper({
 	name : "inCircle",
 	fn : function(args) {
-		return 
-			(Math.pow(args.px - args.cx, 2) +
-			 Math.pow(args.py - args.cy, 2)
-			 < Math.pow(args.cr, 2))
+		return (Math.pow(args.px - args.cx, 2) + Math.pow(args.py - args.cy, 2) < Math.pow(args.cr, 2))
 	},
 })
 
@@ -24,8 +21,6 @@ $.jController.registerHelper({
 $.jController.registerHelper({
 	name : "inRect",
 	fn : function(args) {
-		return 
-			(args.rx <= args.px <= args.rx + args.rw &&
-			 args.ry <= args.py <= args.ry + args.rh)
+		return (args.rx <= args.px <= args.rx + args.rw && args.ry <= args.py <= args.ry + args.rh)
 	},
 })
