@@ -14,7 +14,7 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
-
+		self.params.x = self.params.x +1;
 		$.jController.arc({
 			x: self.params.x,
 			y: self.params.y,

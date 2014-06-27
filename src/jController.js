@@ -1,29 +1,12 @@
 
 // Defining request/cancel animation frame
-(function() {
-    var lastTime = 0;
-    var vendors = ['ms', 'moz', 'webkit', 'o'];
-    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
-        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
-                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
-    }
- 
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback, element) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
-              timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
- 
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
+// shim layer with setTimeout fallback 
+	var requestAnimFrame = (function(){ 
+	  return  function( callback ){ 
+
+	            window.setTimeout(callback, 1000 / 10); 
+	          }; 
+	})(); 
 
 // Begin jController Kernel
 // create closure
@@ -56,34 +39,30 @@
 	var _isClearCanvas = true;
 
 	// Frame per second
-	var fps = 1;
+	var fps = 0.5;
 
 	// jQuery jController function definition
 	$.fn.jController = function (params) {
 
 		// Init jController canvas
 		jController.init(this, params);
+		requestAnimFrame(animate);
 		
-		function animate() {
-
-			setTimeout(function() {
-				if (_isClearCanvas)	{
-
-					jController.clearCanvas();
-				}
-
-			    // Recusively render everything
-			    jController.renderAll();
-			    jController.cleanAll();
-			    window.requestAnimationFrame(animate);
-
-			}, 1000 / fps);
-
-		}
-
-		animate();
-
 		return this;
+	}
+
+	function animate() {
+		if (_isClearCanvas)	{
+
+			jController.clearCanvas();
+		}		
+
+	    // Recusively render everything
+	    jController.renderAll();
+	    jController.cleanAll();
+
+
+	    requestAnimFrame(animate);
 	}
 
 	// jController
@@ -171,7 +150,7 @@
 
 		// Clear canvas
 		clearCanvas : function() {
-
+console.log("Y");
 			var ctx = $.jController.getContext();
 			ctx.clearRect(0, 0, $.jController.getCanvas().width, $.jController.getCanvas().height);
 		},
@@ -197,7 +176,6 @@
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
 
-						//console.log(state);
 						// Render plugin
 						pluginObject.render(_self);
 
