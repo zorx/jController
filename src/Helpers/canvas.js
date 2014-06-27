@@ -13,7 +13,11 @@ $.jController.registerHelper({
 	fn : function(args) {
 
 		// Default values
-		var defaults = {};
+		var defaults = {
+			lineWidth: 1,
+			color: "black",
+			fill: undefined,
+		};
 
 		// Merge args with default settings
 		args = $.extend({}, defaults, args);
