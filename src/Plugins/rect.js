@@ -29,7 +29,7 @@ $.jController.registerPlugin({
 				ctx.rect(params.x, params.y, params.w, params.h);
 			},
 		})
-		
+
 	},
 
 	events : {
@@ -39,6 +39,64 @@ $.jController.registerPlugin({
 			var $canvas = $.jController.getCanvasObject();
 
 			$canvas.on("click", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if ($.jController.getHelper("inRect")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					rx : self.params.x,
+					ry : self.params.y,
+					rw : self.params.w,
+					rh : self.params.h,
+				})) {
+					callback(e);
+				}
+			});
+		},
+
+		mousemove : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if ($.jController.getHelper("inRect")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					rx : self.params.x,
+					ry : self.params.y,
+					rw : self.params.w,
+					rh : self.params.h,
+				})) {
+					callback(e);
+				}
+			});
+		},
+
+		mousein : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
+			self.setInternal({mousedIn:false});
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if ($.jController.getHelper("inRect")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					rx : self.params.x,
+					ry : self.params.y,
+					rw : self.params.w,
+					rh : self.params.h,
+				})) {
+					callback(e);
+				}
+			});
+		},
+
+		mouseout : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
 				if ($.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,

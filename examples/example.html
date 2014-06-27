@@ -69,6 +69,14 @@
 			click: function() {
 				console.log("Rect - click()")
 			},
+			mousein : function(e) {
+				e.data.self.params.fill = "red";
+				console.log("Rect - mousein()")
+			},
+			mouseout : function(e) {
+				e.data.self.params.fill = undefined;
+				console.log("Rect - mouseout()")
+			},
 		});
 
 		// Add circle to canvas
@@ -81,7 +89,6 @@
 			click: function(e) {
 				console.log("Small circle - click()")
 			},
-			
 		});
 
 		$.jController.circle({
