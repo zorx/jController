@@ -10,6 +10,7 @@ $.jController.registerPlugin({
 			w : 0,
 			h : 0,
 			color : "black",
+			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -17,9 +18,14 @@ $.jController.registerPlugin({
 
 	render : function(ctx, params) {
 		ctx.beginPath();
-		ctx.strokeStyle = params.color;
+		$.jController.getHelper("contextSet")({
+			ctx : ctx,
+			color : params.color,
+			lineWidth : params.lineWidth,
+		})
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();
+		$.jController.getHelper("contextReset")({ctx: ctx});
 	},
 
 	events : {

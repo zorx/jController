@@ -8,7 +8,8 @@ $.jController.registerPlugin({
 			x : 0,
 			y : 0,
 			r : 0,
-			color: "black",
+			color : "black",
+			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -22,6 +23,7 @@ $.jController.registerPlugin({
 			angleStart: 0,
 			angleEnd: 2 * Math.PI,
 			color: params.color,
+			lineWidth: params.lineWidth,
 		})
 	},
 

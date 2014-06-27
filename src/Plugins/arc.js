@@ -8,9 +8,10 @@ $.jController.registerPlugin({
 			x : 0,
 			y : 0,
 			r : 0,
-			angleStart: 0,
+			angleStart : 0,
 			angleEnd : Math.PI,
-			color: "black",
+			color : "black",
+			lineWidth : 1,
 		}
 
 		return $.extend({}, defaults, params);
@@ -18,9 +19,13 @@ $.jController.registerPlugin({
 
 	render : function(ctx, params) {
 		ctx.beginPath();
-		ctx.strokeStyle = params.color;
+		$.jController.getHelper("contextSet")({
+			ctx : ctx,
+			color : params.color,
+			lineWidth : params.lineWidth,
+		})
 		ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
 		ctx.stroke();
-		ctx.closePath();
+		$.jController.getHelper("contextReset")({ctx: ctx});
 	},
 })
