@@ -45,6 +45,7 @@
 
 		    // Recusively render everything
 		    jController.renderAll();
+		    jController.cleanAll();
 
 		}
 
@@ -107,13 +108,21 @@
 
 		},
 
+		// Set every plugins as to be rendered on next frame
+		cleanAll : function() {
+			// For each declared plugin
+			$.each(_plugins, function(pluginName, pluginObject) {
+				_plugins[pluginName].isRender = false;
+			});
+		},
+
 		renderAll : function() {
 
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
 
 				// Not render yet
-				if (!pluginObject.shown && pluginObject.paramsList.length != 0) {
+				if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
 
 					// Construct and render each one
 					$.each(pluginObject.paramsList, function(index, state) {
@@ -121,17 +130,19 @@
 						// Create internal values object
 						jController.initInternal(pluginName, index);
 
-						// Create "self" (related to the instance) and retrieve all events
-						jController.listenEvents(state, pluginName, jController.self(state, pluginName, index));
+						// Create "self" (related to the instance) 
+						var _self = jController.self(state, pluginName, index);
 
-						//console.log(state);
+						// Retrieve all events
+						jController.listenEvents(state, pluginName, _self);
+
 						// Render plugin
-						pluginObject.render(context, state);
+						pluginObject.render(context, _self);
 
 					})
 
 					// Object render
-					_plugins[pluginName].shown = true;
+					_plugins[pluginName].isRender = true;
 					
 					// render All (allows us to call a plugin into another )
 					jController.renderAll();
@@ -139,7 +150,6 @@
 
 			})
 
-			_plugins.mosaic.shown = false;
 		}
 	}
 
@@ -265,7 +275,7 @@
 				paramsList  : [],         // With paramsList (list)
 				render 	: plugin.render,  // Register plugin rendering function
 				events 	: plugin.events,  // Register plugin events
-				shown   : false,          // Plugin already rendered ?
+				isRender   : false,          // Plugin already rendered ?
 			}
 
 			// Add plugin function
