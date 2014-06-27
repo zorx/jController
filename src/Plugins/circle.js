@@ -9,6 +9,7 @@ $.jController.registerPlugin({
 			y : 0,
 			r : 0,
 			color : "black",
+			fill : undefined,
 			lineWidth : 1,
 		}
 
@@ -24,6 +25,7 @@ $.jController.registerPlugin({
 			angleStart: 0,
 			angleEnd: 2 * Math.PI,
 			color: self.params.color,
+			fill: self.params.fill,
 			lineWidth: self.params.lineWidth,
 		})
 	},
