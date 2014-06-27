@@ -18,78 +18,78 @@
 	
 		// Add circle to canvas
 		$.jController.circle({
-			x: "275",
-			y: "50",
-			r: "20",
+			x: 275,
+			y: 50,
+			r: 20,
 			color: "red",
 			lineWidth: 3,
 		});
 
 		// Add circle to canvas
 		$.jController.circle({
-			x: "225",
-			y: "100",
-			r: "20",
+			x: 225,
+			y: 100,
+			r: 20,
 			color: "blue",
 			mousein : function() {
-				console.log("in");
+				console.log("Circle - mousein()");
 			},
 			mouseout : function() {
-				console.log("out")
+				console.log("Circle - mouseout()")
 			}
 		});
 
 		// Add circle to canvas
 		$.jController.circle({
-			x: "325",
-			y: "100",
-			r: "20",
+			x: 325,
+			y: 100,
+			r: 20,
 			color: "green",
 		});
 
 		// Add line to canvas
 		$.jController.line({
-			x: "15",
-			y: "15",
-			w: "165",
-			h: "185",
+			x: 15,
+			y: 15,
+			w: 165,
+			h: 185,
 			color: "pink",
 			lineWidth: 5,
 		});
 	
 		// Add rect to jController
 		$.jController.rect({
-			x: "15",
-			y: "15",
-			w: "150",
-			h: "170",
+			x: 15,
+			y: 15,
+			w: 150,
+			h: 170,
 			color: "grey",
 			lineWidth: 2,
 			// Events
 			click: function() {
-				console.log("Clicked !")
+				console.log("Rect - click()")
 			},
 		});
 
 		// Add circle to canvas
 		$.jController.circle({
-			x: "275",
-			y: "150",
-			r: "20",
+			x: 275,
+			y: 150,
+			r: 20,
 			color: "orange",
 			click: function(e) {
-				console.log("Small circle is Clicked !")
+				console.log("Small circle - click()")
 			},
 			
 		});
 
 		$.jController.circle({
-			x: "50",
-			y: "50",
-			r: "40",
+			x: 50,
+			y: 50,
+			r: 40,
 			color: "magenta",
 			click:function(e){
-				console.log("Big circle is Clicked !")
+				console.log("Big circle - click()")
 			},
 		});
 

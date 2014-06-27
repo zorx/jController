@@ -24,8 +24,8 @@ $.jController.registerHelper({
 $.jController.registerHelper({
 	name : "inRect",
 	fn : function(args) {
-		var x = args.rx <= args.px <= args.rx + args.rw;
-		var y = args.ry <= args.py <= args.ry + args.rh
+		var x = args.rx <= args.px && args.px <= args.rx + args.rw;
+		var y = args.ry <= args.py && args.py <= args.ry + args.rh;
 		return (x && y)
 	},
 })
