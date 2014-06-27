@@ -1,11 +1,9 @@
 
 // Circle plugin (based on Arc)
 $.jController.registerPlugin({
-	
 	name : "circle",
 
-	construct : function(params)
-	{
+	construct : function(params) {
 		var defaults = {
 			x : 0,
 			y : 0,
@@ -28,72 +26,65 @@ $.jController.registerPlugin({
 	events : {
 		
 		click : function($canvas, self, callback) {
-			
-			$canvas.on("click", {params: self.params, callback: callback}, function(e) {
-				if ($.jController.getHelper("inCircle")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
-					cx : e.data.params.x,
-					cy : e.data.params.y,
-					cr : e.data.params.r,
-				})) {
-					callback(e);
-				}
-			});
-		},
-
-		mousemove : function ($canvas, self, callback) {
-			$canvas.on("mousemove", {params: self.params, callback: callback}, function(e) {
-				if ($.jController.getHelper("inCircle")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
-					cx : e.data.params.x,
-					cy : e.data.params.y,
-					cr : e.data.params.r,
-				})) {
-					callback(e);
-				}
-			});
-		},
-
-		mousein : function ($canvas, self, callback) {
-			
-			// Set Internal var
-			self.setInternal({_in:false});
-
-
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+			$canvas.on("click", {self: self, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
 					cx : e.data.self.params.x,
 					cy : e.data.self.params.y,
 					cr : e.data.self.params.r,
-				}) && !self.getInternal("_in")) {
-					
-					e.data.self.setInternal({_in:true});
-						callback(e, e.data.self);
-					
-				}
-			});
-		},
-
-		mouseout : function ($canvas, self, callback) {
-			
-			$canvas.on("mousemove", {self:self, callback: callback}, function(e) {
-				if (!$.jController.getHelper("inCircle")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
-					cx : e.data.self.params.x,
-					cy : e.data.self.params.y,
-					cr : e.data.self.params.r,
-				}) && self.getInternal("_in")) {
-					
+				})) {
 					callback(e, e.data.self);
-					e.data.self.setInternal({_in:false});
-
 				}
 			});
-		}
-	}
+		},
+
+		mousemove : function($canvas, self, callback) {
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if ($.jController.getHelper("inCircle")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				})) {
+					callback(e);
+				}
+			});
+		},
+
+		mousein : function($canvas, self, callback) {
+			self.setInternal({mousedIn:false});
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if ($.jController.getHelper("inCircle")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				}) && !self.getInternal("mousedIn")) {
+					self.setInternal({mousedIn:true});
+					callback(e);
+				}
+			});
+		},
+
+		mouseout : function($canvas, self, callback) {
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
+				if (! $.jController.getHelper("inCircle")({
+					px : e.pageX - this.offsetLeft,
+					py : e.pageY - this.offsetTop,
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				}) && self.getInternal("mousedIn")) {
+					callback(e);
+					self.setInternal({mousedIn:false});
+				}
+			});
+		},
+	},
 })

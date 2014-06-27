@@ -13,6 +13,7 @@ $.jController.registerPlugin({
 
 		return $.extend({}, defaults, params);
 	},
+	
 	render : function(ctx, params) {
 		ctx.beginPath();
 		ctx.moveTo(params.x, params.y);

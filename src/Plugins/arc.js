@@ -3,8 +3,7 @@
 $.jController.registerPlugin({
 	name : "arc",
 	
-	construct : function(params)
-	{
+	construct : function(params) {
 		var defaults = {
 			x : 0,
 			y : 0
@@ -12,6 +11,7 @@ $.jController.registerPlugin({
 
 		return $.extend({}, defaults, params);
 	},
+	
 	render : function(ctx, params) {
 		ctx.beginPath();
 		ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
