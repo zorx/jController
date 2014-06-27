@@ -15,7 +15,8 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	render : function(ctx, self) {
+	render : function(self) {
+
 		$.jController.arc({
 			x: self.params.x,
 			y: self.params.y,
@@ -29,7 +30,10 @@ $.jController.registerPlugin({
 
 	events : {
 		
-		click : function($canvas, self, callback) {
+		click : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
 			$canvas.on("click", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
 				if ($.jController.getHelper("inCircle")({
@@ -44,7 +48,10 @@ $.jController.registerPlugin({
 			});
 		},
 
-		mousemove : function($canvas, self, callback) {
+		mousemove : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
 			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
 				if ($.jController.getHelper("inCircle")({
@@ -59,7 +66,10 @@ $.jController.registerPlugin({
 			});
 		},
 
-		mousein : function($canvas, self, callback) {
+		mousein : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
 			self.setInternal({mousedIn:false});
 			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
@@ -76,7 +86,10 @@ $.jController.registerPlugin({
 			});
 		},
 
-		mouseout : function($canvas, self, callback) {
+		mouseout : function(self, callback) {
+
+			var $canvas = $.jController.getCanvasObject();
+
 			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
 				if (! $.jController.getHelper("inCircle")({

@@ -18,7 +18,10 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 	
-	render : function(ctx, self) {
+	render : function(self) {
+
+		var ctx = $.jController.getContext();
+
 		var params = self.params;
 		ctx.beginPath();
 		$.jController.getHelper("contextSet")({
