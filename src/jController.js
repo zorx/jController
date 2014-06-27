@@ -1,13 +1,5 @@
-
-// Begin jController Kernel
-// create closure
-(function($) {
-
-	'use strict';
-
-	// shim layer with setTimeout fallback
+// shim layer with setTimeout fallback
 	window.requestAnimFrame = (function(){
-		
 	  return  window.requestAnimationFrame       ||
 	          window.webkitRequestAnimationFrame ||
 	          window.mozRequestAnimationFrame    ||
@@ -15,6 +7,14 @@
 	            window.setTimeout(callback, 1000 / 60);
 	          };
 	})();
+
+// Begin jController Kernel
+// create closure
+(function($) {
+
+	'use strict';
+
+	
 
 	// jController object
 	$.jController = {};
@@ -40,7 +40,8 @@
 
 		animate();
 		function animate() {
-		    requestAnimFrame( animate );
+
+		    window.requestAnimFrame( animate );
 
 		    // Recusively render everything
 		    jController.renderAll();
@@ -123,6 +124,7 @@
 						// Create "self" (related to the instance) and retrieve all events
 						jController.listenEvents(state, pluginName, jController.self(state, pluginName, index));
 
+						//console.log(state);
 						// Render plugin
 						pluginObject.render(context, state);
 
@@ -136,6 +138,8 @@
 				}
 
 			})
+
+			_plugins.mosaic.shown = false;
 		}
 	}
 
