@@ -55,23 +55,28 @@
 	// Default value of clearing canvas 
 	var _isClearCanvas = true;
 
+	// Frame per second
+	var fps = 1;
+
 	// jQuery jController function definition
 	$.fn.jController = function (params) {
 
 		// Init jController canvas
 		jController.init(this, params);
-
-		// Frame per second
-		var fps = 60;
 		
 		function animate() {
 
 			setTimeout(function() {
-	        	window.requestAnimationFrame(animate);
+				if (_isClearCanvas)	{
+
+					jController.clearCanvas();
+				}
 
 			    // Recusively render everything
 			    jController.renderAll();
 			    jController.cleanAll();
+			    window.requestAnimationFrame(animate);
+
 			}, 1000 / fps);
 
 		}
@@ -84,7 +89,6 @@
 	// jController
 	var jController = 
 	{
-
 		// Creates canvas for jController
 		init : function($obj, params)
 		{
@@ -130,7 +134,7 @@
 					var oldData = ($.isPlainObject($.jController.internal[pluginName][index]))
 						? $.jController.internal[pluginName][index]
 						: {};
-					$.jController.internal[pluginName][index] = $.extend({}, oldData, data);
+					$.jController.internal[pluginName][index] = $.extend(true,{}, oldData, data);
 				},
 				// Retrieve internal value
 				getInternal : function(key) {
@@ -161,7 +165,7 @@
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
 				_plugins[pluginName].isRender = false;
-				
+
 			});
 		},
 
@@ -193,6 +197,7 @@
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
 
+						console.log(state);
 						// Render plugin
 						pluginObject.render(_self);
 
@@ -262,7 +267,7 @@
 		};
 
 		// merge default & params
-		var options    = $.extend({}, defaults, params);
+		var options    = $.extend(true,{}, defaults, params);
 		var eventName  = (options.event  != null) ? "_" + options.event  : "";
 		var pluginName = (options.plugin != null) ? "_" + options.plugin : "";
 		var index      = (options.index  != null) ? "_" + options.index  : "";

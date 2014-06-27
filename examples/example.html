@@ -66,15 +66,15 @@
 			color: "grey",
 			lineWidth: 2,
 			// Events
-			click: function() {
+			click: function(e) {
+				e.data.self.params.fill = "red";
 				console.log("Rect - click()")
 			},
 			mousein : function(e) {
-				e.data.self.params.fill = "red";
 				console.log("Rect - mousein()")
 			},
 			mouseout : function(e) {
-				e.data.self.params.fill = undefined;
+				//e.data.self.params.fill = undefined;
 				console.log("Rect - mouseout()")
 			},
 		});
