@@ -27,7 +27,6 @@ $.jController.registerPlugin({
 		click : function($canvas, self, callback) {
 			$canvas.on("click", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
-				// @TODO: don't work, returns undefined /!\
 				if ($.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
