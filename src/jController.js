@@ -4,7 +4,7 @@
 	          window.webkitRequestAnimationFrame ||
 	          window.mozRequestAnimationFrame    ||
 	          function( callback ){
-	            window.setTimeout(callback, 1000 / 60);
+	            //window.setTimeout(callback, 1000 / 60);
 	          };
 	})();
 
@@ -27,16 +27,20 @@
 
 	// jController helpers list
 	var _helpers = {};
+	
+	// Canvas jQuery object
+	var _$canvas;
 
-	// Canvas jQuery object, and context of canvas
-	var $canvas,context;
+	// Canvas
+	var _canvas;
+
+	// Canvas context
+	var _context;
 
 	// jQuery jController function definition
-	$.fn.jController = function (callback) {
-	 
-		// Get canvas & context
-	 	$canvas = this;
-		context = $canvas[0].getContext("2d");
+	$.fn.jController = function (params) {
+
+		jController.init(this,params);
 
 		animate();
 		function animate() {
@@ -55,6 +59,22 @@
 	// jController
 	var jController = 
 	{
+
+		init : function($obj,params)
+		{
+			// Unique Canvas id
+			var id = 'jController_' + $('canvas').length; 
+
+			// Canvas jQuery object
+			_$canvas = $('<canvas>').attr(params.attr).attr({id: id}).appendTo($obj);
+
+			// Canvas
+			_canvas = _$canvas[0];
+
+			// Context of canvas
+			_context = _canvas.getContext("2d");
+
+		},
 		// Retrieve All events from paramsList and listen
 		listenEvents : function(paramsList, pluginName, self) {
 
@@ -65,7 +85,7 @@
 					// Execute the event					
 					$.jController
 						.getPlugin(pluginName)
-						.events[evt]($canvas, self, callback);
+						.events[evt](self, callback);
 				}
 			});
 
@@ -137,7 +157,7 @@
 						jController.listenEvents(state, pluginName, _self);
 
 						// Render plugin
-						pluginObject.render(context, _self);
+						pluginObject.render(_self);
 
 					})
 
@@ -166,6 +186,21 @@
 	 			})
  			}
  		}($.makeArray(links), callback))
+	}
+
+	$.jController.getCanvasObject = function()
+	{
+		return _$canvas;
+	}
+
+	$.jController.getCanvas = function()
+	{
+		return _canvas;
+	}
+
+	$.jController.getContext = function()
+	{
+		return _context;
 	}
 
 	/* -- Trigger -- */

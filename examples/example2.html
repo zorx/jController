@@ -96,11 +96,15 @@
 	    	r:10
 		})
 		// How to use
-		$("canvas#controller").jController({
-			//Events
-			click:function(){
-				console.log("Something is clicked");
-			},
+		$("#controller").jController({
+			
+			attr : {width:"512",height : "512"},
+			
+			events : {
+				click:function(){
+					console.log("Something is clicked");
+				}
+			}
 		
 		})
 
@@ -111,16 +115,18 @@
 			background-color: #eee;
 		}
 
-		canvas#controller {
+		#controller {
 			display: block;
 			margin: 20px auto;
 			background-color: #fff;
 			border: 1px solid #ccc;
+			height:512px;
+			width:512px;
 		}
 	</style>
 </head>
 <body>
-	<canvas id="controller" width="512" height="512"></canvas>
+	<div id="controller"></div>
 </body>
 </html>
 
