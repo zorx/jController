@@ -3,27 +3,42 @@
 // create closure
 (function($) {
 
+	'use strict';
+
 	// jController object
 	$.jController = {};
 
 	// Index of objets
 	$.jController.internal = {};
 
-	// jController plugins list (private)
+	// jController plugins list
 	var _plugins = {};
 
-	// jController helpers list (private)
+	// jController helpers list
 	var _helpers = {};
+
+	// Canvas jQuery object, and context of canvas
+	var $canvas,context;
 
 	// jQuery jController function definition
 	$.fn.jController = function (callback) {
 	 
 		// Get canvas & context
-	 	var $canvas = this;
-		var context = $canvas[0].getContext("2d");
+	 	$canvas = this;
+		context = $canvas[0].getContext("2d");
 
+		// Recusively render everything
+
+		jController.renderAll();
+
+		return this;
+	}
+
+	// jController
+	var jController = 
+	{
 		// Retrieve All events from paramsList and listen
-		var listenEvents = function(paramsList, pluginName, self) {
+		listenEvents : function(paramsList, pluginName, self) {
 
 			$.each(paramsList, function(evt, callback) {
 				// looking for events on paramsList
@@ -36,10 +51,10 @@
 				}
 			});
 
-		}
+		},
 
 		// Create self "object" for plugin
-		var self = function(state, pluginName, index) {
+		self : function(state, pluginName, index) {
 
 			return {
 				id : index,
@@ -62,10 +77,10 @@
 				},
 			}
 
-		}
+		},
 
 		// Create internal values placeholder for plugin
-		var initInternal = function(pluginName, index) {
+		initInternal : function(pluginName, index) {
 
 			if (!$.isPlainObject ($.jController.internal[pluginName])) {
 				$.jController.internal[pluginName] = {};
@@ -73,9 +88,9 @@
 
 			$.jController.internal[pluginName][index] = {};
 
-		}
+		},
 
-		var renderAll = function() {
+		renderAll : function() {
 
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
@@ -87,10 +102,10 @@
 					$.each(pluginObject.paramsList, function(index, state) {
 						
 						// Create internal values object
-						initInternal(pluginName, index);
+						jController.initInternal(pluginName, index);
 
 						// Create "self" (related to the instance) and retrieve all events
-						listenEvents(state, pluginName, new self(state, pluginName, index));
+						jController.listenEvents(state, pluginName, jController.self(state, pluginName, index));
 
 						// Render plugin
 						pluginObject.render(context, state);
@@ -101,16 +116,11 @@
 					_plugins[pluginName].shown = true;
 					
 					// render All (allows us to call a plugin into another )
-					renderAll();
+					jController.renderAll();
 				}
 
 			})
 		}
-
-		// Recusively render everything
-		renderAll();
-
-		return this;
 	}
 
 	$.jController.import =  function( links, callback ) {
