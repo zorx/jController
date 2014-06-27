@@ -15,15 +15,15 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	render : function(ctx, params) {
+	render : function(ctx, self) {
 		$.jController.arc({
-			x: params.x,
-			y: params.y,
-			r: params.r,
+			x: self.params.x,
+			y: self.params.y,
+			r: self.params.r,
 			angleStart: 0,
 			angleEnd: 2 * Math.PI,
-			color: params.color,
-			lineWidth: params.lineWidth,
+			color: self.params.color,
+			lineWidth: self.params.lineWidth,
 		})
 	},
 
@@ -31,12 +31,13 @@ $.jController.registerPlugin({
 		
 		click : function($canvas, self, callback) {
 			$canvas.on("click", {self: self, callback: callback}, function(e) {
+				var self = e.data.self;
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : e.data.self.params.x,
-					cy : e.data.self.params.y,
-					cr : e.data.self.params.r,
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
 				})) {
 					callback(e);
 				}
