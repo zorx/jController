@@ -11,6 +11,7 @@ $.jController.registerPlugin({
 			angleStart : 0,
 			angleEnd : Math.PI,
 			color : "black",
+			fill : undefined,
 			lineWidth : 1,
 		}
 
@@ -19,17 +20,16 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 
-		var ctx = $.jController.getContext();
-		
 		var params = self.params;
-		ctx.beginPath();
-		$.jController.getHelper("contextSet")({
-			ctx : ctx,
+		$.jController.getHelper("contextDraw")({
+			ctx : $.jController.getContext(),
 			color : params.color,
+			fill  : params.fill,
 			lineWidth : params.lineWidth,
+			draw : function (ctx) {
+				ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
+			},
 		})
-		ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
-		ctx.stroke();
-		$.jController.getHelper("contextReset")({ctx: ctx});
+
 	},
 })

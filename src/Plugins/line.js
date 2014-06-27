@@ -4,8 +4,8 @@
 $.jController.registerPlugin({
 	name : "line",
 	
-	construct : function(params)
-	{
+	construct : function(params) {
+
 		var defaults = {
 			x : 0,
 			y : 0,
@@ -16,22 +16,22 @@ $.jController.registerPlugin({
 		}
 
 		return $.extend({}, defaults, params);
+		
 	},
 	
 	render : function(self) {
 
-		var ctx = $.jController.getContext();
-
 		var params = self.params;
-		ctx.beginPath();
-		$.jController.getHelper("contextSet")({
-			ctx : ctx,
+		$.jController.getHelper("contextDraw")({
+			ctx : $.jController.getContext(),
 			color : params.color,
 			lineWidth : params.lineWidth,
+			draw : function (ctx) {
+				ctx.moveTo(params.x, params.y);
+				ctx.lineTo(params.w, params.h);
+			},
 		})
-		ctx.moveTo(params.x, params.y);
-		ctx.lineTo(params.w, params.h);
-		ctx.stroke();
-		$.jController.getHelper("contextReset")({ctx: ctx});
+
 	},
+
 })
