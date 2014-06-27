@@ -25,9 +25,9 @@ $.jController.registerPlugin({
 
 	    var ctx = $.jController.getContext();
 
-	    if (!self.params.trace)
+	    if (self.params.trace)
 	    {
-	    	ctx.clearRect(0, 0, $.jController.getCanvas().width, $.jController.getCanvas().height);
+	    	$.jController.clearCanvas(false);
 	    }
 
 	    ctx.fillStyle = self.params.colors[rnd];

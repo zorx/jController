@@ -52,6 +52,9 @@
 	// Private Canvas context
 	var _context;
 
+	// Default value of clearing canvas 
+	var _isClearCanvas = true;
+
 	// jQuery jController function definition
 	$.fn.jController = function (params) {
 
@@ -160,6 +163,14 @@
 			});
 		},
 
+		// Clear canvas
+		clearCanvas : function() {
+
+			var ctx = $.jController.getContext();
+			ctx.clearRect(0, 0, $.jController.getCanvas().width, $.jController.getCanvas().height);
+		},
+
+		// Render all plugins
 		renderAll : function() {
 
 			// For each declared plugin
@@ -180,6 +191,11 @@
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
 
+						if (_isClearCanvas)	{
+
+							jController.clearCanvas();
+						}
+						
 						// Render plugin
 						pluginObject.render(_self);
 
@@ -197,6 +213,7 @@
 		}
 	}
 
+	// Import Js files
 	$.jController.import =  function(links, callback) {
  		// Recursively import files and callback()
  		(function importRecursive(list, callback){
@@ -212,19 +229,23 @@
  		}($.makeArray(links), callback))
 	}
 
-	$.jController.getCanvasObject = function()
-	{
+	$.jController.getCanvasObject = function() {
+
 		return _$canvas;
 	}
 
-	$.jController.getCanvas = function()
-	{
+	$.jController.getCanvas = function() {
+
 		return _canvas;
 	}
 
-	$.jController.getContext = function()
-	{
+	$.jController.getContext = function() {
+
 		return _context;
+	}
+
+	$.jController.clearCanvas = function(status) {
+		_isClearCanvas = status;
 	}
 
 	/* -- Trigger -- */
