@@ -45,6 +45,7 @@
 			})
 		}
 
+		// self object is referenced
 		var self = function(params,pluginName,index){
 
 			return {
@@ -251,7 +252,7 @@
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
 			$.jController[plugin.name] = function(state) {
 				//_plugins[plugin.name].params.push (plugin.properties(state))
-				_plugins[plugin.name].params.push (state)
+				_plugins[plugin.name].params.push (plugin.construct(state))
 			}
 		}
 	}

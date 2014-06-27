@@ -4,8 +4,7 @@ $.jController.registerPlugin({
 	
 	name : "circle",
 
-	// note: je propose qu'on l'appelle construct (ref aux objets)
-	properties : function(params)
+	construct : function(params)
 	{
 		var defaults = {
 			x : 0,
@@ -29,13 +28,14 @@ $.jController.registerPlugin({
 	events : {
 		
 		click : function($canvas, self, callback) {
+			
 			$canvas.on("click", {params: self.params, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : params.x,
-					cy : params.y,
-					cr : params.r,
+					cx : e.data.params.x,
+					cy : e.data.params.y,
+					cr : e.data.params.r,
 				})) {
 					callback(e);
 				}
@@ -47,9 +47,9 @@ $.jController.registerPlugin({
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : params.x,
-					cy : params.y,
-					cr : params.r,
+					cx : e.data.params.x,
+					cy : e.data.params.y,
+					cr : e.data.params.r,
 				})) {
 					callback(e);
 				}
@@ -66,13 +66,13 @@ $.jController.registerPlugin({
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : e.data.self.params.x,
+					cy : e.data.self.params.y,
+					cr : e.data.self.params.r,
 				}) && !self.getInternal("_in")) {
 					
-					self.setInternal({_in:true});
-						callback(e, self);
+					e.data.self.setInternal({_in:true});
+						callback(e, e.data.self);
 					
 				}
 			});
@@ -84,13 +84,13 @@ $.jController.registerPlugin({
 				if (!$.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : e.data.self.params.x,
+					cy : e.data.self.params.y,
+					cr : e.data.self.params.r,
 				}) && self.getInternal("_in")) {
 					
-					callback(e, self);
-					self.setInternal({_in:false});
+					callback(e, e.data.self);
+					e.data.self.setInternal({_in:false});
 
 				}
 			});
