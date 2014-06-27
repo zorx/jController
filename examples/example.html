@@ -22,7 +22,7 @@
 			y: 50,
 			r: 20,
 			color: "red",
-			lineWidth: 3,
+			line : { width: 3, }
 		});
 
 		// Add circle to canvas
@@ -54,7 +54,7 @@
 			w: 165,
 			h: 185,
 			color: "pink",
-			lineWidth: 5,
+			line : { width: 5, }
 		});
 	
 		// Add rect to jController
@@ -64,8 +64,8 @@
 			w: 150,
 			h: 170,
 			color: "grey",
-			shadow: { color: "green", blur: 3 },
-			lineWidth: 2,
+			shadow: { color: "green", blur: 3, },
+			line : { width: 3, },
 			// Events
 			click: function(e) {
 				console.log("Rect - click()")
@@ -87,7 +87,7 @@
 			r: 20,
 			color: "orange",
 			fill: "orange",
-			shadow: { color: "green", blur: 3 },
+			shadow: { color: "green", blur: 3, },
 			click: function(e) {
 				console.log("Small circle - click()")
 			},

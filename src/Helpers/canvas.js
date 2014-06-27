@@ -15,7 +15,12 @@ $.jController.registerHelper({
 
 		// Default values
 		var defaults = {
-			lineWidth: 1,
+			line : {
+				width : 1,
+				cap   : "butt",
+				join  : "miter",
+				miterLimit : 10,
+			},
 			color: "black",
 			fill: undefined,
 			shadow : {
@@ -36,7 +41,10 @@ $.jController.registerHelper({
 		args.ctx.beginPath();
 
 		// Set args into context
-		args.ctx.lineWidth  = args.lineWidth;
+		args.ctx.lineWidth  = args.line.width;
+		args.ctx.lineCap    = args.line.cap;
+		args.ctx.lineJoin   = args.line.join;
+		args.ctx.miterLimit = args.line.miterLimit;
 
 
 		// Actually draw what should be drawn

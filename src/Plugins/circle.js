@@ -23,7 +23,7 @@ $.jController.registerPlugin({
 			angleEnd: 2 * Math.PI,
 			color: self.params.color,
 			fill: self.params.fill,
-			lineWidth: self.params.lineWidth,
+			line: self.params.line,
 			shadow: self.params.shadow,
 		})
 
