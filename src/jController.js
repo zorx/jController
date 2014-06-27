@@ -22,54 +22,52 @@
 	 	var $canvas = this;
 		var context = $canvas[0].getContext("2d");
 
-		// Retrieve All events from params and listen
-		var listenEvents = function(params,self, pluginName) {
+		// Retrieve All events from paramsList and listen
+		var listenEvents = function(paramsList, pluginName, self) {
 
-			$.each(params, function(key, value) {
-
-				// looking for events on params
-				if ($.jController.isEvent(pluginName, key) &&
-					$.isFunction(value)) {
-
-					// key in this case is an event Name
-					var eventName = key;
-
-					// value in this case is a callback
-					var callback = value;
-
+			$.each(paramsList, function(evt, callback) {
+				// looking for events on paramsList
+				if ($.jController.isEvent(pluginName, evt) &&
+					$.isFunction(callback)) {
 					// Execute the event					
 					$.jController
 						.getPlugin(pluginName)
-						.events[eventName]($canvas, self, callback);
+						.events[evt]($canvas, self, callback);
 				}
-			})
+			});
+
 		}
 
-		// self object is referenced
-		var self = function(params,pluginName,index){
+		// Create self "object" for plugin
+		var self = function(state, pluginName, index) {
 
 			return {
-						id:index,
-						plugin : pluginName,
-						params:params,
-						setInternal : function(data) {
-							var oldData = ($.isPlainObject($.jController.internal[pluginName][index])) ? 
-								$.jController.internal[pluginName][index] : 
-								{};
+				id : index,
+				plugin : pluginName,
+				params : state,
+				// Set internal values
+				setInternal : function(data) {
+					var oldData = ($.isPlainObject($.jController.internal[pluginName][index]))
+						? $.jController.internal[pluginName][index]
+						: {};
+					$.jController.internal[pluginName][index] = $.extend({}, oldData, data);
+				},
+				// Retrieve internal value
+				getInternal : function(key) {
+					return $.jController.internal[pluginName][index][key]; 
+				},
+				// Retrieve internal values (all)
+				getInternals : function() {
+					return $.jController.internal[pluginName][index];
+				},
+			}
 
-							// Merge theme
-							$.jController.internal[pluginName][index] = $.extend({}, oldData, data);
-						},
-						getInternal : function (key) {
-							return $.jController.internal[pluginName][index][key] ; 
-						}
-					}
 		}
 
-		var internal = function(pluginName,index){
+		// Create internal values placeholder for plugin
+		var initInternal = function(pluginName, index) {
 
-			if (!$.isPlainObject ($.jController.internal[pluginName])) 
-			{
+			if (!$.isPlainObject ($.jController.internal[pluginName])) {
 				$.jController.internal[pluginName] = {};
 			}
 
@@ -77,36 +75,30 @@
 
 		}
 
-		var renderAll = function () {
+		var renderAll = function() {
 
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
 
-				
-
 				// Not render yet
-				if (!pluginObject.isRender && pluginObject.params.length != 0) {
+				if (!pluginObject.shown && pluginObject.paramsList.length != 0) {
 
 					// Construct and render each one
-					$.each(pluginObject.params, function(index, params) {
-						// @TODO : handle default params by using
-						// $.extend({}, default, params) for missing params
+					$.each(pluginObject.paramsList, function(index, state) {
+						
+						// Create internal values object
+						initInternal(pluginName, index);
 
-						new internal(pluginName,index);
-
-						// create Self (related to the instance)
-						var _self = new self(params,pluginName,index);
-
-						// Retrieve All events from params
-						listenEvents(params, _self, pluginName);
+						// Create "self" (related to the instance) and retrieve all events
+						listenEvents(state, pluginName, new self(state, pluginName, index));
 
 						// Render plugin
-						pluginObject.render(context, params);
+						pluginObject.render(context, state);
 
 					})
 
 					// Object render
-					_plugins[pluginName].isRender = true;
+					_plugins[pluginName].shown = true;
 					
 					// render All (allows us to call a plugin into another )
 					renderAll();
@@ -166,7 +158,7 @@
 	/* -- Helpers config -- */
 
 	// Retrieve all events
-	$.jController.getAllHelpers = function() {
+	$.jController.getHelpers = function() {
 		return _helpers;
 	}
 
@@ -193,7 +185,7 @@
 	/* -- Events config -- */
 
 	// Retrieve all events of PluginName
-	$.jController.getAllEvents = function(pluginName) {
+	$.jController.getEvents = function(pluginName) {
 		return ($.jController.isPlugin(pluginName) && 
 			$.isPlainObject($.jController.getPlugin(pluginName).events))
 			? $.jController.getPlugin(pluginName).events
@@ -201,15 +193,15 @@
 	}
 
 	// Retrieve a specific pluginName
-	$.jController.getEvent = function(pluginName,eventName) {
+	$.jController.getEvent = function(pluginName, eventName) {
 		// return the event if exists otherwise null
-		return ($.jController.isEvent(pluginName,eventName)) 
+		return ($.jController.isEvent(pluginName, eventName)) 
 			? _plugins[pluginName].events[eventName] 
 			: null;
 	}
 
 	// Check wether a pluginName Event exists or nor
-	$.jController.isEvent = function(pluginName,eventName) {
+	$.jController.isEvent = function(pluginName, eventName) {
 		return ($.jController.isPlugin(pluginName) &&
 			$.isPlainObject(_plugins[pluginName].events) &&
 			$.isFunction(_plugins[pluginName].events[eventName]))
@@ -218,7 +210,7 @@
 	/* -- Plugins config  -- */
 
 	// Retrieve all plugins
-	$.jController.getAllPlugins = function() {
+	$.jController.getPlugins = function() {
 		return _plugins;
 	}
 
@@ -240,19 +232,16 @@
 
 			// Create new object of plugin
 			_plugins[plugin.name] = {
-
-				params : [],					// With params (list)
-				render 	   : plugin.render,		// Register plugin rendering function
-				events 	   : plugin.events,		// Register plugin events
-				isRender   : false,				// Plugin already rendered ?
-
+				paramsList  : [],         // With paramsList (list)
+				render 	: plugin.render,  // Register plugin rendering function
+				events 	: plugin.events,  // Register plugin events
+				shown   : false,          // Plugin already rendered ?
 			}
 
 			// Add plugin function
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
 			$.jController[plugin.name] = function(state) {
-				//_plugins[plugin.name].params.push (plugin.properties(state))
-				_plugins[plugin.name].params.push (plugin.construct(state))
+				_plugins[plugin.name].paramsList.push (plugin.construct(state))
 			}
 		}
 	}
