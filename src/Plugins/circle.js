@@ -7,19 +7,21 @@ $.jController.registerPlugin({
 		var defaults = {
 			x : 0,
 			y : 0,
-			r : 0
+			r : 0,
+			color: "black",
 		}
 
 		return $.extend({}, defaults, params);
 	},
 
-	render : function(ctx, self) {
+	render : function(ctx, params) {
 		$.jController.arc({
-			x: self.x,
-			y: self.y,
-			r: self.r,
+			x: params.x,
+			y: params.y,
+			r: params.r,
 			angleStart: 0,
-			angleEnd: 2 * Math.PI
+			angleEnd: 2 * Math.PI,
+			color: params.color,
 		})
 	},
 
@@ -34,7 +36,7 @@ $.jController.registerPlugin({
 					cy : e.data.self.params.y,
 					cr : e.data.self.params.r,
 				})) {
-					callback(e, e.data.self);
+					callback(e);
 				}
 			});
 		},

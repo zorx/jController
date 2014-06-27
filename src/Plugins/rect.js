@@ -9,6 +9,7 @@ $.jController.registerPlugin({
 			y : 0,
 			w : 0,
 			h : 0,
+			color : "black",
 		}
 
 		return $.extend({}, defaults, params);
@@ -16,6 +17,7 @@ $.jController.registerPlugin({
 
 	render : function(ctx, params) {
 		ctx.beginPath();
+		ctx.strokeStyle = params.color;
 		ctx.rect(params.x, params.y, params.w, params.h);
 		ctx.stroke();
 	},
