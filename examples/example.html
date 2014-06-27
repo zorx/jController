@@ -8,6 +8,7 @@
 	<script src="../src/Helpers/in.js"></script>
 	<script src="../src/Helpers/canvas.js"></script>
 
+	<script src="../src/Plugins/text.js"></script>
 	<script src="../src/Plugins/arc.js"></script>
 	<script src="../src/Plugins/circle.js"></script>
 	<script src="../src/Plugins/line.js"></script>
@@ -16,6 +17,18 @@
 	<script type="text/javascript"><!--
 	$(function() {
 	
+		// Add text to canvas
+		$.jController.text({
+			x:200,
+			y:100,
+			text: "jController",
+			font: "15px bold Helvetica",
+			outline: "red",
+			align: "center",
+			baseline: "middle",
+			shadow : {blur: 3}
+		});
+
 		// Add circle to canvas
 		$.jController.circle({
 			x: 275,
