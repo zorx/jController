@@ -23,33 +23,65 @@
 		var context = $canvas[0].getContext("2d");
 
 		// Retrieve All events from params and listen
-		var listenEvents = function(params, index, plugin) {
+		var listenEvents = function(params,self, pluginName) {
 
 			$.each(params, function(key, value) {
 
 				// looking for events on params
-				if ($.jController.isEvent(plugin, key) &&
+				if ($.jController.isEvent(pluginName, key) &&
 					$.isFunction(value)) {
 
-					// key in this case is an event
-					var event = key;
+					// key in this case is an event Name
+					var eventName = key;
 
 					// value in this case is a callback
 					var callback = value;
 
+					// Execute the event					
 					$.jController
-						.getPlugin(plugin)
-						.events[event]($canvas, params, callback,index);
-
+						.getPlugin(pluginName)
+						.events[eventName]($canvas, self, callback);
 				}
-				
 			})
+		}
+
+		var self = function(params,pluginName,index){
+
+			return {
+						id:index,
+						plugin : pluginName,
+						params:params,
+						setInternal : function(data) {
+							var oldData = ($.isPlainObject($.jController.internal[pluginName][index])) ? 
+								$.jController.internal[pluginName][index] : 
+								{};
+
+							// Merge theme
+							$.jController.internal[pluginName][index] = $.extend({}, oldData, data);
+						},
+						getInternal : function (key) {
+							return $.jController.internal[pluginName][index][key] ; 
+						}
+					}
+		}
+
+		var internal = function(pluginName,index){
+
+			if (!$.isPlainObject ($.jController.internal[pluginName])) 
+			{
+				$.jController.internal[pluginName] = {};
+			}
+
+			$.jController.internal[pluginName][index] = {};
+
 		}
 
 		var renderAll = function () {
 
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
+
+				
 
 				// Not render yet
 				if (!pluginObject.isRender && pluginObject.params.length != 0) {
@@ -59,8 +91,13 @@
 						// @TODO : handle default params by using
 						// $.extend({}, default, params) for missing params
 
+						new internal(pluginName,index);
+
+						// create Self (related to the instance)
+						var _self = new self(params,pluginName,index);
+
 						// Retrieve All events from params
-						listenEvents(params, index, pluginName);
+						listenEvents(params, _self, pluginName);
 
 						// Render plugin
 						pluginObject.render(context, params);
@@ -91,7 +128,9 @@
  			} else {
 	 			$.getScript(list[0], function() {
 	 				import_recursive(list.slice(1), callback);
-	 			}).fail(function(e,b,x){console.log(x)})
+	 			}).fail(function(jqxhr, settings, exception){
+	 				console.log(exception)
+	 			})
  			}
  		}($.makeArray(links), callback))
 	}

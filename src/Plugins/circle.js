@@ -28,8 +28,8 @@ $.jController.registerPlugin({
 
 	events : {
 		
-		click : function($canvas, params, callback,index) {
-			$canvas.on("click", {params: params, callback: callback}, function(e) {
+		click : function($canvas, self, callback) {
+			$canvas.on("click", {params: self.params, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -42,8 +42,8 @@ $.jController.registerPlugin({
 			});
 		},
 
-		mousemove : function ($canvas, params, callback,index) {
-			$canvas.on("mousemove", {params: params, callback: callback}, function(e) {
+		mousemove : function ($canvas, self, callback) {
+			$canvas.on("mousemove", {params: self.params, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -56,41 +56,41 @@ $.jController.registerPlugin({
 			});
 		},
 
-		mousein : function ($canvas, params, callback,index) {
-			$.jController.internal[index] = {_in:false}
-			//[@TODO] Add getter/setter internal
-			// params => self {id:index,params:params,plugin:pluginName}
+		mousein : function ($canvas, self, callback) {
+			
+			// Set Internal var
+			self.setInternal({_in:false});
 
 
-			$canvas.on("mousemove", {params: params, callback: callback,index:index}, function(e) {
+			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : params.x,
-					cy : params.y,
-					cr : params.r,
-				}) && !$.jController.internal[e.data.index]._in) {
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				}) && !self.getInternal("_in")) {
 					
-					$.jController.internal[e.data.index]._in=true;
+					self.setInternal({_in:true});
 						callback(e, self);
 					
 				}
 			});
 		},
 
-		mouseout : function ($canvas, params, callback,index) {
+		mouseout : function ($canvas, self, callback) {
 			
-			$canvas.on("mousemove", {params: params, callback: callback,index:index}, function(e) {
+			$canvas.on("mousemove", {self:self, callback: callback}, function(e) {
 				if (!$.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
-					cx : params.x,
-					cy : params.y,
-					cr : params.r,
-				}) && $.jController.internal[e.data.index]._in) {
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				}) && self.getInternal("_in")) {
 					
 					callback(e, self);
-					$.jController.internal[e.data.index]._in=false;
+					self.setInternal({_in:false});
 
 				}
 			});
