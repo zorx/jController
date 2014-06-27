@@ -24,12 +24,12 @@ $.jController.registerPlugin({
 	    var rnd = Math.floor(Math.random() * self.params.colors.length);
 
 	    var ctx = $.jController.getContext();
-
+	    
 	    if (self.params.trace)
 	    {
 	    	$.jController.clearCanvas(false);
 	    }
-
+		
 	    ctx.fillStyle = self.params.colors[rnd];
 	    ctx.beginPath();
 	    ctx.arc( x, y, self.params.r, 0, Math.PI * 2, true );
