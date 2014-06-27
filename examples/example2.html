@@ -33,10 +33,10 @@
 			y: "100",
 			r: "20",
 			mousein : function(){
-				alert("in");
+				console.log("in");
 			},
 			mouseout : function(){
-				alert("out")
+				console.log("out")
 			}
 		});
 
@@ -63,7 +63,7 @@
 			h: "170",
 			// Events
 			click:function(){
-				alert("Clicked !")
+				console.log("Clicked !")
 			},
 		});
 
@@ -73,7 +73,7 @@
 			y: "150",
 			r: "20",
 			click:function(e){
-				alert("Small circle is Clicked !")
+				console.log("Small circle is Clicked !")
 			},
 			
 		});
@@ -83,14 +83,14 @@
 			y: "50",
 			r: "40",
 			click:function(e){
-				alert("Big circle is Clicked !")
+				console.log("Big circle is Clicked !")
 			},
 		});
 		// How to use
 		$("canvas#controller").jController({
 			//Events
 			click:function(){
-				alert("Something is clicked");
+				console.log("Something is clicked");
 			},
 		
 		});
