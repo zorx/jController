@@ -157,9 +157,11 @@
 
 		// Set every plugins as to be rendered on next frame
 		cleanAll : function() {
+
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, pluginObject) {
 				_plugins[pluginName].isRender = false;
+				
 			});
 		},
 
@@ -191,11 +193,6 @@
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
 
-						if (_isClearCanvas)	{
-
-							jController.clearCanvas();
-						}
-						
 						// Render plugin
 						pluginObject.render(_self);
 
