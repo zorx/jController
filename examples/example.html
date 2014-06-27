@@ -14,9 +14,6 @@
 	<script src="../src/Plugins/rect.js"></script>
 
 	<script type="text/javascript"><!--
-
-	// Doesn't work on file:/// and ftp:// 
-		
 	$(function() {
 	
 		// Add circle to canvas
@@ -34,10 +31,10 @@
 			y: "100",
 			r: "20",
 			color: "blue",
-			mousein : function(){
+			mousein : function() {
 				console.log("in");
 			},
-			mouseout : function(){
+			mouseout : function() {
 				console.log("out")
 			}
 		});
@@ -69,7 +66,7 @@
 			color: "grey",
 			lineWidth: 2,
 			// Events
-			click:function(){
+			click: function() {
 				console.log("Clicked !")
 			},
 		});
@@ -80,7 +77,7 @@
 			y: "150",
 			r: "20",
 			color: "orange",
-			click:function(e){
+			click: function(e) {
 				console.log("Small circle is Clicked !")
 			},
 			
@@ -95,14 +92,18 @@
 				console.log("Big circle is Clicked !")
 			},
 		});
-		// How to use
+
+		// Finally call jController
 		$("#controller").jController({
 			
-			attr : {width:"512",height : "512"},
+			attr : {
+				width : "512",
+				height : "512",
+			},
 			
 			events : {
-				click:function(){
-					console.log("Something is clicked");
+				click : function() {
+					console.log("jController - click()");
 				}
 			}
 		
@@ -120,8 +121,8 @@
 			margin: 20px auto;
 			background-color: #fff;
 			border: 1px solid #ccc;
-			height:512px;
-			width:512px;
+			width: 512px;
+			height: 512px;
 		}
 	</style>
 </head>

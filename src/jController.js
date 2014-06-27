@@ -1,3 +1,5 @@
+
+// Defining request/cancel animation frame
 (function() {
     var lastTime = 0;
     var vendors = ['ms', 'moz', 'webkit', 'o'];
@@ -23,15 +25,11 @@
         };
 }());
 
-
-
 // Begin jController Kernel
 // create closure
 (function($) {
 
 	'use strict';
-
-	
 
 	// jController object
 	$.jController = {};
@@ -57,9 +55,10 @@
 	// jQuery jController function definition
 	$.fn.jController = function (params) {
 
-		jController.init(this,params);
+		// Init jController canvas
+		jController.init(this, params);
 
-		// Frame peer second
+		// Frame per second
 		var fps = 60;
 		
 		function animate() {
@@ -83,7 +82,8 @@
 	var jController = 
 	{
 
-		init : function($obj,params)
+		// Creates canvas for jController
+		init : function($obj, params)
 		{
 			// Unique Canvas id
 			var id = 'jController_' + $('canvas').length; 
@@ -98,6 +98,7 @@
 			_context = _canvas.getContext("2d");
 
 		},
+
 		// Retrieve All events from paramsList and listen
 		listenEvents : function(paramsList, pluginName, self) {
 
@@ -196,14 +197,14 @@
 		}
 	}
 
-	$.jController.import =  function( links, callback ) {
+	$.jController.import =  function(links, callback) {
  		// Recursively import files and callback()
- 		(function import_recursive(list, callback){
+ 		(function importRecursive(list, callback){
  			if (list.length == 0) {
  				callback();
  			} else {
 	 			$.getScript(list[0], function() {
-	 				import_recursive(list.slice(1), callback);
+	 				importRecursive(list.slice(1), callback);
 	 			}).fail(function(jqxhr, settings, exception){
 	 				console.log(exception)
 	 			})
@@ -330,10 +331,10 @@
 
 			// Create new object of plugin
 			_plugins[plugin.name] = {
-				paramsList  : [],         // With paramsList (list)
-				render 	: plugin.render,  // Register plugin rendering function
-				events 	: plugin.events,  // Register plugin events
-				isRender   : false,          // Plugin already rendered ?
+				paramsList  : [],          // With paramsList (list)
+				render 	 : plugin.render,  // Register plugin rendering function
+				events 	 : plugin.events,  // Register plugin events
+				isRender : false,          // Plugin already rendered ?
 			}
 
 			// Add plugin function
@@ -344,6 +345,4 @@
 		}
 	}
 
-})(jQuery);
-// end of closure
-// End jController Kernel
+})(jQuery); // jController Kernel end
