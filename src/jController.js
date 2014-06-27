@@ -197,7 +197,7 @@
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
 
-						console.log(state);
+						//console.log(state);
 						// Render plugin
 						pluginObject.render(_self);
 

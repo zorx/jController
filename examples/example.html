@@ -64,17 +64,18 @@
 			w: 150,
 			h: 170,
 			color: "grey",
+			shadow: { color: "green", blur: 3 },
 			lineWidth: 2,
 			// Events
 			click: function(e) {
-				e.data.self.params.fill = "red";
 				console.log("Rect - click()")
 			},
 			mousein : function(e) {
+				e.data.self.params.fill = "red";
 				console.log("Rect - mousein()")
 			},
 			mouseout : function(e) {
-				//e.data.self.params.fill = undefined;
+				e.data.self.params.fill = undefined;
 				console.log("Rect - mouseout()")
 			},
 		});
