@@ -5,6 +5,17 @@
 
 	'use strict';
 
+	// shim layer with setTimeout fallback
+	window.requestAnimFrame = (function(){
+		
+	  return  window.requestAnimationFrame       ||
+	          window.webkitRequestAnimationFrame ||
+	          window.mozRequestAnimationFrame    ||
+	          function( callback ){
+	            window.setTimeout(callback, 1000 / 60);
+	          };
+	})();
+
 	// jController object
 	$.jController = {};
 
@@ -27,9 +38,14 @@
 	 	$canvas = this;
 		context = $canvas[0].getContext("2d");
 
-		// Recusively render everything
+		animate();
+		function animate() {
+		    requestAnimFrame( animate );
 
-		jController.renderAll();
+		    // Recusively render everything
+		    jController.renderAll();
+
+		}
 
 		return this;
 	}
