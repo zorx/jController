@@ -1,12 +1,29 @@
-// shim layer with setTimeout fallback
-	window.requestAnimFrame = (function(){
-	  return  window.requestAnimationFrame       ||
-	          window.webkitRequestAnimationFrame ||
-	          window.mozRequestAnimationFrame    ||
-	          function( callback ){
-	            //window.setTimeout(callback, 1000 / 60);
-	          };
-	})();
+(function() {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x]+'CancelAnimationFrame'] 
+                                   || window[vendors[x]+'CancelRequestAnimationFrame'];
+    }
+ 
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+              timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+ 
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
+
 
 // Begin jController Kernel
 // create closure
@@ -22,19 +39,19 @@
 	// Index of objets
 	$.jController.internal = {};
 
-	// jController plugins list
+	// Private jController plugins list
 	var _plugins = {};
 
-	// jController helpers list
+	// Private jController helpers list
 	var _helpers = {};
 	
-	// Canvas jQuery object
+	// Private Canvas jQuery object
 	var _$canvas;
 
-	// Canvas
+	// Private Canvas
 	var _canvas;
 
-	// Canvas context
+	// Private Canvas context
 	var _context;
 
 	// jQuery jController function definition
@@ -42,16 +59,22 @@
 
 		jController.init(this,params);
 
-		animate();
+		// Frame peer second
+		var fps = 60;
+		
 		function animate() {
 
-		    window.requestAnimFrame( animate );
+			setTimeout(function() {
+	        	window.requestAnimationFrame(animate);
 
-		    // Recusively render everything
-		    jController.renderAll();
-		    jController.cleanAll();
+			    // Recusively render everything
+			    jController.renderAll();
+			    jController.cleanAll();
+			}, 1000 / fps);
 
 		}
+
+		animate();
 
 		return this;
 	}
