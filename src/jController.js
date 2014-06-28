@@ -4,7 +4,7 @@
 	var requestAnimFrame = (function(){ 
 	  return  function( callback ){ 
 
-	            window.setTimeout(callback, 1000 / 0.5); 
+	            window.setTimeout(callback, 1000 / 60); 
 	          }; 
 	})(); 
 
@@ -90,16 +90,21 @@
 		},
 
 		// Retrieve All events from paramsList and listen
-		listenEvents : function(paramsList, pluginName, self) {
+		listenEvents : function(state, pluginName, self) {
 
-			$.each(paramsList, function(evt, callback) {
-				// looking for events on paramsList
-				if ($.jController.isEvent(pluginName, evt) &&
-					$.isFunction(callback)) {
+			$.each(state, function(key, value) {
+				// looking for events on state
+				if ($.jController.isEvent(pluginName, key) &&
+					$.isFunction(value)) {
+
+					// key becomes an EventName
+					var eventName = key;
+					// key becomes a callback
+					var callback = value;
 					// Execute the event					
 					$.jController
 						.getPlugin(pluginName)
-						.events[evt](self, callback);
+						.events[eventName](self, callback);
 				}
 			});
 
@@ -197,8 +202,12 @@
 					// Create "self" (related to the instance) 
 					var _self = jController.self(state, pluginName, index);
 
-					// Retrieve all events
-					jController.listenEvents(state, pluginName, _self);
+					if (!state.__isRender)
+					{
+						// Retrieve all events
+						jController.listenEvents(state, pluginName, _self);
+						state.__isRender = true;
+					}
 
 					// Render plugin
 					plugin.render(_self);
@@ -226,8 +235,12 @@
 						// Create "self" (related to the instance) 
 						var _self = jController.self(state, pluginName, index);
 
-						// Retrieve all events
-						jController.listenEvents(state, pluginName, _self);
+						if (!state.__isRender)
+						{
+							// Retrieve all events
+							jController.listenEvents(state, pluginName, _self);
+							state.__isRender = true;
+						}
 
 						// Render plugin
 						$.jController.getPlugin(pluginName).render(_self);
@@ -388,6 +401,7 @@
 				render 	 : plugin.render,  			// Register plugin rendering function
 				events 	 : plugin.events,  			// Register plugin events
 				_construct : plugin.construct, 		// Plugin Constructor
+				isRender : false,          			// Plugin already rendered ?
 				getEvent : function(eventName){ 	// Get eventName
 
 					return $.jController.getEvent(plugin.name,eventName);
@@ -403,6 +417,9 @@
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
 			$.jController[plugin.name] = function(state) {
 				
+				// Instance already rendered ?
+				state.__isRender = false;
+
 				_plugins[plugin.name].paramsList.push (plugin.construct(state))
 			}
 		}
