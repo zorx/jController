@@ -46,7 +46,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(e);
+					callback(self);
 				}
 			});
 		},
@@ -65,7 +65,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(e);
+					callback(self);
 				}
 			});
 		},
@@ -86,7 +86,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(e);
+					callback(self);
 					self.setInternal({mousedIn : true});
 				}
 			});
@@ -107,7 +107,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(e);
+					callback(self);
 					self.setInternal({mousedIn : false});
 				}
 			});
