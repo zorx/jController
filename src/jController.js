@@ -110,7 +110,6 @@
 
 			return {
 				id : index,
-				plugin : pluginName,
 				params : state,
 				// Set internal values
 				setInternal : function(data) {
@@ -128,8 +127,8 @@
 					return $.jController.internal[pluginName][index];
 				},
 
-				// append another plugin to self (plugin name, params)
-				append : function(_pluginName,pParams) {
+				// render another plugin (plugin name, params)
+				render : function(_pluginName,pParams) {
 					//[@TODO]
 
 					if (!$.isPlainObject(_ephemeral[_pluginName])) {
@@ -142,10 +141,17 @@
 
 					return this;
 				},
+
+				// Remove this instance
 				remove : function () {
 
 					_plugins[pluginName].paramsList.splice(index,1);
-					console.log(index);
+					
+				},
+
+				// Get parent
+				parent : function () {
+					return _plugins[pluginName];
 				}
 
 			}
@@ -310,8 +316,8 @@
 
 	// Retrieve events by name
 	$.jController.getHelper = function(name) {
-		// return the helper if exists otherwise null
-		return ($.jController.isHelper(name)) ? _helpers[name] : null;
+		// return the helper if exists otherwise undefined
+		return _helpers[name];
 	}
 
 	// Check wether an Event exists or nor
@@ -362,8 +368,8 @@
 
 	// Retrieve plugin by name
 	$.jController.getPlugin = function(name) {
-		// return the plugin if exists otherwise null
-		return ($.jController.isPlugin(name)) ? _plugins[name] : null;
+		// return the plugin if exists otherwise undefined
+		return _plugins[name];
 	}
 
 	// Check wether a Plugin exists or nor
@@ -378,10 +384,19 @@
 
 			// Create new object of plugin
 			_plugins[plugin.name] = {
-				paramsList  : [],          		// With paramsList (list)
-				render 	 : plugin.render,  		// Register plugin rendering function
-				events 	 : plugin.events,  		// Register plugin events
-				construct : plugin.construct 	// Plugin Constructor
+				paramsList  : [],          			// With paramsList (list)
+				render 	 : plugin.render,  			// Register plugin rendering function
+				events 	 : plugin.events,  			// Register plugin events
+				construct : plugin.construct, 		// Plugin Constructor
+				getEvent : function(eventName){ 	// Get eventName
+
+					return $.jController.getEvent(plugin.name,eventName);
+				},
+				isEvent : function(eventName){ 	// Get eventName
+
+					return $.jController.isEvent(plugin.name,eventName);
+				}
+
 			}
 
 			// Add plugin function

@@ -14,8 +14,8 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
-		//self.append(PluginName,Params)
-		self.append("arc",{
+		// Render another plugin
+		self.render("arc",{
 			x: self.params.x,
 			y: self.params.y,
 			r: self.params.r,
@@ -44,7 +44,7 @@ $.jController.registerPlugin({
 					cy : self.params.y,
 					cr : self.params.r,
 				})) {
-					callback(e);
+					callback(self);
 				}
 			});
 		},
@@ -62,7 +62,7 @@ $.jController.registerPlugin({
 					cy : self.params.y,
 					cr : self.params.r,
 				})) {
-					callback(e);
+					callback(self);
 				}
 			});
 		},
@@ -83,7 +83,7 @@ $.jController.registerPlugin({
 					cr : self.params.r,
 				})) {
 					self.setInternal({mousedIn:true});
-					callback(e);
+					callback(self);
 				}
 			});
 		},
@@ -103,7 +103,7 @@ $.jController.registerPlugin({
 					cr : self.params.r,
 				})) {
 
-					callback(e);
+					callback(self);
 					self.setInternal({mousedIn:false});
 				}
 			});

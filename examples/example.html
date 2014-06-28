@@ -27,7 +27,7 @@
 			click : function (e) {
 				
 				// remove this circle
-				e.data.self.remove();
+				e.remove();
 
 				$.jController.text({
 					x:300,
@@ -101,11 +101,11 @@
 				console.log("Rect - click()")
 			},
 			mousein : function(e) {
-				e.data.self.params.fill = "red";
+				e.params.fill = "red";
 				console.log("Rect - mousein()")
 			},
 			mouseout : function(e) {
-				e.data.self.params.fill = undefined;
+				e.params.fill = undefined;
 				console.log("Rect - mouseout()")
 			},
 		});
@@ -147,7 +147,7 @@
 				}
 			}
 		
-		})
+		});
 
 	});
 	--></script>
