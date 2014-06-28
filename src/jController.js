@@ -399,6 +399,7 @@
 			_plugins[plugin.name] = {
 				paramsList  : [],          			// With paramsList (list)
 				render 	 : plugin.render,  			// Register plugin rendering function
+				name     : plugin.name,				// Plugin name
 				events 	 : plugin.events,  			// Register plugin events
 				_construct : plugin.construct, 		// Plugin Constructor
 				isRender : false,          			// Plugin already rendered ?
