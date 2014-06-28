@@ -4,7 +4,7 @@
 	var requestAnimFrame = (function(){ 
 	  return  function( callback ){ 
 
-	            window.setTimeout(callback, 1000 / 1); 
+	            window.setTimeout(callback, 1000 / 0.5); 
 	          }; 
 	})(); 
 
@@ -62,7 +62,7 @@
 
 			jController.clearCanvas();
 		}		
-		console.log(_plugins.circle);
+		
 	    // Recusively render everything
 	    jController.renderAll();
 	    jController.cleanAll();

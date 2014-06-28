@@ -14,6 +14,7 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
+		
 		// Render another plugin
 		self.render("arc",{
 			x: self.params.x,
@@ -35,8 +36,8 @@ $.jController.registerPlugin({
 			//console.log(self);
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("click", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("click", function(e) {
+				
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -44,6 +45,7 @@ $.jController.registerPlugin({
 					cy : self.params.y,
 					cr : self.params.r,
 				})) {
+
 					callback(self);
 				}
 			});
@@ -53,8 +55,8 @@ $.jController.registerPlugin({
 
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("mousemove", function(e) {
+				
 				if ($.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -72,8 +74,9 @@ $.jController.registerPlugin({
 			var $canvas = $.jController.getCanvasObject();
 
 			self.setInternal({mousedIn:false});
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			
+			$canvas.on("mousemove", function(e) {
+				
 				if (! self.getInternal("mousedIn") &&
 					$.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
@@ -92,8 +95,8 @@ $.jController.registerPlugin({
 
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("mousemove", function(e) {
+				
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
