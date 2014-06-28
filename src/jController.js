@@ -4,7 +4,7 @@
 	var requestAnimFrame = (function(){ 
 	  return  function( callback ){ 
 
-	            window.setTimeout(callback, 1000 / 60); 
+	            window.setTimeout(callback, 1000 / 1); 
 	          }; 
 	})(); 
 
@@ -62,7 +62,7 @@
 
 			jController.clearCanvas();
 		}		
-
+		console.log(_plugins.circle);
 	    // Recusively render everything
 	    jController.renderAll();
 	    jController.cleanAll();
@@ -137,7 +137,7 @@
 							isRender : false,          		// Plugin already rendered ?
 						};
 					}
-					_ephemeral[_pluginName].paramsList.push (_plugins[_pluginName].construct(pParams));
+					_ephemeral[_pluginName].paramsList.push (_plugins[_pluginName]._construct(pParams));
 
 					return this;
 				},
@@ -387,7 +387,7 @@
 				paramsList  : [],          			// With paramsList (list)
 				render 	 : plugin.render,  			// Register plugin rendering function
 				events 	 : plugin.events,  			// Register plugin events
-				construct : plugin.construct, 		// Plugin Constructor
+				_construct : plugin.construct, 		// Plugin Constructor
 				getEvent : function(eventName){ 	// Get eventName
 
 					return $.jController.getEvent(plugin.name,eventName);

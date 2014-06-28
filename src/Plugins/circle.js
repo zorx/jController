@@ -32,7 +32,7 @@ $.jController.registerPlugin({
 	events : {
 		
 		click : function(self, callback) {
-
+			//console.log(self);
 			var $canvas = $.jController.getCanvasObject();
 
 			$canvas.on("click", {self: self, callback: callback}, function(e) {
