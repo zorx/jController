@@ -141,7 +141,13 @@
 					_ephemeral[_pluginName].paramsList.push (_plugins[_pluginName].construct(pParams));
 
 					return this;
+				},
+				remove : function () {
+
+					_plugins[pluginName].paramsList.splice(index,1);
+					console.log(index);
 				}
+
 			}
 
 		},

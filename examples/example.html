@@ -25,26 +25,21 @@
 			color: "red",
 			line : { width: 3},
 			click : function (e) {
-				$.jController.circle({
-					x: 50,
-					y: 50,
-					r: 30,
-					color:"black",
-					fill : "Blue"
-				});
+				
+				// remove this circle
+				e.data.self.remove();
 
 				$.jController.text({
 					x:300,
 					y:180,
 					text: "Zorx Powaaa",
-					font: "15px Helvetica",
+					font: "12px Helvetica",
 					outline: "red",
 					align: "center",
 					baseline: "middle",
 					
 				});
-				console.log(e);
-				e.data.self.params.x = e.data.self.params.x + 5;
+				
 			}
 		});
 		// Add text to canvas
@@ -59,7 +54,6 @@
 			
 		});
 
-		
 
 		// Add circle to canvas
 		$.jController.circle({
