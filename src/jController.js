@@ -4,7 +4,7 @@
 	var requestAnimFrame = (function(){ 
 	  return  function( callback ){ 
 
-	            window.setTimeout(callback, 1000 / 10); 
+	            window.setTimeout(callback, 1000 / 60); 
 	          }; 
 	})(); 
 
@@ -23,6 +23,9 @@
 	// Private jController plugins list
 	var _plugins = {};
 
+	// Ephemeral plugins (when we call a plugin from another)
+	var _ephemeral = {};
+
 	// Private jController helpers list
 	var _helpers = {};
 	
@@ -38,6 +41,8 @@
 	// Default value of clearing canvas 
 	var _isClearCanvas = true;
 
+	var _count=true;
+
 	// Frame per second
 	var fps = 0.5;
 
@@ -46,6 +51,7 @@
 
 		// Init jController canvas
 		jController.init(this, params);
+
 		requestAnimFrame(animate);
 		
 		return this;
@@ -61,13 +67,11 @@
 	    jController.renderAll();
 	    jController.cleanAll();
 
-
 	    requestAnimFrame(animate);
 	}
 
 	// jController
-	var jController = 
-	{
+	var jController = {
 		// Creates canvas for jController
 		init : function($obj, params)
 		{
@@ -123,6 +127,21 @@
 				getInternals : function() {
 					return $.jController.internal[pluginName][index];
 				},
+
+				// append another plugin to self (plugin name, params)
+				append : function(_pluginName,pParams) {
+					//[@TODO]
+
+					if (!$.isPlainObject(_ephemeral[_pluginName])) {
+						_ephemeral[_pluginName] = {
+							paramsList : [],
+							isRender : false,          		// Plugin already rendered ?
+						};
+					}
+					_ephemeral[_pluginName].paramsList.push (_plugins[_pluginName].construct(pParams));
+
+					return this;
+				}
 			}
 
 		},
@@ -142,15 +161,11 @@
 		cleanAll : function() {
 
 			// For each declared plugin
-			$.each(_plugins, function(pluginName, pluginObject) {
-				_plugins[pluginName].isRender = false;
-
-			});
+			_ephemeral = {};
 		},
 
 		// Clear canvas
 		clearCanvas : function() {
-console.log("Y");
 			var ctx = $.jController.getContext();
 			ctx.clearRect(0, 0, $.jController.getCanvas().width, $.jController.getCanvas().height);
 		},
@@ -159,13 +174,39 @@ console.log("Y");
 		renderAll : function() {
 
 			// For each declared plugin
-			$.each(_plugins, function(pluginName, pluginObject) {
+			$.each(_plugins, function(pluginName, plugin) {
+				
+				// Construct and render each one
+				$.each(plugin.paramsList, function(index, state) {
+					
+					// Create internal values object
+					jController.initInternal(pluginName, index);
 
+					// Create "self" (related to the instance) 
+					var _self = jController.self(state, pluginName, index);
+
+					// Retrieve all events
+					jController.listenEvents(state, pluginName, _self);
+
+					// Render plugin
+					plugin.render(_self);
+
+				})
+			})
+
+			jController.renderEphemeral();
+		},
+
+		// Render Ephemeral plugins
+		renderEphemeral : function () {
+
+			// For each declared plugin
+			$.each(_ephemeral, function(pluginName, plugin) {
 				// Not render yet
-				if (!pluginObject.isRender && pluginObject.paramsList.length != 0) {
+				if (!plugin.isRender && plugin.paramsList.length != 0) {
 
 					// Construct and render each one
-					$.each(pluginObject.paramsList, function(index, state) {
+					$.each(plugin.paramsList, function(index, state) {
 						
 						// Create internal values object
 						jController.initInternal(pluginName, index);
@@ -177,17 +218,16 @@ console.log("Y");
 						jController.listenEvents(state, pluginName, _self);
 
 						// Render plugin
-						pluginObject.render(_self);
+						$.jController.getPlugin(pluginName).render(_self);
 
 					})
 
 					// Object render
-					_plugins[pluginName].isRender = true;
+					_ephemeral[pluginName].isRender = true;
 					
-					// render All (allows us to call a plugin into another )
-					jController.renderAll();
+					// render All (allow us to call a plugin into another )
+					jController.renderEphemeral();
 				}
-
 			})
 
 		}
@@ -332,15 +372,16 @@ console.log("Y");
 
 			// Create new object of plugin
 			_plugins[plugin.name] = {
-				paramsList  : [],          // With paramsList (list)
-				render 	 : plugin.render,  // Register plugin rendering function
-				events 	 : plugin.events,  // Register plugin events
-				isRender : false,          // Plugin already rendered ?
+				paramsList  : [],          		// With paramsList (list)
+				render 	 : plugin.render,  		// Register plugin rendering function
+				events 	 : plugin.events,  		// Register plugin events
+				construct : plugin.construct 	// Plugin Constructor
 			}
 
 			// Add plugin function
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
 			$.jController[plugin.name] = function(state) {
+				
 				_plugins[plugin.name].paramsList.push (plugin.construct(state))
 			}
 		}

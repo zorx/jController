@@ -17,26 +17,47 @@
 	<script type="text/javascript"><!--
 	$(function() {
 	
-		// Add text to canvas
-		$.jController.text({
-			x:200,
-			y:100,
-			text: "jController",
-			font: "15px bold Helvetica",
-			outline: "red",
-			align: "center",
-			baseline: "middle",
-			shadow : {blur: 3}
-		});
-
 		// Add circle to canvas
 		$.jController.circle({
 			x: 275,
 			y: 50,
-			r: 20,
+			r: 30,
 			color: "red",
-			line : { width: 3, }
+			line : { width: 3},
+			click : function (e) {
+				$.jController.circle({
+					x: 50,
+					y: 50,
+					r: 30,
+					color:"black",
+					fill : "Blue"
+				});
+
+				$.jController.text({
+					x:300,
+					y:180,
+					text: "Zorx Powaaa",
+					font: "15px Helvetica",
+					outline: "red",
+					align: "center",
+					baseline: "middle",
+					
+				});
+			}
 		});
+		// Add text to canvas
+		$.jController.text({
+			x:275,
+			y:50,
+			text: "Click here",
+			font: "12px bold Helvetica",
+			outline: "red",
+			align: "center",
+			baseline: "middle",
+			
+		});
+
+		
 
 		// Add circle to canvas
 		$.jController.circle({

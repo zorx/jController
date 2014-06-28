@@ -112,10 +112,6 @@ $.jController.registerPlugin({
 				}
 			});
 
-			$canvas.on("mouseout", {self: self, callback: callback}, function(e) {
-				callback(e);
-				e.data.self.setInternal({mousedIn : false});
-			});
 		},
 
 	},

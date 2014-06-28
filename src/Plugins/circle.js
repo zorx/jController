@@ -14,8 +14,8 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
-		self.params.x = self.params.x +1;
-		$.jController.arc({
+		//self.append(PluginName,Params)
+		self.append("arc",{
 			x: self.params.x,
 			y: self.params.y,
 			r: self.params.r,
@@ -94,23 +94,20 @@ $.jController.registerPlugin({
 
 			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
 				var self = e.data.self;
-				if (self.getInternal("mousedIn" &&
+				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inCircle")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
 					cx : self.params.x,
 					cy : self.params.y,
 					cr : self.params.r,
-				}))) {
+				})) {
+
 					callback(e);
 					self.setInternal({mousedIn:false});
 				}
 			});
 
-			$canvas.on("mouseout", {self: self, callback: callback}, function(e) {
-				callback(e);
-				e.data.self.setInternal({mousedIn : false});
-			});
 		},
 	},
 })
