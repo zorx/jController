@@ -36,8 +36,8 @@ $.jController.registerPlugin({
 
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("click", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("click", function(e) {
+				
 				if ($.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -55,8 +55,8 @@ $.jController.registerPlugin({
 
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("mousemove", function(e) {
+				
 				if ($.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,
 					py : e.pageY - this.offsetTop,
@@ -75,8 +75,8 @@ $.jController.registerPlugin({
 			self.setInternal({mousedIn : false});
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("mousemove", function(e) {
+				
 				if (! self.getInternal("mousedIn") && 
 					$.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,
@@ -96,8 +96,8 @@ $.jController.registerPlugin({
 
 			var $canvas = $.jController.getCanvasObject();
 
-			$canvas.on("mousemove", {self: self, callback: callback}, function(e) {
-				var self = e.data.self;
+			$canvas.on("mousemove", function(e) {
+				
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inRect")({
 					px : e.pageX - this.offsetLeft,
