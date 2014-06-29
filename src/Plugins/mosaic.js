@@ -19,21 +19,21 @@ $.jController.registerPlugin({
 		
 		var ctx = $.jController.getContext();
 
-		var t = new Date().getTime() * 0.002;
-		var x = Math.sin(t)       * 192 + 256;
-		var y = Math.cos(t * 0.9) * 192 + 256;
-		var c = Math.floor(Math.random() * self.params.colors.length);
+		self.params.t = new Date().getTime() * 0.002;
+		self.params.x = Math.sin(self.params.t)       * 192 + 256;
+		self.params.y = Math.cos(self.params.t * 0.9) * 192 + 256;
+		self.params.c = Math.floor(Math.random() * self.params.colors.length);
 
 		if (self.params.trace) {
 			$.jController.clearCanvas(false);
 		}
 
 		self.render("circle", {
-			x: x,
-			y: y,
+			x: self.params.x,
+			y: self.params.y,
 			r: self.params.r,
-			color: self.params.colors[c],
-			fill:  self.params.colors[c],
+			color: self.params.colors[self.params.c],
+			fill:  self.params.colors[self.params.c],
 		});
 		
 	},
@@ -45,6 +45,7 @@ $.jController.registerPlugin({
 			listener : "click",
 
 			fn : function (self, callback, data) {
+
 
 				var canvas = $.jController.getCanvas();
 
