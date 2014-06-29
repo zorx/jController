@@ -1,3 +1,4 @@
+//http://www.rgraph.net/blog/2013/february/an-example-of-the-html5-canvas-ispointinpath-function.html
 // Begin jController Kernel
 // create closure
 (function($) {
@@ -21,7 +22,7 @@
 	$.jController = {};
 
 	// Index of objets
-	$.jController.internal = {};
+	var _internal = {};
 
 	// Private jController plugins list
 	var _plugins = {};
@@ -165,18 +166,24 @@
 				params : state,
 				// Set internal values
 				setInternal : function(data) {
-					var oldData = ($.isPlainObject($.jController.internal[pluginName][index]))
-						? $.jController.internal[pluginName][index]
+					
+					var oldData = ($.isPlainObject(_internal[pluginName+index]))
+						? _internal[pluginName+index]
 						: {};
-					$.jController.internal[pluginName][index] = $.extend(true,{}, oldData, data);
+
+					_internal[pluginName+index] = $.extend(true,{}, oldData, data);
+					
+
 				},
 				// Retrieve internal value
 				getInternal : function(key) {
-					return $.jController.internal[pluginName][index][key]; 
+					var ret = ($.isPlainObject(_internal[pluginName+index])) ? _internal[pluginName+index][key] : undefined;
+					return ret;
+					
 				},
 				// Retrieve internal values (all)
 				getInternals : function() {
-					return $.jController.internal[pluginName][index];
+					return _internal[pluginName+index];
 				},
 
 				// render another plugin (plugin name, params)
@@ -218,13 +225,13 @@
 
 		// Create internal values placeholder for plugin
 		initInternal : function(pluginName, index) {
-
-			if (!$.isPlainObject ($.jController.internal[pluginName])) {
-				$.jController.internal[pluginName] = {};
+/*
+			if (!$.isPlainObject (_internal[pluginName])) {
+				_internal[pluginName] = {};
 			}
-
-			$.jController.internal[pluginName][index] = {};
-
+			if (!$.isPlainObject (_internal[pluginName][index]))
+			_internal[pluginName][index] = {};
+*/
 		},
 
 		// Set every plugins as to be rendered on next frame
