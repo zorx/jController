@@ -223,17 +223,6 @@
 
 		},
 
-		// Create internal values placeholder for plugin
-		initInternal : function(pluginName, index) {
-/*
-			if (!$.isPlainObject (_internal[pluginName])) {
-				_internal[pluginName] = {};
-			}
-			if (!$.isPlainObject (_internal[pluginName][index]))
-			_internal[pluginName][index] = {};
-*/
-		},
-
 		// Set every plugins as to be rendered on next frame
 		cleanAll : function() {
 
@@ -259,9 +248,6 @@
 				// Construct and render each one
 				$.each(plugin.paramsList, function(index, state) {
 					
-					// Create internal values object
-					jController.initInternal(pluginName, index);
-
 					// Create "self" (related to the instance) 
 					var _self = jController.self(state, pluginName, index);
 
@@ -292,9 +278,6 @@
 					// Construct and render each one
 					$.each(plugin.paramsList, function(index, state) {
 						
-						// Create internal values object
-						jController.initInternal(pluginName, index);
-
 						// Create "self" (related to the instance) 
 						var _self = jController.self(state, pluginName, index);
 
