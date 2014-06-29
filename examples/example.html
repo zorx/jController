@@ -22,39 +22,14 @@
 		$.jController.circle({
 			x: 275,
 			y: 50,
-			r: 30,
+			r: 20,
 			color: "red",
-			line : { width: 3},
-			click : function (e) {
-				
-				// remove this circle
-				e.remove();
-
-				//e.trigger("move",{});
-
-				$.jController.text({
-					x:300,
-					y:180,
-					text: "Zorx Powaaa",
-					font: "12px Helvetica",
-					outline: "red",
-					align: "center",
-					baseline: "middle",
-					
-				});
-				
-			}
-		});
-		// Add text to canvas
-		$.jController.text({
-			x:275,
-			y:50,
-			text: "Click here",
-			font: "12px bold Helvetica",
-			outline: "red",
-			align: "center",
-			baseline: "middle",
-			
+			mousein : function(self) {
+				self.params.fill = self.params.color;
+			},
+			mouseout : function(self) {
+				self.params.fill = undefined;
+			},
 		});
 
 
@@ -64,12 +39,12 @@
 			y: 100,
 			r: 20,
 			color: "blue",
-			mousein : function() {
-				console.log("Circle - mousein()");
+			mousein : function(self) {
+				self.params.fill = self.params.color;
 			},
-			mouseout : function() {
-				console.log("Circle - mouseout()")
-			}
+			mouseout : function(self) {
+				self.params.fill = undefined;
+			},
 		});
 
 		// Add circle to canvas
@@ -78,6 +53,12 @@
 			y: 100,
 			r: 20,
 			color: "green",
+			mousein : function(self) {
+				self.params.fill = self.params.color;
+			},
+			mouseout : function(self) {
+				self.params.fill = undefined;
+			},
 		});
 
 		// Add line to canvas
@@ -93,23 +74,24 @@
 		// Add rect to jController
 		$.jController.rect({
 			x: 15,
-			y: 15,
+			y: 100,
 			w: 150,
-			h: 170,
+			h: 65,
 			color: "grey",
-			shadow: { color: "green", blur: 3, },
+			shadow: { color: "grey", blur: 10, },
 			line : { width: 3, },
 			// Events
-			click: function(e) {
-				console.log("Rect - click()")
+			click: function(self) {
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
 			},
-			mousein : function(e) {
-				e.params.fill = "red";
-				console.log("Rect - mousein()")
+			mousein : function(self) {
+				self.params.fill = "red";
 			},
-			mouseout : function(e) {
-				e.params.fill = undefined;
-				console.log("Rect - mouseout()")
+			mouseout : function(self) {
+				self.params.fill = undefined;
 			},
 		});
 
@@ -124,6 +106,12 @@
 			click: function(e) {
 				console.log("Small circle - click()")
 			},
+			mousein : function(self) {
+				self.params.shadow.blur = 1;
+			},
+			mouseout : function(self) {
+				self.params.shadow.blur = 3;
+			},
 		});
 
 		$.jController.circle({
@@ -131,8 +119,11 @@
 			y: 50,
 			r: 40,
 			color: "magenta",
-			click:function(e){
-				console.log("Big circle - click()")
+			click: function(self){
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
 			},
 		});
 
