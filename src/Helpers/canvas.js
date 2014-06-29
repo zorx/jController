@@ -81,7 +81,7 @@ $.jController.registerHelper({
 
 
 /**
- * Handle canvas to draw text
+ * Handle canvas to write text
  * args :
  * ctx = canvas context
  * text = what should be written
@@ -94,20 +94,20 @@ $.jController.registerHelper({
  * shadow : { color, blur, offX, offY }
  */
 $.jController.registerHelper({
-	name : "contextDrawText",
+	name : "contextWrite",
 	fn : function(args) {
 
 		// Default values
 		var defaults = {
 			x : 0,
 			y : 0,
-			text : undefined,
-			font : "10px sans-serif",
+			text  : undefined,
+			font  : "10px sans-serif",
 			align : "start",
 			baseline : "bottom",
-			color : "black",
-			outline : undefined,
-			shadow : {
+			color    : "black",
+			outline  : undefined,
+			shadow   : {
 				color: "black",
 				blur : 0,
 				offX : 0,

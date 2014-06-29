@@ -15,7 +15,7 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		var params = self.params;
-		$.jController.getHelper("contextDrawText")({
+		$.jController.getHelper("contextWrite")({
 			ctx    : $.jController.getContext(),
 			x : params.x,
 			y : params.y,

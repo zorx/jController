@@ -7,14 +7,15 @@
 	// Defining request/cancel animation frame
 	// shim layer with setTimeout fallback 
 	window.requestAnimFrame = (function () {
-	    return window.requestAnimationFrame ||
-	    window.webkitRequestAnimationFrame ||
-	    window.mozRequestAnimationFrame ||
-	    window.oRequestAnimationFrame ||
-	    window.msRequestAnimationFrame ||
-	    function (callback) {
-	        window.setTimeout(callback, 1000 / 60);
-	    };
+	    return
+	    	window.requestAnimationFrame       ||
+	    	window.webkitRequestAnimationFrame ||
+	    	window.mozRequestAnimationFrame    ||
+	    	window.oRequestAnimationFrame      ||
+	    	window.msRequestAnimationFrame     ||
+		    function (callback) {
+		        window.setTimeout(callback, 1000 / 60);
+		    };
 	})();
 
 	// jController object
@@ -68,7 +69,6 @@
 
 	function animate() {
 		if (_isClearCanvas)	{
-
 			jController.clearCanvas();
 		}		
 		
@@ -88,7 +88,10 @@
 			var id = 'jController_' + $('canvas').length; 
 
 			// Canvas jQuery object
-			_$canvas = $('<canvas>').attr(params.attr).attr({id: id}).appendTo($obj);
+			_$canvas = $('<canvas>')
+				.attr(params.attr)
+				.attr({id: id})
+				.appendTo($obj);
 
 			// Canvas
 			_canvas = _$canvas[0];
@@ -102,14 +105,14 @@
 		listenEvents : function(state, pluginName, self) {
 
 			$.each(state, function(key, value) {
-				// looking for events on state
+				// Looking for events on state
 				if ($.jController.isEvent(pluginName, key) &&
 					$.isFunction(value)) {
 
-					// key becomes an EventName
+					// Key is an EventName
 					var eventName = key;
-					// key becomes a callback
-					var callbackOnEvent = value;
+					// Value is a callback
+					var evtCallback = value;
 					
 					// Listener Name					
 					var listenerName = $.jController
@@ -132,22 +135,22 @@
 						}
 
 						// Don't change this, save the execute event function
-					    _onEvent[pluginName][self.id][listenerName] = function(e){
-					     callbackEvent(self,callbackOnEvent,e);
-					    };
+						_onEvent[pluginName][self.id][listenerName] = function(e) {
+							callbackEvent(self,evtCallback,e);
+						};
 
 						if ($.jController.isListener(listenerName)) {
-							
 							// Don't change this, start listening
-							$.jController.getListener(listenerName).on(_onEvent[pluginName][self.id][listenerName]);
-						}else{
-							throw "jController can't find the listener <"+listenerName+">";
+							$.jController
+								.getListener(listenerName)
+								.on(_onEvent[pluginName][self.id][listenerName]);
+						} else {
+							throw "jController error: can't find <"+listenerName+"> listener";
 						}
 
-					}else {
-
+					} else {
 						// Execute the event
-						callbackEvent(self,callbackOnEvent);
+						callbackEvent(self,evtCallback);
 					}
 					
 				}
@@ -184,10 +187,11 @@
 					if (!$.isPlainObject(_ephemeral[_pluginName])) {
 						_ephemeral[_pluginName] = {
 							paramsList : [],
-							isRender : false,          		// Plugin already rendered ?
+							isRender : false, // Plugin already rendered ?
 						};
 					}
-					_ephemeral[_pluginName].paramsList.push (_plugins[_pluginName]._construct(pParams));
+					_ephemeral[_pluginName].paramsList
+						.push (_plugins[_pluginName]._construct(pParams));
 
 					return this;
 				},
@@ -198,9 +202,10 @@
 					_plugins[pluginName].paramsList.splice(index,1);
 
 					// Remove all onEvent for this instance
-					$.each(_onEvent[pluginName][index],function(listenerName,fn) {
-						
-						$.jController.getListener(listenerName).off(_onEvent[pluginName][index][listenerName]);
+					$.each(_onEvent[pluginName][index],function(listenerName, fn) {
+						$.jController
+							.getListener(listenerName)
+							.off(_onEvent[pluginName][index][listenerName]);
 					});
 					
 				},
@@ -234,8 +239,11 @@
 
 		// Clear canvas
 		clearCanvas : function() {
-			var ctx = $.jController.getContext();
-			ctx.clearRect(0, 0, $.jController.getCanvas().width, $.jController.getCanvas().height);
+			$.jController
+				.getContext()
+				.clearRect(0, 0,
+					$.jController.getCanvas().width,
+					$.jController.getCanvas().height);
 		},
 
 		// Render all plugins
@@ -319,29 +327,26 @@
 	 			$.getScript(list[0], function() {
 	 				importRecursive(list.slice(1), callback);
 	 			}).fail(function(jqxhr, settings, exception){
-	 				throw "jController detect an error on import >> "+exception;
+	 				throw "jController error: on import, " + exception;
 	 			})
  			}
- 		}($.makeArray(links), callback))
+ 		}($.makeArray(links), callback));
 	}
 
 	$.jController.getCanvasObject = function() {
-
 		return _$canvas;
 	}
 
 	$.jController.getCanvas = function() {
-
 		return _canvas;
 	}
 
 	$.jController.getContext = function() {
-
 		return _context;
 	}
 
-	$.jController.clearCanvas = function(status) {
-		_isClearCanvas = status;
+	$.jController.clearCanvas = function(flag) {
+		_isClearCanvas = flag;
 	}
 
 	/* -- Trigger -- */
@@ -357,7 +362,7 @@
 			event:  null, // Triggered event
 			plugin: null, // Triggered plugin type
 			index:  null, // Triggered plugin index
-			data:   []    // Sent data
+			data:   [],   // Sent data
 		};
 
 		// merge default & params
@@ -388,20 +393,17 @@
 	$.jController.isListener = function(name) {
 		return ($.isPlainObject(_listeners[name]) &&
 				$.isFunction(_listeners[name].on) &&
-				$.isFunction(_listeners[name].off)
-				);
+				$.isFunction(_listeners[name].off));
 	}
 
 	// Register a listener
 	$.jController.registerListener = function(listener) {
-		
 		// Check wether the name has been set
 		if (listener.name) {
-
 			// Register listener functions
 			_listeners[listener.name] = {
-				on : listener.on,
-				off : listener.off
+				on  : listener.on,
+				off : listener.off,
 			}
 		}
 	}
@@ -415,7 +417,7 @@
 
 	// Retrieve helper by name
 	$.jController.getHelper = function(name) {
-		// return the helper if exists otherwise undefined
+		// return existing helper (undefined otherwise)
 		return _helpers[name];
 	}
 
@@ -443,15 +445,15 @@
 			: null;
 	}
 
-	// Retrieve a specific pluginName
+	// Retrieve a specific pluginName event
 	$.jController.getEvent = function(pluginName, eventName) {
-		// return the event if exists otherwise null
+		// return existing event (null otherwise)
 		return ($.jController.isEvent(pluginName, eventName)) 
 			? _plugins[pluginName].events[eventName] 
 			: null;
 	}
 
-	// Check wether a pluginName Event exists or nor
+	// Check pluginName event existence
 	$.jController.isEvent = function(pluginName, eventName) {
 		return ($.jController.isPlugin(pluginName) &&
 			$.isPlainObject(_plugins[pluginName].events) &&
