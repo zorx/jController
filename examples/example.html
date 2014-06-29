@@ -19,7 +19,7 @@
 	$(function() {
 	
 		// Add circle to canvas
-		$.jController.circle({
+		var redCircle = $.jController.circle({
 			x: 275,
 			y: 50,
 			r: 20,
@@ -34,7 +34,7 @@
 
 
 		// Add circle to canvas
-		$.jController.circle({
+		var blueCircle = $.jController.circle({
 			x: 225,
 			y: 100,
 			r: 20,
@@ -48,7 +48,7 @@
 		});
 
 		// Add circle to canvas
-		$.jController.circle({
+		var greenCircle = $.jController.circle({
 			x: 325,
 			y: 100,
 			r: 20,
@@ -58,6 +58,39 @@
 			},
 			mouseout : function(self) {
 				self.params.fill = undefined;
+			},
+		});
+
+		// Add circle to canvas
+		$.jController.circle({
+			x: 275,
+			y: 150,
+			r: 20,
+			color: "orange",
+			fill: "orange",
+			shadow: { color: "green", blur: 3, },
+			click: function(e) {
+				console.log("Small circle - click()")
+			},
+			mousein : function(self) {
+				self.params.shadow.blur = 1;
+			},
+			mouseout : function(self) {
+				self.params.shadow.blur = 3;
+			},
+		});
+
+		$.jController.circle({
+			x: 50,
+			y: 50,
+			r: 40,
+			color: "magenta",
+			click: function(self){
+				var r = Math.floor(Math.random() * 255);
+				var g = Math.floor(Math.random() * 255);
+				var b = Math.floor(Math.random() * 255);
+				self.params.fill = "rgb(" + r + "," + g + "," + b + ")";
+				greenCircle.remove();
 			},
 		});
 
@@ -95,37 +128,7 @@
 			},
 		});
 
-		// Add circle to canvas
-		$.jController.circle({
-			x: 275,
-			y: 150,
-			r: 20,
-			color: "orange",
-			fill: "orange",
-			shadow: { color: "green", blur: 3, },
-			click: function(e) {
-				console.log("Small circle - click()")
-			},
-			mousein : function(self) {
-				self.params.shadow.blur = 1;
-			},
-			mouseout : function(self) {
-				self.params.shadow.blur = 3;
-			},
-		});
-
-		$.jController.circle({
-			x: 50,
-			y: 50,
-			r: 40,
-			color: "magenta",
-			click: function(self){
-				var r = Math.floor(Math.random() * 255);
-				var g = Math.floor(Math.random() * 255);
-				var b = Math.floor(Math.random() * 255);
-				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
-			},
-		});
+		
 
 		// Finally call jController
 		$("#controller").jController({

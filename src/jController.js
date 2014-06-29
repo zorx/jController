@@ -149,8 +149,8 @@
 						}
 
 					} else {
-						// Execute the event
-						callbackEvent(self,evtCallback);
+						// Execute the event (Maybe not ! @TODO)
+						//callbackEvent(self,evtCallback);
 					}
 					
 				}
@@ -203,15 +203,32 @@
 				// Remove this instance
 				remove : function () {
 
-					_plugins[pluginName].paramsList.splice(index,1);
+					if (index != -1)
+					{
+						_plugins[pluginName].paramsList.splice(index,1);
 
-					// Remove all onEvent for this instance
-					$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-						$.jController
-							.getListener(listenerName)
-							.off(_onEvent[pluginName][index][listenerName]);
+						if ($.isPlainObject(_onEvent[pluginName]))
+						{
+							// Remove all onEvent for this instance
+							$.each(_onEvent[pluginName][index],function(listenerName, fn) {
+								$.jController
+									.getListener(listenerName)
+									.off(_onEvent[pluginName][index][listenerName]);
+							});
+						}
+						index = -1;
+					}
+				},
+
+				// Trigger
+				trigger : function (eventName,data) {
+
+					$.jController.trigger({
+						event:  eventName, 			// Triggered event
+						plugin: pluginName, 		// Triggered plugin type
+						index:  index, 				// Triggered plugin index
+						data:   data,   			// Sent data
 					});
-					
 				},
 
 				// Get parent
@@ -359,6 +376,7 @@
 		var index      = (options.index  != null) ? "_" + options.index  : "";
 		var trigger    = $.jController.getTriggerPrefix() + eventName + pluginName + index;
 
+		console.log(trigger, options.data);
 		// Sent a trigger using jQuery
 		$(document).trigger(trigger, options.data);
 	}
@@ -497,7 +515,12 @@
 				// Instance already rendered ?
 				state.__isRender = false;
 
-				_plugins[plugin.name].paramsList.push (plugin.construct(state))
+				var pluginName = plugin.name;
+				var index = _plugins[pluginName].paramsList.length;
+
+				_plugins[pluginName].paramsList.push (plugin.construct(state))
+
+				return jController.self(state, pluginName, index);
 			}
 		}
 	}
