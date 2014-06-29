@@ -81,11 +81,6 @@ $.jController.registerPlugin({
 
 				var canvas = $.jController.getCanvas();
 
-				// @TODO : gérer merge defaults
-				if (typeof self.getInternal("mousedIn") == "undefined") {
-					self.setInternal({mousedIn:false});
-				}
-
 				if (! self.getInternal("mousedIn") &&
 					$.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
