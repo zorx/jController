@@ -39,13 +39,12 @@ $.jController.registerPlugin({
 				
 				var canvas = $.jController.getCanvas();
 
-				if ($.jController.getHelper("inRect")({
+				if ($.jController.getHelper("inPath")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					rx : self.params.x,
-					ry : self.params.y,
-					rw : self.params.w,
-					rh : self.params.h,
+					draw : function (ctx) {
+						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+					}
 				})) {
 					callback(self, data);
 				}
@@ -60,13 +59,12 @@ $.jController.registerPlugin({
 				
 				var canvas = $.jController.getCanvas();
 
-				if ($.jController.getHelper("inRect")({
+				if ($.jController.getHelper("inPath")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					rx : self.params.x,
-					ry : self.params.y,
-					rw : self.params.w,
-					rh : self.params.h,
+					draw : function (ctx) {
+						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+					}
 				})) {
 					callback(self, data);
 				}
@@ -82,13 +80,12 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 
 				if (! self.getInternal("mousedIn") && 
-					$.jController.getHelper("inRect")({
+					$.jController.getHelper("inPath")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					rx : self.params.x,
-					ry : self.params.y,
-					rw : self.params.w,
-					rh : self.params.h,
+					draw : function (ctx) {
+						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+					}
 				})) {
 					callback(self, data);
 					self.setInternal({mousedIn : true});
@@ -104,13 +101,12 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
-					! $.jController.getHelper("inRect")({
+					! $.jController.getHelper("inPath")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					rx : self.params.x,
-					ry : self.params.y,
-					rw : self.params.w,
-					rh : self.params.h,
+					draw : function (ctx) {
+						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+					}
 				})) {
 					callback(self, data);
 					self.setInternal({mousedIn : false});
