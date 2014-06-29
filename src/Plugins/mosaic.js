@@ -9,7 +9,7 @@ $.jController.registerPlugin({
 		var defaults = {
 			r : 0,
 			trace : false,
-			colors : ["rgb(0,0,255)","rgb(0,255,0)","rgb(255,0,0)"]
+			colors : ["rgb(230,180,60)","rgb(250,50,10)","rgb(255,0,0)"]
 		}
 
 		return $.extend({}, defaults, params);
@@ -45,7 +45,6 @@ $.jController.registerPlugin({
 			listener : "click",
 
 			fn : function (self, callback, data) {
-
 
 				var canvas = $.jController.getCanvas();
 
