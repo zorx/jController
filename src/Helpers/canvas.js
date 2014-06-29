@@ -12,9 +12,10 @@
 $.jController.registerHelper({
 	name : "contextDraw",
 	fn : function(args) {
-
+		
 		// Default values
 		var defaults = {
+			ctx : $.jController.getContext(),
 			line : {
 				width : 1,
 				cap   : "butt",
@@ -99,6 +100,7 @@ $.jController.registerHelper({
 
 		// Default values
 		var defaults = {
+			ctx : $.jController.getContext(),
 			x : 0,
 			y : 0,
 			text  : undefined,

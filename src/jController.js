@@ -180,17 +180,15 @@
 				},
 
 				// render another plugin (plugin name, params)
-				render : function(_pluginName,pParams) {
-					//[@TODO]
-
-					if (!$.isPlainObject(_ephemeral[_pluginName])) {
-						_ephemeral[_pluginName] = {
+				render : function(pluginName, params) {
+					if (! $.isPlainObject(_ephemeral[pluginName ])) {
+						_ephemeral[pluginName] = {
 							paramsList : [],
 							isRender : false, // Plugin already rendered ?
 						};
 					}
-					_ephemeral[_pluginName].paramsList
-						.push (_plugins[_pluginName]._construct(pParams));
+					_ephemeral[pluginName].paramsList
+						.push (_plugins[pluginName ]._construct(params));
 
 					return this;
 				},
@@ -260,7 +258,7 @@
 					// Create "self" (related to the instance) 
 					var _self = jController.self(state, pluginName, index);
 
-					if (!state.__isRender)
+					if (! state.__isRender)
 					{
 						// Retrieve all events
 						jController.listenEvents(state, pluginName, _self);
@@ -282,7 +280,7 @@
 			// For each declared plugin
 			$.each(_ephemeral, function(pluginName, plugin) {
 				// Not render yet
-				if (!plugin.isRender && plugin.paramsList.length != 0) {
+				if (! plugin.isRender && plugin.paramsList.length != 0) {
 
 					// Construct and render each one
 					$.each(plugin.paramsList, function(index, state) {
@@ -293,7 +291,7 @@
 						// Create "self" (related to the instance) 
 						var _self = jController.self(state, pluginName, index);
 
-						if (!state.__isRender)
+						if (! state.__isRender)
 						{
 							// Retrieve all events
 							jController.listenEvents(state, pluginName, _self);
@@ -308,7 +306,7 @@
 					// Object render
 					_ephemeral[pluginName].isRender = true;
 					
-					// render All (allow us to call a plugin into another )
+					// Recursive call (for intricate plugins)
 					jController.renderEphemeral();
 				}
 			})

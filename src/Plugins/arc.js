@@ -19,7 +19,6 @@ $.jController.registerPlugin({
 
 		var params = self.params;
 		$.jController.getHelper("contextDraw")({
-			ctx    : $.jController.getContext(),
 			color  : params.color,
 			fill   : params.fill,
 			line   : params.line,

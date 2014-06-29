@@ -17,24 +17,32 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		
-		var time = new Date().getTime() * 0.002;
-	    var x = Math.sin( time ) * 192 + 256;
-	    var y = Math.cos( time * 0.9 ) * 192 + 256;
+		var ctx = $.jController.getContext();
 
-	    var rnd = Math.floor(Math.random() * self.params.colors.length);
+		var t = new Date().getTime() * 0.002;
+		var x = Math.sin(t)       * 192 + 256;
+		var y = Math.cos(t * 0.9) * 192 + 256;
+		var c = Math.floor(Math.random() * self.params.colors.length);
 
-	    var ctx = $.jController.getContext();
-	    
-	    if (self.params.trace)
-	    {
-	    	$.jController.clearCanvas(false);
-	    }
-		
-	    ctx.fillStyle = self.params.colors[rnd];
-	    ctx.beginPath();
-	    ctx.arc( x, y, self.params.r, 0, Math.PI * 2, true );
-	    ctx.closePath();
-	    ctx.fill();
+		if (self.params.trace) {
+			$.jController.clearCanvas(false);
+		}
+
+		self.render("circle", {
+			x: x,
+			y: y,
+			r: self.params.r,
+			color: self.params.colors[c],
+			fill:  self.params.colors[c],
+		});
+
+		/*
+		ctx.fillStyle = self.params.colors[c];
+		ctx.beginPath();
+		ctx.arc( x, y, self.params.r, 0, Math.PI * 2, true );
+		ctx.closePath();
+		ctx.fill();
+		*/
 
 	},
 
@@ -45,7 +53,18 @@ $.jController.registerPlugin({
 			listener : "click",
 
 			fn : function (self, callback, data) {
-				callback(self, data);
+
+				var canvas = $.jController.getCanvas();
+
+				if ($.jController.getHelper("inCircle")({
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
+					cx : self.params.x,
+					cy : self.params.y,
+					cr : self.params.r,
+				})) {
+					callback(self, data);
+				}
 			}
 		}
 	}
