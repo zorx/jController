@@ -36,5 +36,17 @@ $.jController.registerPlugin({
 	    ctx.closePath();
 	    ctx.fill();
 
+	},
+
+	events : {
+
+		click : {
+
+			listener : "click",
+
+			fn : function (self,callback,listener) {
+				callback(self);
+			}
+		}
 	}
 })

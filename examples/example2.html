@@ -6,6 +6,7 @@
 	<script src="../src/jController.js"></script>
 
 
+	<script src="../src/Listeners/jQuery.js"></script>
 
 	<script src="../src/Helpers/in.js"></script>
 	<script src="../src/Plugins/arc.js"></script>
@@ -20,81 +21,16 @@
 		
 	$(function() {
 	
-	/*
-		// Add circle to canvas
-		$.jController.circle({
-			x: "275",
-			y: "50",
-			r: "20",
-
-		});
-
-		// Add circle to canvas
-		$.jController.circle({
-			x: "225",
-			y: "100",
-			r: "20",
-			mousein : function(e,self){
-				console.log("in");
-				self.params.x = 20;
-			},
-			mouseout : function(){
-				console.log("out")
-			}
-		});
-
-		// Add circle to canvas
-		$.jController.circle({
-			x: "325",
-			y: "100",
-			r: "20",
-		});
-
-		// Add line to canvas
-		$.jController.line({
-			x: "15",
-			y: "15",
-			w: "165",
-			h: "185",
-		});
 	
-		// Add rect to jController
-		$.jController.rect({
-			x: "15",
-			y: "15",
-			w: "150",
-			h: "170",
-			// Events
-			click:function(){
-				console.log("Clicked !")
-			},
-		});
-
-		// Add circle to canvas
-		$.jController.circle({
-			x: "275",
-			y: "150",
-			r: "20",
-			click:function(e){
-				console.log("Small circle is Clicked !")
-			},
-			
-		});
-
-		$.jController.circle({
-			x: "50",
-			y: "50",
-			r: "40",
-			click:function(e){
-				console.log("Big circle is Clicked !")
-			},
-		});
-
-*/
 		$.jController.mosaic({
 	    	colors : ["rgb(0,0,255)","rgb(0,255,0)","rgb(255,0,0)"],
 	    	trace : false,
-	    	r:10
+	    	r:10,
+	    	//callbackOnEvent
+	    	click : function (self) {
+
+	    		console.log("Yeah !");
+	    	}
 		})
 
 		// How to use

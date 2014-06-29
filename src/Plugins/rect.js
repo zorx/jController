@@ -32,15 +32,17 @@ $.jController.registerPlugin({
 
 	events : {
 
-		click : function(self, callback) {
+		click : {
 
-			var $canvas = $.jController.getCanvasObject();
+			listener : "click",
 
-			$canvas.on("click", function(e) {
+			fn : function (self,callback,listener) {
 				
+				var canvas = $.jController.getCanvas();
+
 				if ($.jController.getHelper("inRect")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
+					px : listener.pageX - canvas.offsetLeft,
+					py : listener.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -48,18 +50,20 @@ $.jController.registerPlugin({
 				})) {
 					callback(self);
 				}
-			});
+			}
 		},
 
-		mousemove : function(self, callback) {
+		mousemove : {
 
-			var $canvas = $.jController.getCanvasObject();
+			listener : "mousemove",
 
-			$canvas.on("mousemove", function(e) {
+			fn : function (self,callback,listener) {
 				
+				var canvas = $.jController.getCanvas();
+
 				if ($.jController.getHelper("inRect")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
+					px : listener.pageX - canvas.offsetLeft,
+					py : listener.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -67,20 +71,23 @@ $.jController.registerPlugin({
 				})) {
 					callback(self);
 				}
-			});
+			}
 		},
 
-		mousein : function(self, callback) {
+		mousein : {
 
-			self.setInternal({mousedIn : false});
-			var $canvas = $.jController.getCanvasObject();
+			listener : "mousemove",
 
-			$canvas.on("mousemove", function(e) {
+			fn : function (self,callback,listener) {
+
+				var canvas = $.jController.getCanvas();
+
+				self.setInternal({mousedIn : false});
 				
 				if (! self.getInternal("mousedIn") && 
 					$.jController.getHelper("inRect")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
+					px : listener.pageX - canvas.offsetLeft,
+					py : listener.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -89,19 +96,21 @@ $.jController.registerPlugin({
 					callback(self);
 					self.setInternal({mousedIn : true});
 				}
-			});
+			}
 		},
 
-		mouseout : function(self, callback) {
+		mouseout : {
 
-			var $canvas = $.jController.getCanvasObject();
+			listener : "mousemove",
 
-			$canvas.on("mousemove", function(e) {
+			fn : function (self,callback,listener) {
+				
+				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inRect")({
-					px : e.pageX - this.offsetLeft,
-					py : e.pageY - this.offsetTop,
+					px : listener.pageX - canvas.offsetLeft,
+					py : listener.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -110,7 +119,7 @@ $.jController.registerPlugin({
 					callback(self);
 					self.setInternal({mousedIn : false});
 				}
-			});
+			}
 
 		},
 

@@ -28,6 +28,12 @@
 
 	// Private jController helpers list
 	var _helpers = {};
+
+	// Private jController listeners list
+	var _listeners = {};
+
+	// list of events by plugin (for trigger)
+	var _onEvent = {};
 	
 	// Private Canvas jQuery object
 	var _$canvas;
@@ -100,11 +106,47 @@
 					// key becomes an EventName
 					var eventName = key;
 					// key becomes a callback
-					var callback = value;
-					// Execute the event					
-					$.jController
+					var callbackOnEvent = value;
+					
+					// Listener Name					
+					var listenerName = $.jController
 						.getPlugin(pluginName)
-						.events[eventName](self, callback);
+						.events[eventName].listener;
+					
+					// Callback for event
+					var callbackEvent = $.jController
+						.getPlugin(pluginName)
+						.events[eventName].fn;
+
+					if (listenerName != undefined) {
+						
+						if (!$.isPlainObject(_onEvent[pluginName])) {
+							_onEvent[pluginName] = {};
+						}
+
+						if (!$.isPlainObject(_onEvent[pluginName][self.id])) {
+							_onEvent[pluginName][self.id] = {};
+						}
+
+						// Don't change this, save the execute event function
+					    _onEvent[pluginName][self.id][listenerName] = function(e){
+					     callbackEvent(self,callbackOnEvent,e);
+					    };
+
+						if ($.jController.isListener(listenerName)) {
+							
+							// Don't change this, start listening
+							$.jController.getListener(listenerName).on(_onEvent[pluginName][self.id][listenerName]);
+						}else{
+							throw "jController can't find the listener <"+listenerName+">";
+						}
+
+					}else {
+
+						// Execute the event
+						callbackEvent(self,callbackOnEvent);
+					}
+					
 				}
 			});
 
@@ -151,6 +193,12 @@
 				remove : function () {
 
 					_plugins[pluginName].paramsList.splice(index,1);
+
+					// Remove all onEvent for this instance
+					$.each(_onEvent[pluginName][index],function(listenerName,fn) {
+						
+						$.jController.getListener(listenerName).off(_onEvent[pluginName][index][listenerName]);
+					});
 					
 				},
 
@@ -268,7 +316,7 @@
 	 			$.getScript(list[0], function() {
 	 				importRecursive(list.slice(1), callback);
 	 			}).fail(function(jqxhr, settings, exception){
-	 				console.log(exception)
+	 				throw "jController detect an error on import >> "+exception;
 	 			})
  			}
  		}($.makeArray(links), callback))
@@ -314,31 +362,66 @@
 		var eventName  = (options.event  != null) ? "_" + options.event  : "";
 		var pluginName = (options.plugin != null) ? "_" + options.plugin : "";
 		var index      = (options.index  != null) ? "_" + options.index  : "";
-		var trigger    = $.jController.getTriggerPrefix() + eventName + pluginName;
+		var trigger    = $.jController.getTriggerPrefix() + eventName + pluginName + index;
 
 		// Sent a trigger using jQuery
 		$(document).trigger(trigger, options.data);
 	}
 
+	/* -- Listeners config -- */
+
+	// Retrieve all listeners
+	$.jController.getListeners = function() {
+		return _listeners;
+	}
+
+	// Retrieve listener by name
+	$.jController.getListener = function(name) {
+		// return the listener if exists otherwise undefined
+		return _listeners[name];
+	}
+
+	// Check wether a listener exists or nor
+	$.jController.isListener = function(name) {
+		return ($.isPlainObject(_listeners[name]) &&
+				$.isFunction(_listeners[name].on) &&
+				$.isFunction(_listeners[name].off)
+				);
+	}
+
+	// Register a listener
+	$.jController.registerListener = function(listener) {
+		
+		// Check wether the name has been set
+		if (listener.name) {
+
+			// Register listener functions
+			_listeners[listener.name] = {
+				on : listener.on,
+				off : listener.off
+			}
+		}
+	}
+
 	/* -- Helpers config -- */
 
-	// Retrieve all events
+	// Retrieve all helpers
 	$.jController.getHelpers = function() {
 		return _helpers;
 	}
 
-	// Retrieve events by name
+	// Retrieve helper by name
 	$.jController.getHelper = function(name) {
 		// return the helper if exists otherwise undefined
 		return _helpers[name];
 	}
 
-	// Check wether an Event exists or nor
+	// Check wether a helper exists or nor
 	$.jController.isHelper = function(name) {
 		return ($.isFunction(_helpers[name]));
 	}
 
-	// Register Event
+	// Register a helper
 	$.jController.registerHelper = function(helper) {
 		// Check wether the name has been set
 		if (helper.name) {
@@ -369,7 +452,8 @@
 	$.jController.isEvent = function(pluginName, eventName) {
 		return ($.jController.isPlugin(pluginName) &&
 			$.isPlainObject(_plugins[pluginName].events) &&
-			$.isFunction(_plugins[pluginName].events[eventName]))
+			$.isPlainObject(_plugins[pluginName].events[eventName]) &&
+			$.isFunction(_plugins[pluginName].events[eventName].fn))
 	}
 
 	/* -- Plugins config  -- */
