@@ -30,9 +30,12 @@
 	    	r:50,
 	    	//callbackOnEvent
 	    	click : function (self) {
-
 	    		console.log("Yeah !");
-	    	}
+                self.params.r -= 5;
+                if (self.params.r < 5) {
+                    self.params.r = 50;
+                }
+            }
 		})
 
 		// How to use
