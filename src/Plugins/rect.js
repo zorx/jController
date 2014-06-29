@@ -36,13 +36,13 @@ $.jController.registerPlugin({
 
 			listener : "click",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
 
 				if ($.jController.getHelper("inRect")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -57,13 +57,13 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
 
 				if ($.jController.getHelper("inRect")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -78,7 +78,7 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 
 				var canvas = $.jController.getCanvas();
 
@@ -86,8 +86,8 @@ $.jController.registerPlugin({
 				
 				if (! self.getInternal("mousedIn") && 
 					$.jController.getHelper("inRect")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,
@@ -103,14 +103,14 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inRect")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					rx : self.params.x,
 					ry : self.params.y,
 					rw : self.params.w,

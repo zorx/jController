@@ -25,7 +25,8 @@ $.jController.registerPlugin({
 			line   : params.line,
 			shadow : params.shadow,
 			draw : function (ctx) {
-				ctx.arc(params.x, params.y, params.r, params.angleStart, params.angleEnd);
+				ctx.arc(params.x, params.y, params.r,
+					params.angleStart, params.angleEnd);
 			},
 		})
 

@@ -44,7 +44,7 @@ $.jController.registerPlugin({
 
 			listener : "click",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				callback(self);
 			}
 		}

@@ -15,18 +15,18 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		
-		// Render another plugin
-		self.render("arc",{
+		// Circles are full arcs
+		self.render("arc", {
 			x: self.params.x,
 			y: self.params.y,
 			r: self.params.r,
 			angleStart: 0,
-			angleEnd: 2 * Math.PI,
-			color: self.params.color,
-			fill: self.params.fill,
-			line: self.params.line,
+			angleEnd:   2 * Math.PI,
+			color:  self.params.color,
+			fill:   self.params.fill,
+			line:   self.params.line,
 			shadow: self.params.shadow,
-		})
+		});
 
 	},
 
@@ -36,13 +36,13 @@ $.jController.registerPlugin({
 
 			listener : "click",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
 
 				if ($.jController.getHelper("inCircle")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					cx : self.params.x,
 					cy : self.params.y,
 					cr : self.params.r,
@@ -57,13 +57,13 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
 
 				if ($.jController.getHelper("inCircle")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					cx : self.params.x,
 					cy : self.params.y,
 					cr : self.params.r,
@@ -77,7 +77,7 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 
 				var canvas = $.jController.getCanvas();
 
@@ -85,8 +85,8 @@ $.jController.registerPlugin({
 				
 				if (! self.getInternal("mousedIn") &&
 					$.jController.getHelper("inCircle")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					cx : self.params.x,
 					cy : self.params.y,
 					cr : self.params.r,
@@ -101,14 +101,14 @@ $.jController.registerPlugin({
 
 			listener : "mousemove",
 
-			fn : function (self,callback,listener) {
+			fn : function (self, callback, data) {
 
 				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inCircle")({
-					px : listener.pageX - canvas.offsetLeft,
-					py : listener.pageY - canvas.offsetTop,
+					px : data.pageX - canvas.offsetLeft,
+					py : data.pageY - canvas.offsetTop,
 					cx : self.params.x,
 					cy : self.params.y,
 					cr : self.params.r,
