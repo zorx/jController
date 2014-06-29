@@ -35,15 +35,7 @@ $.jController.registerPlugin({
 			color: self.params.colors[c],
 			fill:  self.params.colors[c],
 		});
-
-		/*
-		ctx.fillStyle = self.params.colors[c];
-		ctx.beginPath();
-		ctx.arc( x, y, self.params.r, 0, Math.PI * 2, true );
-		ctx.closePath();
-		ctx.fill();
-		*/
-
+		
 	},
 
 	events : {

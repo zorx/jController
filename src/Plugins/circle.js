@@ -10,6 +10,20 @@ $.jController.registerPlugin({
 			r : 0,
 		}
 
+		/**
+		@TODO: gérer un internal par défaut
+		cf mousein out qui a besoin de mousedIn à false au début
+		pour éviter le "si undef mettre à false"
+
+		le souci c'est qu'il faut avoir accès à self d'ici pour faire ça,
+		et j'ai regardé il n'est pas encore accessible d'ici lorsque cette
+		fonction est appellée
+
+		de manière générale, on est en train d'atteindre les limites du système actuel, vu qu'on peut pas affecter les instances de plugin et les utiliser (genre a1 = $.jC.arc()   a1.on("click", function() {}), etc.)
+		on va avoir du mal à vraiment faire un système cohérent ou chaque instance a son état interne mais est liée à la "classe" a laquelle est appartient
+		là on est train de fix au fur et à mesure mais je pense qu'on va vite se heurter à des murs ...
+		*/
+
 		return $.extend({}, defaults, params);
 	},
 
@@ -81,8 +95,18 @@ $.jController.registerPlugin({
 
 				var canvas = $.jController.getCanvas();
 
-				self.setInternal({mousedIn:false});
-				
+				/*
+				// @TODO : gérer état initial dans le construct (cf construct)
+				if (typeof self.getInternal("mousedIn") == "undefined") {
+					console.log(self)
+					console.log(typeof self.getInternal("mousedIn"))
+					console.log("mousedIn (init)")
+					self.setInternal({mousedIn:false});
+					console.log(typeof self.getInternal("mousedIn"))
+					console.log("---")
+				}
+				*/
+
 				if (! self.getInternal("mousedIn") &&
 					$.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,

@@ -81,7 +81,15 @@ $.jController.registerPlugin({
 
 				var canvas = $.jController.getCanvas();
 
-				self.setInternal({mousedIn : false});
+				// @TODO : gérer état initial dans le construct (cf Circle::construct)
+				if (typeof self.getInternal("mousedIn") == "undefined") {
+					//console.log(self, self.getInternals())
+					//console.log("mousedIn (init)")
+					self.setInternal({mousedIn:false});
+					//console.log(self, self.getInternals())
+					//console.log("---")
+					// ça marche pas ... on accède à des self différents, cf output
+				}
 				
 				if (! self.getInternal("mousedIn") && 
 					$.jController.getHelper("inRect")({
