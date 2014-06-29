@@ -48,7 +48,7 @@ $.jController.registerPlugin({
 					cr : self.params.r,
 				})) {
 
-					callback(self);
+					callback(self, data);
 				}
 			}
 		},
@@ -68,7 +68,7 @@ $.jController.registerPlugin({
 					cy : self.params.y,
 					cr : self.params.r,
 				})) {
-					callback(self);
+					callback(self, data);
 				}
 			}
 		},
@@ -92,7 +92,7 @@ $.jController.registerPlugin({
 					cr : self.params.r,
 				})) {
 					self.setInternal({mousedIn:true});
-					callback(self);
+					callback(self, data);
 				}
 			}
 		},
@@ -104,7 +104,7 @@ $.jController.registerPlugin({
 			fn : function (self, callback, data) {
 
 				var canvas = $.jController.getCanvas();
-				
+
 				if (self.getInternal("mousedIn") &&
 					! $.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
@@ -113,8 +113,7 @@ $.jController.registerPlugin({
 					cy : self.params.y,
 					cr : self.params.r,
 				})) {
-
-					callback(self);
+					callback(self, data);
 					self.setInternal({mousedIn:false});
 				}
 			}

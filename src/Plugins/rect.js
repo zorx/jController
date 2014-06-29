@@ -48,7 +48,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(self);
+					callback(self, data);
 				}
 			}
 		},
@@ -69,7 +69,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(self);
+					callback(self, data);
 				}
 			}
 		},
@@ -93,7 +93,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(self);
+					callback(self, data);
 					self.setInternal({mousedIn : true});
 				}
 			}
@@ -104,7 +104,6 @@ $.jController.registerPlugin({
 			listener : "mousemove",
 
 			fn : function (self, callback, data) {
-				
 				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
@@ -116,7 +115,7 @@ $.jController.registerPlugin({
 					rw : self.params.w,
 					rh : self.params.h,
 				})) {
-					callback(self);
+					callback(self, data);
 					self.setInternal({mousedIn : false});
 				}
 			}
