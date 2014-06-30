@@ -208,10 +208,7 @@
 						_ephemeralInstances[pluginName] = {};
 					}
 					_ephemeralInstances[pluginName][i] = jController.self(params, pluginName, i);
-					if (pluginName == "circle" && _count < 2) {
-						console.log(_ephemeralInstances[pluginName][i]);
-						_count++;
-					}
+					
 					return _ephemeralInstances[pluginName][i];
 				},
 
@@ -330,12 +327,6 @@
 							// Retrieve all events
 							jController.listenEvents(state, pluginName, _self);
 							state.__isRender = true;
-						}
-
-						if (pluginName == "circle" && _count < 2)
-						{
-							console.log($.jController.getPlugin(pluginName).render);
-
 						}
 
 						// Render plugin
