@@ -36,6 +36,13 @@
 	// Private jController listeners list
 	var _listeners = {};
 
+	// Private jController instances list
+	var _instances = {};
+
+	// Private jController instances list
+	var _ephemeralInstances = {};
+	
+
 	// list of events by plugin (for trigger)
 	var _onEvent = {};
 	
@@ -50,11 +57,6 @@
 
 	// Default value of clearing canvas 
 	var _isClearCanvas = true;
-
-	var _count=true;
-
-	// Frame per second
-	var fps = 0.5;
 
 	// jQuery jController function definition
 	$.fn.jController = function (params) {
@@ -101,7 +103,7 @@
 
 		},
 
-		// Retrieve All events from paramsList and listen
+		// Retrieve All events from configInstances and listen
 		listenEvents : function(state, pluginName, self) {
 
 			$.each(state, function(key, value) {
@@ -190,34 +192,44 @@
 				render : function(pluginName, params) {
 					if (! $.isPlainObject(_ephemeral[pluginName ])) {
 						_ephemeral[pluginName] = {
-							paramsList : [],
+							configInstances : [],
 							isRender : false, // Plugin already rendered ?
 						};
 					}
-					_ephemeral[pluginName].paramsList
-						.push (_plugins[pluginName ]._construct(params));
 
-					return this;
+					var i = _ephemeral[pluginName].configInstances.length;
+
+					_ephemeral[pluginName].configInstances
+						.push (_plugins[pluginName].construct(params));
+
+
+					if (!$.isPlainObject(_ephemeralInstances[pluginName])) {					
+						_ephemeralInstances[pluginName] = {};
+					}
+					_ephemeralInstances[pluginName][i] = jController.self(params, pluginName, i);
+
+					return _ephemeralInstances[pluginName][i];
 				},
 
 				// Remove this instance
 				remove : function () {
 
-					if (index != -1)
-					{
-						_plugins[pluginName].paramsList.splice(index,1);
+					
+					_plugins[pluginName].configInstances[index] = undefined;
+					
 
-						if ($.isPlainObject(_onEvent[pluginName]))
-						{
-							// Remove all onEvent for this instance
-							$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-								$.jController
-									.getListener(listenerName)
-									.off(_onEvent[pluginName][index][listenerName]);
-							});
-						}
-						index = -1;
+					if ($.isPlainObject(_onEvent[pluginName]))
+					{
+						// Remove all onEvent for this instance
+						$.each(_onEvent[pluginName][index],function(listenerName, fn) {
+							$.jController
+								.getListener(listenerName)
+								.off(_onEvent[pluginName][index][listenerName]);
+						});
 					}
+
+					_instances[pluginName][index]=undefined;
+						
 				},
 
 				// Trigger
@@ -263,20 +275,23 @@
 			$.each(_plugins, function(pluginName, plugin) {
 				
 				// Construct and render each one
-				$.each(plugin.paramsList, function(index, state) {
+				$.each(plugin.configInstances, function(index, state) {
 					
-					// Create "self" (related to the instance) 
-					var _self = jController.self(state, pluginName, index);
-
-					if (! state.__isRender)
+					if (state != undefined)
 					{
-						// Retrieve all events
-						jController.listenEvents(state, pluginName, _self);
-						state.__isRender = true;
-					}
+						// Create "self" (related to the instance) 
+						var _self = _instances[pluginName][index];
 
-					// Render plugin
-					plugin.render(_self);
+						if (! state.__isRender)
+						{
+							// Retrieve all events
+							jController.listenEvents(state, pluginName, _self);
+							state.__isRender = true;
+						}
+
+						// Render plugin
+						plugin.render(_self);
+					}
 
 				})
 			})
@@ -290,23 +305,26 @@
 			// For each declared plugin
 			$.each(_ephemeral, function(pluginName, plugin) {
 				// Not render yet
-				if (! plugin.isRender && plugin.paramsList.length != 0) {
+				if (! plugin.isRender && plugin.configInstances.length != 0) {
 
 					// Construct and render each one
-					$.each(plugin.paramsList, function(index, state) {
+					$.each(plugin.configInstances, function(index, state) {
 						
-						// Create "self" (related to the instance) 
-						var _self = jController.self(state, pluginName, index);
-
-						if (! state.__isRender)
+						if (state != undefined)
 						{
-							// Retrieve all events
-							jController.listenEvents(state, pluginName, _self);
-							state.__isRender = true;
-						}
+							// Create "self" (related to the instance) 
+							var _self = _ephemeralInstances[pluginName][index];
 
-						// Render plugin
-						$.jController.getPlugin(pluginName).render(_self);
+							if (! state.__isRender)
+							{
+								// Retrieve all events
+								jController.listenEvents(state, pluginName, _self);
+								state.__isRender = true;
+							}
+
+							// Render plugin
+							$.jController.getPlugin(pluginName).render(_self);
+						}
 
 					})
 
@@ -489,13 +507,8 @@
 		// Check wether the name has been set
 		if (plugin.name) {
 
-			// Create new object of plugin
-			_plugins[plugin.name] = {
-				paramsList  : [],          			// With paramsList (list)
-				render 	 : plugin.render,  			// Register plugin rendering function
-				name     : plugin.name,				// Plugin name
-				events 	 : plugin.events,  			// Register plugin events
-				_construct : plugin.construct, 		// Plugin Constructor
+			var _config = {
+				configInstances  : [],          			// With configInstances (list)
 				isRender : false,          			// Plugin already rendered ?
 				getEvent : function(eventName){ 	// Get eventName
 
@@ -508,6 +521,9 @@
 
 			}
 
+			// Create new object of plugin
+			_plugins[plugin.name] = $.extend(true,{},_config,plugin);
+			
 			// Add plugin function
 			// Ex : $.jController.arc({[...]}) adds an arc into the controller
 			$.jController[plugin.name] = function(state) {
@@ -516,11 +532,16 @@
 				state.__isRender = false;
 
 				var pluginName = plugin.name;
-				var index = _plugins[pluginName].paramsList.length;
+				var index = _plugins[pluginName].configInstances.length;
 
-				_plugins[pluginName].paramsList.push (plugin.construct(state))
+				_plugins[pluginName].configInstances.push (plugin.construct(state));
 
-				return jController.self(state, pluginName, index);
+				if (!$.isArray(_instances[pluginName])) {					
+					_instances[pluginName] = [];
+				}
+				_instances[pluginName][index] = jController.self(state, pluginName, index);
+
+				return _instances[pluginName][index];
 			}
 		}
 	}

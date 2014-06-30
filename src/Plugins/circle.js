@@ -117,5 +117,13 @@ $.jController.registerPlugin({
 			}
 
 		},
+
+		say : {
+
+			fn : function (self,callback) {
+
+				console.log("A plugin Say !");
+			}
+		}
 	},
 })

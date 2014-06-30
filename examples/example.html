@@ -59,10 +59,13 @@
 			mouseout : function(self) {
 				self.params.fill = undefined;
 			},
+			say : function (self) {
+				console.log("I'm Green");
+			}
 		});
 
 		// Add circle to canvas
-		$.jController.circle({
+		var orangeCircle = $.jController.circle({
 			x: 275,
 			y: 150,
 			r: 20,
@@ -80,7 +83,7 @@
 			},
 		});
 
-		$.jController.circle({
+		var magentaCircle = $.jController.circle({
 			x: 50,
 			y: 50,
 			r: 40,
@@ -90,7 +93,7 @@
 				var g = Math.floor(Math.random() * 255);
 				var b = Math.floor(Math.random() * 255);
 				self.params.fill = "rgb(" + r + "," + g + "," + b + ")";
-				greenCircle.remove();
+
 			},
 		});
 
@@ -118,6 +121,11 @@
 				var r = Math.floor(Math.random() * 255);
 				var g = Math.floor(Math.random() * 255);
 				var b = Math.floor(Math.random() * 255);
+				blueCircle.remove();
+				
+				greenCircle.trigger("say");
+
+				
 				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
 			},
 			mousein : function(self) {
