@@ -27,14 +27,16 @@ $.jController.registerPlugin({
 		if (self.params.trace) {
 			$.jController.clearCanvas(false);
 		}
-
-		self.render("circle", {
+		//console.log(self);
+		var t = self.render("circle", {
 			x: self.params.x,
 			y: self.params.y,
 			r: self.params.r,
 			color: self.params.colors[self.params.c],
 			fill:  self.params.colors[self.params.c],
 		});
+
+		//console.log(t);
 		
 	},
 

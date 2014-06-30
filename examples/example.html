@@ -14,10 +14,13 @@
 	<script src="../src/Plugins/circle.js"></script>
 	<script src="../src/Plugins/line.js"></script>
 	<script src="../src/Plugins/rect.js"></script>
+	<script src="../src/Plugins/mosaic.js"></script>
+
 
 	<script type="text/javascript"><!--
 	$(function() {
 	
+		
 		// Add circle to canvas
 		var redCircle = $.jController.circle({
 			x: 275,
@@ -59,8 +62,8 @@
 			mouseout : function(self) {
 				self.params.fill = undefined;
 			},
-			say : function (self) {
-				console.log("I'm Green");
+			jump : function (self) {
+				console.log("I'm Green, and i'm jumpping");
 			}
 		});
 
@@ -123,7 +126,7 @@
 				var b = Math.floor(Math.random() * 255);
 				blueCircle.remove();
 				
-				greenCircle.trigger("say");
+				greenCircle.trigger("jump");
 
 				
 				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
@@ -142,8 +145,8 @@
 		$("#controller").jController({
 			
 			attr : {
-				width  : 400,
-				height : 200,
+				width  : 512,
+				height : 512,
 			},
 			
 			events : {

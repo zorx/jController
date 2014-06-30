@@ -27,6 +27,8 @@
 	// Private jController plugins list
 	var _plugins = {};
 
+	var _count = 0;
+
 	// Ephemeral plugins (when we call a plugin from another)
 	var _ephemeral = {};
 
@@ -193,7 +195,6 @@
 					if (! $.isPlainObject(_ephemeral[pluginName ])) {
 						_ephemeral[pluginName] = {
 							configInstances : [],
-							isRender : false, // Plugin already rendered ?
 						};
 					}
 
@@ -207,7 +208,10 @@
 						_ephemeralInstances[pluginName] = {};
 					}
 					_ephemeralInstances[pluginName][i] = jController.self(params, pluginName, i);
-
+					if (pluginName == "circle" && _count < 2) {
+						console.log(_ephemeralInstances[pluginName][i]);
+						_count++;
+					}
 					return _ephemeralInstances[pluginName][i];
 				},
 
@@ -235,12 +239,17 @@
 				// Trigger
 				trigger : function (eventName,data) {
 
-					$.jController.trigger({
-						event:  eventName, 			// Triggered event
-						plugin: pluginName, 		// Triggered plugin type
-						index:  index, 				// Triggered plugin index
-						data:   data,   			// Sent data
-					});
+					var callback = state[eventName];
+
+					if ($.jController.isEvent(pluginName, eventName) && $.isFunction(callback)) {
+
+						// Callback for event
+						var callbackEvent = $.jController
+							.getPlugin(pluginName)
+							.events[eventName].fn;
+
+						callbackEvent(this,callback);
+					}
 				},
 
 				// Get parent
@@ -302,39 +311,45 @@
 		// Render Ephemeral plugins
 		renderEphemeral : function () {
 
+			var _exit=false;
 			// For each declared plugin
 			$.each(_ephemeral, function(pluginName, plugin) {
-				// Not render yet
-				if (! plugin.isRender && plugin.configInstances.length != 0) {
 
-					// Construct and render each one
-					$.each(plugin.configInstances, function(index, state) {
-						
-						if (state != undefined)
+				_exit = true;
+				// Construct and render each one
+				$.each(plugin.configInstances, function(index, state) {
+					
+					if (state != undefined)
+					{
+						// Create "self" (related to the instance) 
+						var _self = _ephemeralInstances[pluginName][index];
+
+						if (! state.__isRender)
 						{
-							// Create "self" (related to the instance) 
-							var _self = _ephemeralInstances[pluginName][index];
-
-							if (! state.__isRender)
-							{
-								// Retrieve all events
-								jController.listenEvents(state, pluginName, _self);
-								state.__isRender = true;
-							}
-
-							// Render plugin
-							$.jController.getPlugin(pluginName).render(_self);
+							_exit = false;
+							// Retrieve all events
+							jController.listenEvents(state, pluginName, _self);
+							state.__isRender = true;
 						}
 
-					})
+						if (pluginName == "circle" && _count < 2)
+						{
+							console.log($.jController.getPlugin(pluginName).render);
 
-					// Object render
-					_ephemeral[pluginName].isRender = true;
-					
-					// Recursive call (for intricate plugins)
-					jController.renderEphemeral();
-				}
+						}
+
+						// Render plugin
+						$.jController.getPlugin(pluginName).render(_self);
+					}
+
+				})
 			})
+
+			if (!_exit) {
+				// Recursive call (for intricate plugins)
+				jController.renderEphemeral();
+			}
+				
 
 		}
 	}
@@ -509,7 +524,6 @@
 
 			var _config = {
 				configInstances  : [],          			// With configInstances (list)
-				isRender : false,          			// Plugin already rendered ?
 				getEvent : function(eventName){ 	// Get eventName
 
 					return $.jController.getEvent(plugin.name,eventName);
