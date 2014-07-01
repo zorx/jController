@@ -18,11 +18,11 @@ $.jController.registerPlugin({
 	render : function(self) {
 		
 		var ctx = $.jController.getContext();
-
+		ctx.save();
 		self.params.t = new Date().getTime() * 0.002;
 		self.params.x = Math.sin(self.params.t)       * 192 + 256;
 		self.params.y = Math.cos(self.params.t * 0.9) * 192 + 256;
-		self.params.c = Math.floor(Math.random() * self.params.colors.length);
+		self.params.c = 1;//Math.floor(Math.random() * self.params.colors.length);
 
 		if (self.params.trace) {
 			$.jController.clearCanvas(false);
@@ -35,7 +35,7 @@ $.jController.registerPlugin({
 			color: self.params.colors[self.params.c],
 			fill:  self.params.colors[self.params.c],
 		});
-
+		ctx.restore();
 		//console.log(t);
 		
 	},

@@ -245,7 +245,7 @@
 							.getPlugin(pluginName)
 							.events[eventName].fn;
 
-						callbackEvent(this,callback);
+						callbackEvent(this,callback,data);
 					}
 				},
 
