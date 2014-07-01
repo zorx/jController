@@ -13,6 +13,12 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
+	/* // Idea :
+	path : function(params) {
+		return (internal(innerCircle)).getPath();
+	},
+	*/
+
 	render : function(self) {
 		
 		// Circles are full arcs

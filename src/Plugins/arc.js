@@ -15,15 +15,26 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	render : function(self) {
+	/* // Idea:
+	path : function(params) {
+		// @TODO: manque la gestion paramétrique
+		return function (params, ctx) {
+			return function(ctx) {
+				ctx.arc(params.x, params.y, params.r,
+				params.angleStart, params.angleEnd);
+			}
+		}
+	},
+	*/
 
+	render : function(self) {
 		var params = self.params;
 		$.jController.getHelper("contextDraw")({
 			color  : params.color,
 			fill   : params.fill,
 			line   : params.line,
 			shadow : params.shadow,
-			draw : function (ctx) {
+			draw : /* Idea: self.getPath(params) */ function (ctx) {
 				ctx.arc(params.x, params.y, params.r,
 					params.angleStart, params.angleEnd);
 			},

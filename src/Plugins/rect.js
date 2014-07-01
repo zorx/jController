@@ -14,6 +14,17 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
+	/* // Idea:
+	path : function(params) {
+		// @TODO: manque la gestion paramétrique
+		return function (params, ctx) {
+			return function(ctx) {
+				ctx.rect(params.x, params.y, params.w, params.h);
+			}
+		}
+	},
+	*/
+
 	render : function(self) {
 
 		var params = self.params;
@@ -22,7 +33,7 @@ $.jController.registerPlugin({
 			fill   : params.fill,
 			line   : params.line,
 			shadow : params.shadow,
-			draw : function (ctx) {
+			draw : /* Idea: self.getPath(params) */ function (ctx) {
 				ctx.rect(params.x, params.y, params.w, params.h);
 			},
 		})

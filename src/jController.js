@@ -190,6 +190,14 @@
 					return _internal[pluginName+index];
 				},
 
+				/* Idea:
+				// Retrieve object path (useful for events detection)
+				getPath : function() {
+					return self.path; // = function(params)
+				}
+
+				*/
+
 				// render another plugin (plugin name, params)
 				render : function(pluginName, params) {
 					if (! $.isPlainObject(_ephemeral[pluginName ])) {
