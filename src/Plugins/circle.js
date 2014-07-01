@@ -123,22 +123,34 @@ $.jController.registerPlugin({
 			fn : function (self,callback,data) {
 
 				self.params.y = self.params.y+2;
-				
-				// Circles are full arcs
-				$.jController.mosaic({
-			    	colors : ["rgb(250, 250, 250)", "rgb(230,220,100)", "rgb(230,180,60)","rgb(250,50,10)","rgb(255,0,0)"],
-			    	trace : false,
-			    	r:50,
-			    	//callbackOnEvent
-			    	click : function (self) {
-			    		console.log("Yeah !");
-		                self.params.r -= 5;
-		                if (self.params.r < 5) {
-		                    self.params.r = 50;
-		                }
-		            }
-				});
+				var ismosaic = self.getInternal("mosaic");
 
+				if (ismosaic)
+				{
+					self.getInternal("mosaicobj").remove();
+					self.setInternal({mosaic:false});
+				}else
+				{
+					self.setInternal({mosaic:true});
+
+					// Circles are full arcs
+					var hello = $.jController.mosaic({
+				    	colors : ["rgb(250, 250, 250)", "rgb(230,220,100)", "rgb(230,180,60)","rgb(250,50,10)","rgb(255,0,0)"],
+				    	trace : false,
+				    	r:50,
+				    	//callbackOnEvent
+				    	click : function (self) {
+				    		console.log("Yeah !");
+			                self.params.r -= 5;
+			                if (self.params.r < 5) {
+			                    self.params.r = 50;
+			                }
+			            }
+					});
+					self.setInternal({mosaicobj:hello});
+				}
+
+				
 				callback(self,data);
 			}
 		}

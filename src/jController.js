@@ -227,8 +227,9 @@
 								.getListener(listenerName)
 								.off(_onEvent[pluginName][index][listenerName]);
 						});
-					}
 
+					}
+					
 					_instances[pluginName][index]=undefined;
 						
 				},
