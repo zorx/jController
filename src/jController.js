@@ -39,7 +39,7 @@
 	// Private jController plugins list
 	var _plugins = {};
 
-	// Ephemeral plugins (when we call a plugin from another)
+	// Ephemeral plugins (nested plugin calls)
 	var _ephemeral = {};
 
 	// Private jController helpers list
@@ -48,7 +48,7 @@
 	// Private jController listeners list
 	var _listeners = {};
 
-	// list of events by plugin (for trigger)
+	// Plugins events list (triggerable)
 	var _onEvent = {};
 
 	// jController events
@@ -79,28 +79,29 @@
 
 
 	// Create state "object" for plugin
-	var state = function(attr, pluginName,index) {
+	var state = function(attr, pluginName, index) {
 
 		this.id = index;
 		this.attr = attr;
 		this.isRender = false;
+
 		// Set internal values
 		this.setInternal = function(data) {
 			
-			var oldData = ($.isPlainObject(_internal[pluginName+index]))
+			var _data = ($.isPlainObject(_internal[pluginName+index]))
 				? _internal[pluginName+index]
 				: {};
 
-			_internal[pluginName+index] = $.extend(true,{}, oldData, data);
-			
-
+			_internal[pluginName+index] = $.extend(true, {}, _data, data);
 		}
+
 		// Retrieve internal value
 		this.getInternal = function(key) {
-			var ret = ($.isPlainObject(_internal[pluginName+index])) ? _internal[pluginName+index][key] : undefined;
-			return ret;
-			
+			return ($.isPlainObject(_internal[pluginName+index]))
+				? _internal[pluginName+index][key]
+				: undefined;
 		}
+
 		// Retrieve internal values (all)
 		this.getInternals = function() {
 			return _internal[pluginName+index];
@@ -111,10 +112,9 @@
 		getPath : function() {
 			return self.path; // = function(params)
 		}
-
 		*/
 
-		// render another plugin (plugin name, params)
+		// Render another plugin (plugin name, params)
 		this.render = function(pluginName, attr) {
 			if (! $.isPlainObject(_ephemeral[pluginName])) {
 				_ephemeral[pluginName] = {
@@ -122,9 +122,14 @@
 				};
 			}
 
-			var index = _ephemeral[pluginName].instances.length;
-			var _state = new state($.jController.getPlugin(pluginName).construct(attr),pluginName,index);
-			_ephemeral[pluginName].instances.push (_state);
+			var index  = _ephemeral[pluginName].instances.length;
+			var _state = new state(
+				$.jController.getPlugin(pluginName).construct(attr),
+				pluginName,
+				index
+			);
+
+			_ephemeral[pluginName].instances.push(_state);
 
 			return _state;
 		}
@@ -132,9 +137,7 @@
 		// Remove this instance
 		this.remove = function () {
 
-			
 			_plugins[pluginName].instances[index] = undefined;
-			
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
@@ -150,22 +153,23 @@
 		}
 
 		// Trigger
-		this.trigger = function (eventName,data) {
+		this.trigger = function (eventName, data) {
 
 			var callback = state[eventName];
 
-			if ($.jController.isEvent(pluginName, eventName) && $.isFunction(callback)) {
+			if ($.jController.isEvent(pluginName, eventName) &&
+				$.isFunction(callback)) {
 
 				// Callback for event
 				var callbackEvent = $.jController
 					.getPlugin(pluginName)
 					.events[eventName].fn;
 
-				callbackEvent(this,callback,data);
+				callbackEvent(this, callback, data);
 			}
 		}
 
-		// Get parent
+		// Get parent (plugin "class")
 		this.parent = function () {
 			return _plugins[pluginName];
 		}
@@ -233,7 +237,7 @@
 
 						// Don't change this, save the execute event function
 						_onEvent[pluginName][state.id][listenerName] = function(e) {
-							callbackEvent(state,evtCallback,e);
+							callbackEvent(state, evtCallback, e);
 						};
 
 						if ($.jController.isListener(listenerName)) {
@@ -298,7 +302,7 @@
 		// Render Ephemeral plugins
 		renderEphemeral : function () {
 
-			var _exit=false;
+			var _exit = false;
 			// For each declared plugin
 			$.each(_ephemeral, function(pluginName, plugin) {
 
@@ -306,10 +310,8 @@
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
 					
-					if (state != undefined)
-					{
-						if (! state.isRender)
-						{
+					if (state != undefined) {
+						if (! state.isRender) {
 							_exit = false;
 							// Retrieve all events
 							jController.listenEvents(state, pluginName);
@@ -323,12 +325,10 @@
 				})
 			})
 
-			if (!_exit) {
+			if (! _exit) {
 				// Recursive call (for intricate plugins)
 				jController.renderEphemeral();
 			}
-				
-
 		}
 	}
 
@@ -371,8 +371,7 @@
 		var callback = _kernelEvents[eventName];
 
 		if ($.isFunction(callback)) {
-
-			// execute Callback using data
+			// Execute callback using data
 			callback(data);
 		}
 	}
@@ -483,26 +482,28 @@
 	// Register Plugin
 	$.jController.registerPlugin = function(plugin) {
 		
-		var pName=plugin.name;
+		var pName = plugin.name;
 
 		// Check wether the name has been set
-		if (!pName) {throw "What's my name !"}
+		if (! pName) {
+			throw "jController error: can't register plugin without name !";
+		}
 
 		var _config = {
 			instances  : [],          			// With instances (list)
-			getEvent : function(eventName){ 	// Get eventName
-
-				return $.jController.getEvent(pName,eventName);
+			getEvent : function(eventName) {
+				// Get eventName
+				return $.jController.getEvent(pName, eventName);
 			},
-			isEvent : function(eventName){ 	// Get eventName
-
-				return $.jController.isEvent(pName,eventName);
+			isEvent : function(eventName) {
+				// Get eventName
+				return $.jController.isEvent(pName, eventName);
 			}
 
 		}
 
 		// Create new object of plugin
-		_plugins[pName] = $.extend(true,{},_config,plugin);
+		_plugins[pName] = $.extend(true, {}, _config, plugin);
 		
 		// Add plugin function
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
