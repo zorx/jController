@@ -191,7 +191,7 @@
 			_context = _canvas.getContext("2d");
 
 			// Save kernel events
-			$.each(attr.events,function(eventName,callback) {
+			$.each(attr.events, function(eventName, callback) {
 				_kernelEvents[eventName] = callback;
 			})
 
@@ -322,13 +322,13 @@
 	// Import Js files
 	$.jController.import =  function(links, callback) {
  		// Recursively import files and callback()
- 		(function importRecursive(list, callback){
+ 		(function importRecursive(list, callback) {
  			if (list.length == 0) {
  				callback();
  			} else {
 	 			$.getScript(list[0], function() {
 	 				importRecursive(list.slice(1), callback);
-	 			}).fail(function(jqxhr, settings, exception){
+	 			}).fail(function(jqxhr, settings, exception) {
 	 				throw "jController error: on import, " + exception;
 	 			})
  			}
@@ -353,7 +353,7 @@
 
 	/* -- Trigger -- */
 
-	$.jController.trigger = function(eventName,data) {
+	$.jController.trigger = function(eventName, data) {
 		
 		var callback = _kernelEvents[eventName];
 
@@ -444,8 +444,9 @@
 			throw "jController error: can't register plugin without name !";
 		}
 
-		var _config = {
-			instances  : [],          			// With instances (list)
+		var defaults = {
+			// With instances (list)
+			instances  : [],
 			getEvent : function(eventName) {
 				// Get eventName
 				return $.jController.getEvent(pName, eventName);
@@ -454,18 +455,17 @@
 				// Get eventName
 				return $.jController.isEvent(pName, eventName);
 			}
-
 		}
 
 		// Create new object of plugin
-		_plugins[pName] = $.extend(true, {}, _config, plugin);
+		_plugins[pName] = $.extend(true, {}, defaults, plugin);
 		
 		// Add plugin function
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[pName] = function(attr) {
 
 			var index = _plugins[pName].instances.length;
-			var _state = new state(plugin.construct(attr),pName,index);
+			var _state = new state(plugin.construct(attr),pName, index);
 			_plugins[pName].instances.push (_state);
 
 			return _state;
