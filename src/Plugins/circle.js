@@ -111,42 +111,6 @@ $.jController.registerPlugin({
 			}
 
 		},
-
-		jump : {
-
-			fn : function (self,callback,data) {
-
-				self.attr.y = self.attr.y+2;
-				var ismosaic = self.getInternal("mosaic");
-
-				if (ismosaic)
-				{
-					self.getInternal("mosaicobj").remove();
-					self.setInternal({mosaic:false});
-				}else
-				{
-					self.setInternal({mosaic:true});
-
-					// Circles are full arcs
-					var hello = $.jController.mosaic({
-				    	colors : ["rgb(250, 250, 250)", "rgb(230,220,100)", "rgb(230,180,60)","rgb(250,50,10)","rgb(255,0,0)"],
-				    	trace : false,
-				    	r:50,
-				    	//callbackOnEvent
-				    	click : function (self) {
-				    		console.log("Yeah !");
-			                self.attr.r -= 5;
-			                if (self.attr.r < 5) {
-			                    self.attr.r = 50;
-			                }
-			            }
-					});
-					self.setInternal({mosaicobj:hello});
-				}
-
-				
-				callback(self,data);
-			}
-		}
+		
 	},
 })
