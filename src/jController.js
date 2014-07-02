@@ -115,11 +115,23 @@
 
 		this.inPath = function(x, y) {
 			var self = this;
-			return $.jController.getHelper("inPath")({
-				px : x,
-				py : y,
-				draw : self.getPath(),
-			})
+			var ctx = $.jController.getContext();
+
+			// Save
+			ctx.save();
+			ctx.beginPath();
+
+			// Draw path
+			(self.getPath())();
+
+			// Check in
+			var result = ctx.isPointInPath(x, y);
+
+			// Restore
+			ctx.closePath();
+			ctx.restore();
+
+			return result;
 		}
 
 		// Render another plugin (plugin name, params)
