@@ -109,17 +109,19 @@
 
 		// @TODO
 		this.getPath = function() {
-			return (false)
-				? function(){} //self.path (function)
+			console.log("getPath: ", this)
+			var path = _plugins[pluginName].path
+			return ($.isFunction(path))
+				// = "self".path()
+				? function() { path(this); }
 				: function(){}
 		}
 
-		// @TODO
 		this.inPath = function(x, y) {
 			return $.jController.getHelper("inPath")({
 				px : x,
 				py : y,
-				draw : function(){} // self.path (function)
+				draw : this.getPath(),
 			})
 		}
 
@@ -509,13 +511,11 @@
 				// Get eventName
 				return $.jController.isEvent(pName, eventName);
 			},
-			// Empty default path
-			path : function() {},
 		}
 
 		// Create new object of plugin
 		_plugins[pName] = $.extend(true, {}, defaults, plugin);
-		
+
 		// Add plugin function
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[pName] = function(attr) {

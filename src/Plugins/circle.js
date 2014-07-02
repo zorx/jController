@@ -47,13 +47,10 @@ $.jController.registerPlugin({
 				
 				var canvas = $.jController.getCanvas();
 
-				if ($.jController.getHelper("inCircle")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					cx : self.attr.x,
-					cy : self.attr.y,
-					cr : self.attr.r,
-				})) {
+				if (self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 
 					callback(self, data);
 				}
@@ -68,13 +65,10 @@ $.jController.registerPlugin({
 				
 				var canvas = $.jController.getCanvas();
 
-				if ($.jController.getHelper("inCircle")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					cx : self.attr.x,
-					cy : self.attr.y,
-					cr : self.attr.r,
-				})) {
+				if (self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 				}
 			}
@@ -89,13 +83,10 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 
 				if (! self.getInternal("mousedIn") &&
-					$.jController.getHelper("inCircle")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					cx : self.attr.x,
-					cy : self.attr.y,
-					cr : self.attr.r,
-				})) {
+					self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					self.setInternal({mousedIn:true});
 					callback(self, data);
 				}
@@ -111,13 +102,10 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 
 				if (self.getInternal("mousedIn") &&
-					! $.jController.getHelper("inCircle")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					cx : self.attr.x,
-					cy : self.attr.y,
-					cr : self.attr.r,
-				})) {
+					! self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 					self.setInternal({mousedIn:false});
 				}

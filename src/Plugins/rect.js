@@ -29,7 +29,7 @@ $.jController.registerPlugin({
 				fill   : params.fill,
 				line   : params.line,
 				shadow : params.shadow,
-				draw   : self.getPath()
+				draw   : self.getPath(),
 		})
 	},
 
@@ -40,11 +40,11 @@ $.jController.registerPlugin({
 			listener : "click",
 
 			fn : function (self, callback, data) {
-				
 				var canvas = $.jController.getCanvas();
 				if (self.inPath(
 					data.pageX - canvas.offsetLeft,
-					data.pageY - canvas.offsetTop)) {
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 				}
 			}
@@ -58,13 +58,10 @@ $.jController.registerPlugin({
 				
 				var canvas = $.jController.getCanvas();
 
-				if ($.jController.getHelper("inPath")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					draw : function (ctx) {
-						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
-					}
-				})) {
+				if (self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 				}
 			}
@@ -79,13 +76,10 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 
 				if (! self.getInternal("mousedIn") && 
-					$.jController.getHelper("inPath")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					draw : function (ctx) {
-						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
-					}
-				})) {
+					self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 					self.setInternal({mousedIn : true});
 				}
@@ -100,13 +94,10 @@ $.jController.registerPlugin({
 				var canvas = $.jController.getCanvas();
 				
 				if (self.getInternal("mousedIn") &&
-					! $.jController.getHelper("inPath")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					draw : function (ctx) {
-						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
-					}
-				})) {
+					! self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				)) {
 					callback(self, data);
 					self.setInternal({mousedIn : false});
 				}

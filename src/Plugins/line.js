@@ -17,6 +17,7 @@ $.jController.registerPlugin({
 	},
 	
 	path : function(self) {
+		console.log("path: ", self);
 		var params = self.attr;
 		var ctx    = $.jController.getContext();
 		ctx.moveTo(params.x, params.y);
@@ -24,6 +25,7 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
+		console.log("render: ", self, self.getPath());
 		var params = self.attr;
 		$.jController.getHelper("canvasDraw")({
 			color  : params.color,
