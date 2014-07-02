@@ -45,9 +45,6 @@
 	// Private jController helpers list
 	var _helpers = {};
 
-	// Private jController listeners list
-	var _listeners = {};
-
 	// Plugins events list (triggerable)
 	var _onEvent = {};
 
@@ -143,9 +140,7 @@
 			{
 				// Remove all onEvent for this instance
 				$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-					$.jController
-						.getListener(listenerName)
-						.off(_onEvent[pluginName][index][listenerName]);
+					$.jController.getCanvas().removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
 				});
 
 			}
@@ -240,15 +235,7 @@
 							callbackEvent(state, evtCallback, e);
 						};
 
-						if ($.jController.isListener(listenerName)) {
-							// Don't change this, start listening
-							$.jController
-								.getListener(listenerName)
-								.on(_onEvent[pluginName][state.id][listenerName]);
-						} else {
-							throw "jController error: can't find <"+listenerName+"> listener";
-						}
-
+						$.jController.getCanvas().addEventListener(listenerName, _onEvent[pluginName][state.id][listenerName], false);
 					}
 				}
 			});
@@ -373,38 +360,6 @@
 		if ($.isFunction(callback)) {
 			// Execute callback using data
 			callback(data);
-		}
-	}
-
-	/* -- Listeners config -- */
-
-	// Retrieve all listeners
-	$.jController.getListeners = function() {
-		return _listeners;
-	}
-
-	// Retrieve listener by name
-	$.jController.getListener = function(name) {
-		// return the listener if exists otherwise undefined
-		return _listeners[name];
-	}
-
-	// Check wether a listener exists or nor
-	$.jController.isListener = function(name) {
-		return ($.isPlainObject(_listeners[name]) &&
-				$.isFunction(_listeners[name].on) &&
-				$.isFunction(_listeners[name].off));
-	}
-
-	// Register a listener
-	$.jController.registerListener = function(listener) {
-		// Check wether the name has been set
-		if (listener.name) {
-			// Register listener functions
-			_listeners[listener.name] = {
-				on  : listener.on,
-				off : listener.off,
-			}
 		}
 	}
 
