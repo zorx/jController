@@ -12,7 +12,7 @@
 $.jController.registerHelper({
 	name : "canvasDraw",
 	fn : function(args) {
-		
+
 		// Default values
 		var defaults = {
 			ctx : $.jController.getContext(),

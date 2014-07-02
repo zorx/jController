@@ -14,16 +14,13 @@ $.jController.registerPlugin({
 	},
 
 	path : function(self) {
-		// @TODO : utiliser le plugin arc
-		$.jController
-			.getContext()
-			.arc(self.attr.x, self.attr.y, self.attr.r, 0, 2.*Math.PI);
+		(self.getInternal('innerArc').getPath())();
 	},
 
 	render : function(self) {
 		
 		// Circles are full arcs
-		self.render("arc", {
+		var arc = self.render("arc", {
 			x: self.attr.x,
 			y: self.attr.y,
 			r: self.attr.r,
@@ -34,6 +31,8 @@ $.jController.registerPlugin({
 			line:   self.attr.line,
 			shadow: self.attr.shadow,
 		});
+
+		self.setInternal({innerArc: arc});
 
 	},
 

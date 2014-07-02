@@ -15,6 +15,10 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
+	path : function (self) {
+		// @TODO
+	},
+
 	render : function(self) {
 		
 		var ctx = $.jController.getContext();

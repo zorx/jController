@@ -109,19 +109,19 @@
 
 		// @TODO
 		this.getPath = function() {
-			console.log("getPath: ", this)
 			var path = _plugins[pluginName].path
+			var self = this;
 			return ($.isFunction(path))
-				// = "self".path()
-				? function() { path(this); }
-				: function(){}
+				? function() { path(self) }
+				: function() {}
 		}
 
 		this.inPath = function(x, y) {
+			var self = this;
 			return $.jController.getHelper("inPath")({
 				px : x,
 				py : y,
-				draw : this.getPath(),
+				draw : self.getPath(),
 			})
 		}
 
