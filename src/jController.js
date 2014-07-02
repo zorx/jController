@@ -33,9 +33,6 @@
 	// Default value of clearing canvas 
 	var _isClearCanvas = true;
 
-	// The prefix used by jController trigger sys
-	var _triggerPrefix = "jController_";
-
 	// Index of objets
 	var _internal = {};
 
@@ -368,11 +365,6 @@
 	}
 
 	/* -- Trigger -- */
-
-	$.jController.getTriggerPrefix = function() {
-		// jController own triggers prefix
-		return _triggerPrefix;
-	}
 
 	$.jController.trigger = function(eventName,data) {
 		
