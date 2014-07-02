@@ -1,4 +1,4 @@
-//http://www.rgraph.net/blog/2013/february/an-example-of-the-html5-canvas-ispointinpath-function.html
+
 // Begin jController Kernel
 // create closure
 (function($) {

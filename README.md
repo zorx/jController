@@ -1,8 +1,12 @@
-# jController #
+# jController
 
-## A small javascript controller to play games or control applications from anywhere (phone, PC, etc.)
+## A customisable JavaScript multi-devices controller for games/applications
 
 ### TODO
 
 Basic plugins, ex : SVG plugin, Image plugin, etc.
 (REF: http://www.w3schools.com/tags/ref_canvas.asp)
+
+Listeners : mouse, pen, drag&drop, touch, etc.
+
+More examples : NES controller, etc.
