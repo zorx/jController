@@ -19,21 +19,21 @@ $.jController.registerPlugin({
 		
 		var ctx = $.jController.getContext();
 		ctx.save();
-		self.params.t = new Date().getTime() * 0.002;
-		self.params.x = Math.sin(self.params.t)       * 192 + 256;
-		self.params.y = Math.cos(self.params.t * 0.9) * 192 + 256;
-		self.params.c = 1;//Math.floor(Math.random() * self.params.colors.length);
+		self.attr.t = new Date().getTime() * 0.002;
+		self.attr.x = Math.sin(self.attr.t)       * 192 + 256;
+		self.attr.y = Math.cos(self.attr.t * 0.9) * 192 + 256;
+		self.attr.c = 1;//Math.floor(Math.random() * self.attr.colors.length);
 
-		if (self.params.trace) {
+		if (self.attr.trace) {
 			$.jController.clearCanvas(false);
 		}
 		//console.log(self);
 		var t = self.render("circle", {
-			x: self.params.x,
-			y: self.params.y,
-			r: self.params.r,
-			color: self.params.colors[self.params.c],
-			fill:  self.params.colors[self.params.c],
+			x: self.attr.x,
+			y: self.attr.y,
+			r: self.attr.r,
+			color: self.attr.colors[self.attr.c],
+			fill:  self.attr.colors[self.attr.c],
 		});
 		ctx.restore();
 		//console.log(t);
@@ -53,9 +53,9 @@ $.jController.registerPlugin({
 				if ($.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : self.attr.x,
+					cy : self.attr.y,
+					cr : self.attr.r,
 				})) {
 					callback(self, data);
 				}

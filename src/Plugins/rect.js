@@ -27,7 +27,7 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 
-		var params = self.params;
+		var params = self.attr;
 		$.jController.getHelper("contextDraw")({
 			color  : params.color,
 			fill   : params.fill,
@@ -54,7 +54,7 @@ $.jController.registerPlugin({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
 					draw : function (ctx) {
-						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
 					}
 				})) {
 					callback(self, data);
@@ -74,7 +74,7 @@ $.jController.registerPlugin({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
 					draw : function (ctx) {
-						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
 					}
 				})) {
 					callback(self, data);
@@ -95,7 +95,7 @@ $.jController.registerPlugin({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
 					draw : function (ctx) {
-						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
 					}
 				})) {
 					callback(self, data);
@@ -116,7 +116,7 @@ $.jController.registerPlugin({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
 					draw : function (ctx) {
-						ctx.rect(self.params.x, self.params.y, self.params.w, self.params.h);
+						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
 					}
 				})) {
 					callback(self, data);

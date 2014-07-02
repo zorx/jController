@@ -23,15 +23,15 @@ $.jController.registerPlugin({
 		
 		// Circles are full arcs
 		self.render("arc", {
-			x: self.params.x,
-			y: self.params.y,
-			r: self.params.r,
+			x: self.attr.x,
+			y: self.attr.y,
+			r: self.attr.r,
 			angleStart: 0,
 			angleEnd:   2 * Math.PI,
-			color:  self.params.color,
-			fill:   self.params.fill,
-			line:   self.params.line,
-			shadow: self.params.shadow,
+			color:  self.attr.color,
+			fill:   self.attr.fill,
+			line:   self.attr.line,
+			shadow: self.attr.shadow,
 		});
 
 	},
@@ -49,9 +49,9 @@ $.jController.registerPlugin({
 				if ($.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : self.attr.x,
+					cy : self.attr.y,
+					cr : self.attr.r,
 				})) {
 
 					callback(self, data);
@@ -70,9 +70,9 @@ $.jController.registerPlugin({
 				if ($.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : self.attr.x,
+					cy : self.attr.y,
+					cr : self.attr.r,
 				})) {
 					callback(self, data);
 				}
@@ -91,9 +91,9 @@ $.jController.registerPlugin({
 					$.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : self.attr.x,
+					cy : self.attr.y,
+					cr : self.attr.r,
 				})) {
 					self.setInternal({mousedIn:true});
 					callback(self, data);
@@ -113,9 +113,9 @@ $.jController.registerPlugin({
 					! $.jController.getHelper("inCircle")({
 					px : data.pageX - canvas.offsetLeft,
 					py : data.pageY - canvas.offsetTop,
-					cx : self.params.x,
-					cy : self.params.y,
-					cr : self.params.r,
+					cx : self.attr.x,
+					cy : self.attr.y,
+					cr : self.attr.r,
 				})) {
 					callback(self, data);
 					self.setInternal({mousedIn:false});
@@ -128,7 +128,7 @@ $.jController.registerPlugin({
 
 			fn : function (self,callback,data) {
 
-				self.params.y = self.params.y+2;
+				self.attr.y = self.attr.y+2;
 				var ismosaic = self.getInternal("mosaic");
 
 				if (ismosaic)
@@ -147,9 +147,9 @@ $.jController.registerPlugin({
 				    	//callbackOnEvent
 				    	click : function (self) {
 				    		console.log("Yeah !");
-			                self.params.r -= 5;
-			                if (self.params.r < 5) {
-			                    self.params.r = 50;
+			                self.attr.r -= 5;
+			                if (self.attr.r < 5) {
+			                    self.attr.r = 50;
 			                }
 			            }
 					});

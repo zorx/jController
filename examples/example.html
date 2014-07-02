@@ -28,10 +28,10 @@
 			r: 20,
 			color: "red",
 			mousein : function(self) {
-				self.params.fill = self.params.color;
+				self.attr.fill = self.attr.color;
 			},
 			mouseout : function(self) {
-				self.params.fill = undefined;
+				self.attr.fill = undefined;
 			},
 		});
 
@@ -43,10 +43,14 @@
 			r: 20,
 			color: "blue",
 			mousein : function(self,data) {
-				self.params.fill = self.params.color;
+				self.attr.fill = self.attr.color;
 			},
 			mouseout : function(self) {
-				self.params.fill = undefined;
+				self.attr.fill = undefined;
+			},
+			click : function(self) {
+				console.log("Clicked ! blue");
+				$.jController.trigger("click",{data:"yes"});
 			},
 		});
 
@@ -57,10 +61,10 @@
 			r: 20,
 			color: "green",
 			mousein : function(self) {
-				self.params.fill = self.params.color;
+				self.attr.fill = self.attr.color;
 			},
 			mouseout : function(self) {
-				self.params.fill = undefined;
+				self.attr.fill = undefined;
 			},
 			jump : function (self) {
 				console.log("I'm Green, and i'm jumpping");
@@ -79,10 +83,10 @@
 				console.log("Small circle - click()")
 			},
 			mousein : function(self) {
-				self.params.shadow.blur = 1;
+				self.attr.shadow.blur = 1;
 			},
 			mouseout : function(self) {
-				self.params.shadow.blur = 3;
+				self.attr.shadow.blur = 3;
 			},
 		});
 
@@ -95,7 +99,7 @@
 				var r = Math.floor(Math.random() * 255);
 				var g = Math.floor(Math.random() * 255);
 				var b = Math.floor(Math.random() * 255);
-				self.params.fill = "rgb(" + r + "," + g + "," + b + ")";
+				self.attr.fill = "rgb(" + r + "," + g + "," + b + ")";
 
 			},
 		});
@@ -129,17 +133,15 @@
 				greenCircle.trigger("jump");
 
 				
-				self.params.fill = "rgb(" + r + "," + g + "," + b + ")"; 
+				self.attr.fill = "rgb(" + r + "," + g + "," + b + ")"; 
 			},
 			mousein : function(self) {
-				self.params.fill = "red";
+				self.attr.fill = "red";
 			},
 			mouseout : function(self) {
-				self.params.fill = undefined;
+				self.attr.fill = undefined;
 			},
 		});
-
-		
 
 		// Finally call jController
 		$("#controller").jController({
@@ -150,8 +152,8 @@
 			},
 			
 			events : {
-				click : function() {
-					console.log("jController - click()");
+				click : function(data) {
+					console.log("jController - click()",data);
 				}
 			}
 		

@@ -28,7 +28,7 @@ $.jController.registerPlugin({
 	*/
 
 	render : function(self) {
-		var params = self.params;
+		var params = self.attr;
 		$.jController.getHelper("contextDraw")({
 			color  : params.color,
 			fill   : params.fill,
