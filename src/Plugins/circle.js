@@ -13,9 +13,10 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	/* // Idea :
-	path : function(params) {
-		return (internal(innerCircle)).getPath();
+	/*
+	path : function(self, ctx) {
+		// @TODO : utiliser le plugin arc
+		ctx.arc(self.attr.x, self.attr.y, self.attr.r, 0, 2.*Math.PI);
 	},
 	*/
 

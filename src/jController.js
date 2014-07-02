@@ -107,10 +107,11 @@
 			return _internal[pluginName+index];
 		}
 
-		/* Idea:
-		// Retrieve object path (useful for events detection)
-		getPath : function() {
-			return self.path; // = function(params)
+		/* @TODO
+		this.getPath = function() {
+			return (false)
+				? function() //self.path
+				: function()
 		}
 		*/
 
@@ -499,7 +500,9 @@
 			isEvent : function(eventName) {
 				// Get eventName
 				return $.jController.isEvent(pName, eventName);
-			}
+			},
+			// Empty default path
+			path : function() {},
 		}
 
 		// Create new object of plugin
@@ -510,7 +513,7 @@
 		$.jController[pName] = function(attr) {
 
 			var index = _plugins[pName].instances.length;
-			var _state = new state(plugin.construct(attr),pName, index);
+			var _state = new state(plugin.construct(attr), pName, index);
 			_plugins[pName].instances.push (_state);
 
 			return _state;
