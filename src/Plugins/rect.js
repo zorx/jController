@@ -14,30 +14,23 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	/* // Idea:
-	path : function(params) {
-		// @TODO: manque la gestion paramétrique
-		return function (params, ctx) {
-			return function(ctx) {
-				ctx.rect(params.x, params.y, params.w, params.h);
-			}
-		}
+	path : function(self) {
+		var params = self.attr;
+		$.jController
+			.getContext()
+			.rect(params.x, params.y, params.w, params.h);
 	},
-	*/
 
 	render : function(self) {
-
 		var params = self.attr;
-		$.jController.getHelper("contextDraw")({
-			color  : params.color,
-			fill   : params.fill,
-			line   : params.line,
-			shadow : params.shadow,
-			draw : /* Idea: self.getPath(params) */ function (ctx) {
-				ctx.rect(params.x, params.y, params.w, params.h);
-			},
+		$.jController
+			.getHelper("canvasDraw")({
+				color  : params.color,
+				fill   : params.fill,
+				line   : params.line,
+				shadow : params.shadow,
+				draw   : self.getPath()
 		})
-
 	},
 
 	events : {
@@ -49,14 +42,9 @@ $.jController.registerPlugin({
 			fn : function (self, callback, data) {
 				
 				var canvas = $.jController.getCanvas();
-
-				if ($.jController.getHelper("inPath")({
-					px : data.pageX - canvas.offsetLeft,
-					py : data.pageY - canvas.offsetTop,
-					draw : function (ctx) {
-						ctx.rect(self.attr.x, self.attr.y, self.attr.w, self.attr.h);
-					}
-				})) {
+				if (self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop)) {
 					callback(self, data);
 				}
 			}

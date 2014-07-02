@@ -14,20 +14,22 @@ $.jController.registerPlugin({
 		}
 
 		return $.extend({}, defaults, params);
-		
 	},
 	
-	render : function(self) {
-
+	path : function(self) {
 		var params = self.attr;
-		$.jController.getHelper("contextDraw")({
+		var ctx    = $.jController.getContext();
+		ctx.moveTo(params.x, params.y);
+		ctx.lineTo(params.w, params.h);
+	},
+
+	render : function(self) {
+		var params = self.attr;
+		$.jController.getHelper("canvasDraw")({
 			color  : params.color,
 			line   : params.line,
 			shadow : params.shadow,
-			draw : function (ctx) {
-				ctx.moveTo(params.x, params.y);
-				ctx.lineTo(params.w, params.h);
-			},
+			draw   : self.getPath(),
 		})
 
 	},

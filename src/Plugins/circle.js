@@ -13,12 +13,12 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	/*
-	path : function(self, ctx) {
+	path : function(self) {
 		// @TODO : utiliser le plugin arc
-		ctx.arc(self.attr.x, self.attr.y, self.attr.r, 0, 2.*Math.PI);
+		$.jController
+			.getContext()
+			.arc(self.attr.x, self.attr.y, self.attr.r, 0, 2.*Math.PI);
 	},
-	*/
 
 	render : function(self) {
 		

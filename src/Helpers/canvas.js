@@ -10,7 +10,7 @@
  * shadow : { color, blur, offX, offY }
  */
 $.jController.registerHelper({
-	name : "contextDraw",
+	name : "canvasDraw",
 	fn : function(args) {
 		
 		// Default values
@@ -48,7 +48,7 @@ $.jController.registerHelper({
 		args.ctx.miterLimit = args.line.miterLimit;
 
 		// Actually draw what should be drawn
-		args.draw(args.ctx);
+		args.draw();
 		
 		// Put shadows ?
 		if (args.shadow.blur > 0) {
@@ -95,7 +95,7 @@ $.jController.registerHelper({
  * shadow : { color, blur, offX, offY }
  */
 $.jController.registerHelper({
-	name : "contextWrite",
+	name : "canvasWrite",
 	fn : function(args) {
 
 		// Default values

@@ -15,18 +15,18 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		var params = self.attr;
-		$.jController.getHelper("contextWrite")({
+		$.jController.getHelper("canvasWrite")({
 			x : params.x,
 			y : params.y,
 			baseline : params.baseline,
-			align   : params.align,
-			text    : params.text,
-			font    : params.font,
-			color   : params.color,
-			outline : params.outline,
-			line    : params.line,
-			shadow  : params.shadow,
-			text    : params.text,
+			align    : params.align,
+			text     : params.text,
+			font     : params.font,
+			color    : params.color,
+			outline  : params.outline,
+			line     : params.line,
+			shadow   : params.shadow,
+			text     : params.text,
 		});
 	},
 });
