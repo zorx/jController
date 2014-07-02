@@ -107,13 +107,21 @@
 			return _internal[pluginName+index];
 		}
 
-		/* @TODO
+		// @TODO
 		this.getPath = function() {
 			return (false)
-				? function() //self.path
-				: function()
+				? function(){} //self.path (function)
+				: function(){}
 		}
-		*/
+
+		// @TODO
+		this.inPath = function(x, y) {
+			return $.jController.getHelper("inPath")({
+				px : x,
+				py : y,
+				draw : function(){} // self.path (function)
+			})
+		}
 
 		// Render another plugin (plugin name, params)
 		this.render = function(pluginName, attr) {
