@@ -6,16 +6,23 @@
 	<script src="../../../lib/hand.min.js"></script>
 	<script src="../../../src/jController.js"></script>
 
-	<script src="../../../helpers/canvas.js"></script>
-	<script src="../../../plugins/text.js"></script>
-	<script src="../../../plugins/arc.js"></script>
-	<script src="../../../plugins/circle.js"></script>
-	<script src="../../../plugins/line.js"></script>
-	<script src="../../../plugins/rect.js"></script>
-	<script src="joystick.js"></script>
-
 	<script type="text/javascript"><!--
-	$(function() {
+
+	$.jController.import([
+	{
+	dir : "../../../helpers/",
+	files : ["canvas.js"],
+	},
+	{
+	dir : "../../../plugins/",
+	files : ["text.js","arc.js","circle.js","line.js","rect.js"],
+	},
+	{
+	dir : "",
+	files : ["joystick.js"],
+	},
+	],function () {
+
 		// Add circle to canvas
 		var redCircle = $.jController.circle({
 			x: 275,

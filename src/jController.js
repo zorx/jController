@@ -342,21 +342,24 @@
 		}
 	}
 
-	// Import Js files
-	$.jController.import =  function(links, callback) {
- 		// Recursively import files and callback()
- 		(function importRecursive(list, callback) {
- 			if (list.length == 0) {
- 				callback();
- 			} else {
-	 			$.getScript(list[0], function() {
-	 				importRecursive(list.slice(1), callback);
-	 			}).fail(function(jqxhr, settings, exception) {
-	 				throw "jController error: on import, " + exception;
-	 			})
- 			}
- 		}($.makeArray(links), callback));
-	}
+	/* enhance $.getSctipt to handle mutiple scripts */
+	$.jController.import = function( resources, callback ) {
+	 
+	    var scripts = [];
+	 	
+	 	$.each(resources,function (i,src)
+	 	{
+	 		$.each(src.files,function (j,file)
+		 	{
+		 		scripts.push($.getScript( src.dir+file));
+		 	})
+	 	})
+
+	    $.when.apply( null, scripts ).then(function() {
+	        $(document).ready(callback);
+	    });
+	};
+
 
 	$.jController.getCanvasObject = function() {
 		return _$canvas;
