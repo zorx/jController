@@ -235,7 +235,7 @@
 					var evtCallback = value;
 					
 					// Listener Name					
-					var listenerName = $.jController
+					var listenerList = $.jController
 						.getPlugin(pluginName)
 						.events[eventName].listener;
 					
@@ -244,8 +244,10 @@
 						.getPlugin(pluginName)
 						.events[eventName].fn;
 
-					if (listenerName != undefined) {
+					if (listenerList != undefined) {
 						
+						listenerList = $.makeArray(listenerList);
+
 						if (!$.isPlainObject(_onEvent[pluginName])) {
 							_onEvent[pluginName] = {};
 						}
@@ -254,12 +256,15 @@
 							_onEvent[pluginName][state.id] = {};
 						}
 
-						// Don't change this, save the execute event function
-						_onEvent[pluginName][state.id][listenerName] = function(e) {
-							callbackEvent(state, evtCallback, e);
-						};
+						$.each(listenerList, function (i,listenerName) {
 
-						$.jController.getCanvas().addEventListener(listenerName, _onEvent[pluginName][state.id][listenerName], false);
+							// Don't change this, save the execute event function
+							_onEvent[pluginName][state.id][listenerName] = function(e) {
+								callbackEvent(state, evtCallback, e);
+							};
+
+							$.jController.getCanvas().addEventListener(listenerName, _onEvent[pluginName][state.id][listenerName], false);
+						})
 					}
 				}
 			});
