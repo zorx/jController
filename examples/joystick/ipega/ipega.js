@@ -1,18 +1,16 @@
 
-$(function() {
+/* Import jController files */
+$.jController.import([
+	{ dir : "../../../plugins", files : ["rect", "arc", "circle",] },
+	{ dir : "../../../helpers", files : ["canvas",] },
+]
+/* Ipega controller */
+, function() {
 
 	/* Ipega components */
+	
 
-	/* Run Ipega controller */
-	$("#jController").jController({
-		attr: {
-			width: 400,
-			height: 200,
-		}
+	/* Start controller */
 
-		events : {
-			// @TODO
-		}
-	})
 
 });
