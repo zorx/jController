@@ -3,7 +3,6 @@
 $.jController.import([
 	{ dir : "../../../plugins", files : ["rect", "arc", "circle",] },
 	{ dir : "../../../helpers", files : ["canvas",] },
-	{ dir : "./plugins", files : ["button",] },
 ]
 /* Ipega controller */
 , function() {

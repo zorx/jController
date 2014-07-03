@@ -35,7 +35,7 @@ $.jController.registerPlugin({
 				// @TODO: in path
 				callback(self, data);
 			}
-		}
+		},
 
 		up : {
 			listener : "pointerup",
@@ -43,7 +43,7 @@ $.jController.registerPlugin({
 				// @TODO: in path
 				callback(self, data);
 			}
-		}
+		},
 
 		push : {
 			listener : "pointerup",
@@ -51,7 +51,7 @@ $.jController.registerPlugin({
 				// @TODO: in path
 				callback(self, data);
 			}
-		}
+		},
 
 	}
 });
