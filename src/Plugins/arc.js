@@ -30,7 +30,7 @@ $.jController.registerPlugin({
 			fill   : params.fill,
 			line   : params.line,
 			shadow : params.shadow,
-			draw   : self.getPath(params),
+			draw   : self.getPath(),
 		})
 	},
 })

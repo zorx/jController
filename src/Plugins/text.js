@@ -13,6 +13,14 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
+	path : function(self) {
+		var params = self.attr;
+		$.jController
+			.getContext()
+			// @TODO : define englobing rect (with context, baseline, align, font)
+			.rect(params.x, params.y, 10, 10);
+	},
+
 	render : function(self) {
 		var params = self.attr;
 		$.jController.getHelper("canvasWrite")({
