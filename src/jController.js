@@ -342,20 +342,19 @@
 		}
 	}
 
-	/* enhance $.getSctipt to handle mutiple scripts */
-	$.jController.import = function( resources, callback ) {
+	// Enhance $.getScript to handle mutiple scripts
+	$.jController.import = function(resources, callback) {
 	 
 	    var scripts = [];
 	 	
-	 	$.each(resources,function (i,src)
-	 	{
-	 		$.each(src.files,function (j,file)
-		 	{
-		 		scripts.push($.getScript( src.dir+file));
-		 	})
-	 	})
+	 	$.each(resources, function(i, src) {
+	 		$.each(src.files, function(j, file) {
+	 			var slash = (src.dir != "") ? "/" : "";
+		 		scripts.push($.getScript(src.dir + slash + file));
+		 	});
+	 	});
 
-	    $.when.apply( null, scripts ).then(function() {
+	    $.when.apply(null, scripts).then(function() {
 	        $(document).ready(callback);
 	    });
 	};
