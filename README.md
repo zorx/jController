@@ -7,6 +7,10 @@
 Basic plugins, ex : SVG plugin, Image plugin, etc.
 (REF: http://www.w3schools.com/tags/ref_canvas.asp)
 
-Listeners : mouse, pen, drag&drop, touch, etc.
-
 More examples : NES controller, etc.
+
+## Main developers
+
+Amine OUDJEHIH <amine.oudjehih@gmail.com>
+Sacha WILT <sacha.wilt@gmail.com>
+
