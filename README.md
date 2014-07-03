@@ -10,14 +10,14 @@ Basic plugins, ex : SVG plugin, Image plugin, etc.
 More examples : joysticks, etc.
 
 Supported listeners (through hand.js)
-- pointerdown
 - pointermove
+- pointerdown
 - pointerup
-- pointercancel
 - pointerenter
-- pointerleave
 - pointerout
 - pointerover
+- pointerleave
+- pointercancel
 
 ## Main developers
 

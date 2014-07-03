@@ -32,24 +32,43 @@ $.jController.registerPlugin({
 		down : {
 			listener : "pointerdown",
 			fn : function(self, callback, data) {
-				// @TODO: in path
-				callback(self, data);
+				var $canvas = $.jController.getCanvas();
+				if (self.inPath(
+					data.pageX - $canvas.offsetLeft,
+					data.pageY - $canvas.offsetTop
+				)) {
+					self.setInternal({downIn: true});
+					callback(self, data);
+				}
 			}
 		},
 
 		up : {
 			listener : "pointerup",
 			fn : function(self, callback, data) {
-				// @TODO: in path
-				callback(self, data);
+				var $canvas = $.jController.getCanvas();
+				if (self.inPath(
+					data.pageX - $canvas.offsetLeft,
+					data.pageY - $canvas.offsetTop
+				)) {
+					callback(self, data);
+				}
 			}
 		},
 
 		push : {
 			listener : "pointerup",
 			fn : function(self, callback, data) {
-				// @TODO: in path
-				callback(self, data);
+				var $canvas = $.jController.getCanvas();
+				if (self.getInternal('downIn') &&
+					self.inPath(
+					data.pageX - $canvas.offsetLeft,
+					data.pageY - $canvas.offsetTop
+				)) {
+					callback(self, data);
+				}
+
+				self.setInternal({downIn: false});
 			}
 		},
 

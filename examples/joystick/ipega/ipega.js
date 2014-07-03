@@ -13,16 +13,28 @@ $.jController.import([
 		y : 100,
 		r : 20,
 
-		down : function(self) {
-			$.jController.trigger("buttonA", { event: "down", });
+		down : function(self, data) {
+			$.jController.trigger("buttonA", {
+				event: "down",
+				self: self,
+				data : data,
+			});
 		},
 
-		up : function(self) {
-			$.jController.trigger("buttonA", { event: "up", });
+		up : function(self, data) {
+			$.jController.trigger("buttonA", {
+				event: "up",
+				self: self,
+				data : data,
+			});
 		},
 
-		push : function(self) {
-			$.jController.trigger("buttonA", { event: "push", });
+		push : function(self, data) {
+			$.jController.trigger("buttonA", {
+				event: "push",
+				self: self,
+				data : data,
+			});
 		},
 	});
 
