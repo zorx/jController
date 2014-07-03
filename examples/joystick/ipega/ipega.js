@@ -3,19 +3,28 @@
 $.jController.import([
 	{ dir : "../../../plugins", files : ["rect", "arc", "circle",] },
 	{ dir : "../../../helpers", files : ["canvas",] },
+	{ dir : "./plugins", files : ["button",] },
 ]
 /* Ipega controller */
 , function() {
 
 	/* Ipega components */
-	var buttonA = $.jController.circle({
+	var buttonA = $.jController.button({
 		x : 100,
 		y : 100,
 		r : 20,
 
-		click : function(self) {
-			$.jController.trigger("buttonA", { event: "click", });
-		}
+		down : function(self) {
+			$.jController.trigger("buttonA", { event: "down", });
+		},
+
+		up : function(self) {
+			$.jController.trigger("buttonA", { event: "up", });
+		},
+
+		push : function(self) {
+			$.jController.trigger("buttonA", { event: "push", });
+		},
 	});
 
 	/* Start controller */

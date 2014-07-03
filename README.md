@@ -7,7 +7,17 @@
 Basic plugins, ex : SVG plugin, Image plugin, etc.
 (REF: http://www.w3schools.com/tags/ref_canvas.asp)
 
-More examples : NES controller, etc.
+More examples : joysticks, etc.
+
+Supported listeners (through hand.js)
+- pointerdown
+- pointermove
+- pointerup
+- pointercancel
+- pointerenter
+- pointerleave
+- pointerout
+- pointerover
 
 ## Main developers
 
