@@ -349,7 +349,7 @@
 	 	
 	 	$.each(resources, function(i, src) {
 	 		$.each(src.files, function(j, file) {
-	 			var dir = (src.dir != "") ? src.dir+"/" : "";
+	 			var dir = (src.dir != "") ? src.dir + "/" : "";
 				scripts.push($.getScript(dir + file));
 		 	});
 	 	});
