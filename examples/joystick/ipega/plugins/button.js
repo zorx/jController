@@ -8,6 +8,7 @@ $.jController.registerPlugin({
 			x : 0,
 			y : 0, 
 			r : 0,
+			color : "black",
 		}
 
 		return $.extend({}, defaults, params);
@@ -18,10 +19,20 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
+		var blur = 2;
+		var fill = undefined;
+
+		if (self.getInternal('downIn')) {
+			blur = 3;
+			fill = self.attr.color;
+		}
+
 		var circle = self.render('circle', {
 			x: self.attr.x,
 			y: self.attr.y,
 			r: self.attr.r,
+			shadow : { blur: blur },
+			fill : fill,
 		});
 
 		self.setInternal({innerCircle: circle});
@@ -54,6 +65,7 @@ $.jController.registerPlugin({
 					callback(self, data);
 				}
 			}
+
 		},
 
 		push : {
