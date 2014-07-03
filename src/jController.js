@@ -6,7 +6,8 @@
 	'use strict';
 
 	// Defining request/cancel animation frame
-	// shim layer with setTimeout fallback 
+	// shim layer with setTimeout fallback
+	
 	window.requestAnimFrame = (function () {
 		return window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame  ||
@@ -320,14 +321,13 @@
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
 					
-					if (state != undefined) {
-						if (! state.isRender) {
-							_exit = false;
-							// Retrieve all events
-							jController.listenEvents(state, pluginName);
-							state.isRender = true;
-						}
-
+					if (state != undefined && ! state.isRender) {
+						
+						_exit = false;
+						// Retrieve all events
+						jController.listenEvents(state, pluginName);
+						state.isRender = true;
+					
 						// Render plugin
 						$.jController.getPlugin(pluginName).render(state);
 					}
