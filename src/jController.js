@@ -111,7 +111,7 @@
 			var self = this;
 			return ($.isFunction(path))
 				? function() { path(self) }
-				: function() {}
+				: function() { self.parent().render(self); }
 		}
 
 		this.inPath = function(x, y) {
@@ -124,6 +124,7 @@
 
 			// Draw path
 			(self.getPath())();
+	
 
 			// Check in
 			var result = ctx.isPointInPath(x, y);
