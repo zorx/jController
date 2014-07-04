@@ -51,6 +51,9 @@
 
 	// jController events
 	var _kernelEvents = {};
+
+	// Global events
+	var _Events = {};
 	
 
 	// jQuery jController function definition
@@ -127,7 +130,7 @@
 	
 
 			// Check in
-			var result = ctx.isPointInPath(x, y);
+			var result = ctx.isPointInPath(x, y) || (ctx.isPointInStroke && ctx.isPointInStroke (x,y));
 
 			// Restore
 			ctx.closePath();
@@ -394,6 +397,21 @@
 		}
 	}
 
+	/* -- Global Events  -- */
+
+	// Register an event
+	$.jController.registerEvent = function(event) {
+		// Check wether the name has been set
+		if (event.name) {
+			// Register event function
+			_Events[event.name] = {
+				listener : event.listener,
+				fn :  event.fn
+			}
+		}
+	}
+
+
 	/* -- Helpers config -- */
 
 	// Retrieve all helpers
@@ -486,7 +504,10 @@
 				// Get eventName
 				return $.jController.isEvent(pName, eventName);
 			},
+
+			events : _Events
 		}
+
 
 		// Create new object of plugin
 		_plugins[pName] = $.extend(true, {}, defaults, plugin);

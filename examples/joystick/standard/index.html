@@ -5,7 +5,7 @@
 	<script src="../../../lib/jquery-1.11.1.min.js"></script>
 	<script src="../../../lib/hand.min.js"></script>
 	<script src="../../../src/jController.js"></script>
-
+	<script src="../../../events/drag.js"></script>
 	<script src="../../../helpers/canvas.js"></script>
 	<script src="../../../plugins/text.js"></script>
 	<script src="../../../plugins/arc.js"></script>
@@ -123,7 +123,8 @@
 			w: 165,
 			h: 185,
 			color: "pink",
-			line : { width: 5, }
+			line : { width: 15, },
+			drag : function () {}
 		});
 	
 		// Add rect to jController
@@ -153,6 +154,7 @@
 			mouseout : function(self) {
 				self.attr.fill = undefined;
 			},
+			drag : function (){}
 		});
 
 		// Finally call jController
