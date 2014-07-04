@@ -1,7 +1,7 @@
 
 /* Import jController files */
 $.jController.import([
-	{ dir : "../../../plugins", files : ["rect", "arc", "circle",] },
+	{ dir : "../../../plugins", files : ["rect", "arc", "circle", "text",] },
 	{ dir : "../../../helpers", files : ["canvas",] },
 ]
 /* Ipega controller */
@@ -9,62 +9,38 @@ $.jController.import([
 
 	/* Ipega components */
 	var buttonA = $.jController.button({
-		x : 500,
-		y : 100,
-		r : 20,
-
-		down : function(self, data) {
-			$.jController.trigger("buttonA", {
-				event: "down",
-				self: self,
-				data : data,
-			});
-		},
-
-		up : function(self, data) {
-			$.jController.trigger("buttonA", {
-				event: "up",
-				self: self,
-				data : data,
-			});
-		},
-
+		x : 480,
+		y : 130,
+		label : "A",
 		push : function(self, data) {
-			$.jController.trigger("buttonA", {
-				event: "push",
-				self: self,
-				data : data,
-			});
+			$.jController.trigger("buttonA", {self:self, data:data})
 		},
 	});
 
 	var buttonB = $.jController.button({
-		x : 500,
-		y : 150,
-		r : 20,
-
-		down : function(self, data) {
-			$.jController.trigger("buttonB", {
-				event: "down",
-				self: self,
-				data : data,
-			});
-		},
-
-		up : function(self, data) {
-			$.jController.trigger("buttonB", {
-				event: "up",
-				self: self,
-				data : data,
-			});
-		},
-
+		x : 520,
+		y : 90,
+		label : "B",
 		push : function(self, data) {
-			$.jController.trigger("buttonB", {
-				event: "push",
-				self: self,
-				data : data,
-			});
+			$.jController.trigger("buttonB", {self:self, data:data})
+		},
+	});
+
+	var buttonX = $.jController.button({
+		x : 440,
+		y : 90,
+		label : "X",
+		push : function(self, data) {
+			$.jController.trigger("buttonX", {self:self, data:data})
+		},
+	});
+
+	var buttonY = $.jController.button({
+		x : 480,
+		y : 50,
+		label : "Y",
+		push : function(self, data) {
+			$.jController.trigger("buttonY", {self:self, data:data})
 		},
 	});
 
@@ -82,6 +58,14 @@ $.jController.import([
 			},
 
 			buttonB : function(data) {
+				console.log("buttonB : ", data);
+			},
+
+			buttonX : function(data) {
+				console.log("buttonA : ", data);
+			},
+
+			buttonY : function(data) {
 				console.log("buttonB : ", data);
 			},
 		},
