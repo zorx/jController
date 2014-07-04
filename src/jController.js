@@ -122,8 +122,12 @@
 			ctx.save();
 			ctx.beginPath();
 
-			// Draw path
-			(self.getPath())();
+			if ($.isFunction(_plugins[pluginName].path)) {
+				// Draw path
+				(self.getPath())();
+			}else {
+				this.parent().render(self);
+			}
 
 			// Check in
 			var result = ctx.isPointInPath(x, y);

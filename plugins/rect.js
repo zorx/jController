@@ -14,12 +14,6 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 
-	path : function(self) {
-		var params = self.attr;
-		$.jController
-			.getContext()
-			.rect(params.x, params.y, params.w, params.h);
-	},
 
 	render : function(self) {
 		var params = self.attr;
@@ -29,7 +23,9 @@ $.jController.registerPlugin({
 				fill   : params.fill,
 				line   : params.line,
 				shadow : params.shadow,
-				draw   : self.getPath(),
+				draw   : function () {
+					$.jController.getContext().rect(params.x, params.y, params.w, params.h);
+				}
 		})
 	},
 
