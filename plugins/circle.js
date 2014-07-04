@@ -38,12 +38,47 @@ $.jController.registerPlugin({
 
 	events : {
 		
+		drag : {
+
+			listener : ["pointerdown","pointerup","mousemove"],
+
+			fn : function (self, callback, data) {
+				
+				var canvas = $.jController.getCanvas();
+				
+				if (data.type == "pointerdown") {
+					if (self.inPath(
+						data.pageX - canvas.offsetLeft,
+						data.pageY - canvas.offsetTop
+					)) {
+						self.setInternal({drag:true});
+					}
+				}
+
+				else if (data.type == "pointerup") {
+
+					self.setInternal({drag:false});
+					
+					callback(self,data);
+				
+				}
+
+				else if (data.type == "mousemove") {
+
+					if (self.getInternal("drag")) {
+
+						self.attr.x = data.pageX - canvas.offsetLeft;
+						self.attr.y = data.pageY - canvas.offsetTop;
+					}
+				}
+			}
+		},
 		click : {
 
 			listener : "click",
 
 			fn : function (self, callback, data) {
-				
+
 				var canvas = $.jController.getCanvas();
 
 				if (self.inPath(
@@ -61,7 +96,6 @@ $.jController.registerPlugin({
 			listener : "mousemove",
 
 			fn : function (self, callback, data) {
-				
 				var canvas = $.jController.getCanvas();
 
 				if (self.inPath(
