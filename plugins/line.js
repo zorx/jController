@@ -16,6 +16,7 @@ $.jController.registerPlugin({
 		return $.extend({}, defaults, params);
 	},
 	//@TODO path Line
+    // http://jsfiddle.net/ZNLg3/
 	path : function(self) {
 		var params = self.attr;
 		var ctx    = $.jController.getContext();
