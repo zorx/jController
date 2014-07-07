@@ -41,6 +41,9 @@ $.jController.registerHelper({
 		// Begin path
 		args.ctx.beginPath();
 
+		// Set composite operation
+		args.ctx.globalCompositeOperation = "source-over";
+
 		// Set args into context
 		args.ctx.lineWidth  = args.line.width;
 		args.ctx.lineCap    = args.line.cap;
