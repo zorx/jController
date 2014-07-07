@@ -121,8 +121,6 @@
 			var self = this;
 			var ctx = $.jController.getContext();
 
-			// Save
-			ctx.save();
 			ctx.beginPath();
 
 			// Draw path
@@ -134,7 +132,6 @@
 
 			// Restore
 			ctx.closePath();
-			ctx.restore();
 
 			return result;
 		}
