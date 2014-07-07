@@ -35,8 +35,10 @@ $.jController.registerHelper({
 		// Merge args with default settings
 		args = $.extend(true, {}, defaults, args);
 
-		// Save context
-		args.ctx.save();
+		if (args.shadow.blur > 0) {
+			// Save context
+			args.ctx.save();
+		}
 
 		// Begin path
 		args.ctx.beginPath();
@@ -73,9 +75,11 @@ $.jController.registerHelper({
 		// Close path
 		args.ctx.closePath();
 
-		// Restore context
-		args.ctx.restore();
-
+		if (args.shadow.blur > 0) {
+			// Restore context
+			args.ctx.restore();
+		}
+		
 		return true;
 	}
 })
