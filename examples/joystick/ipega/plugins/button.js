@@ -54,21 +54,27 @@ $.jController.registerPlugin({
 	events : {
 
 		push : {
-			listener : ["pointerdown", "pointerup",],
+			listener : ["pointerdown", "pointerup", "pointermove"],
 			fn : function(self, callback, data) {
 				var canvas = $.jController.getCanvas();
 
-				if (data.type == "pointerdown") {
-					if (self.inPath(
-						data.pageX - canvas.offsetLeft,
-						data.pageY - canvas.offsetTop
-					)) {
-						self.setInternal({pushed: true});
-					}
-				} else if (data.type == "pointerup") {
+				var isInButton = self.inPath(
+					data.pageX - canvas.offsetLeft,
+					data.pageY - canvas.offsetTop
+				);
+
+				// Pushing button
+				if (data.type == "pointerdown" && isInButton) {
+					self.setInternal({pushed: true});
+				}
+
+				// Leaving button (up or move)
+				if ((data.type == "pointermove" && !isInButton) ||
+				    (data.type == "pointerup")) {
 					if (self.getInternal('pushed')) {
 						callback(self, data);
 					}
+
 					self.setInternal({pushed: false});
 				}
 			}

@@ -62,11 +62,11 @@ $.jController.import([
 			},
 
 			buttonX : function(data) {
-				console.log("buttonA : ", data);
+				console.log("buttonX : ", data);
 			},
 
 			buttonY : function(data) {
-				console.log("buttonB : ", data);
+				console.log("buttonY : ", data);
 			},
 		},
 
