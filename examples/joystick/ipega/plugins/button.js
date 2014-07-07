@@ -8,7 +8,6 @@ $.jController.registerPlugin({
 			x : 0,
 			y : 0, 
 			r : 20,
-			color : "black",
 		}
 
 		return $.extend({}, defaults, params);
@@ -20,12 +19,12 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		var blur  = 2;
-		var fill  = undefined;
-		var color = self.attr.color; 
+		var fill  = "red";
+		var color = "black"; 
 
 		if (self.getInternal('pushed')) {
-			blur  = 3;
-			fill  = self.attr.color;
+			blur  = 5;
+			fill  = "grey";
 			color = "orange";
 		}
 
@@ -38,7 +37,7 @@ $.jController.registerPlugin({
 		});
 
 		var label = self.render('text', {
-			x : self.attr.x,
+			x : self.attr.x+20,
 			y : self.attr.y,
 			text : self.attr.label,
 			color : color,
@@ -47,8 +46,8 @@ $.jController.registerPlugin({
 			baseline : "middle",
 		});
 
-		self.setInternal({innerCircle: circle});
 		self.setInternal({label: label});
+		self.setInternal({innerCircle: circle});
 	},
 
 	events : {
