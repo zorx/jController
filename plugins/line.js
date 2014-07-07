@@ -1,5 +1,4 @@
 
-
 // Line plugin
 $.jController.registerPlugin({
 	name : "line",
@@ -15,14 +14,13 @@ $.jController.registerPlugin({
 
 		return $.extend({}, defaults, params);
 	},
-	//@TODO path Line
-    // http://jsfiddle.net/ZNLg3/
+
 	path : function(self) {
 		var params = self.attr;
 		var ctx    = $.jController.getContext();
+		ctx.lineWidth = params.line.width;
 		ctx.moveTo(params.x, params.y);
 		ctx.lineTo(params.w, params.h);
-		ctx.lineWidth  = params.line.width;
 	},
 
 	render : function(self) {
