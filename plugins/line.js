@@ -22,6 +22,7 @@ $.jController.registerPlugin({
 		var ctx    = $.jController.getContext();
 		ctx.moveTo(params.x, params.y);
 		ctx.lineTo(params.w, params.h);
+		ctx.lineWidth  = params.line.width;
 	},
 
 	render : function(self) {
