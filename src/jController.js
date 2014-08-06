@@ -154,8 +154,7 @@
 			_ephemeral[pluginName].instances.push(_state);
 
 			return _state;
-		}
-
+		},
 		// Remove this instance
 		this.remove = function () {
 
@@ -175,11 +174,9 @@
 		// Trigger
 		this.trigger = function (eventName, data) {
 
-			var callback = state[eventName];
-
+			var callback = attr[eventName];
 			if ($.jController.isEvent(pluginName, eventName) &&
 				$.isFunction(callback)) {
-
 				// Callback for event
 				var callbackEvent = $.jController
 					.getPlugin(pluginName)
@@ -264,7 +261,7 @@
 								callbackEvent(state, evtCallback, e);
 							};
 
-							$.jController.getCanvas().addEventListener(listenerName, _onEvent[pluginName][state.id][listenerName], false);
+							document.addEventListener(listenerName, _onEvent[pluginName][state.id][listenerName], false);
 						})
 					}
 				}
@@ -312,8 +309,9 @@
 
 				})
 			})
-
-			jController.renderEphemeral();
+			if(! $.isEmptyObject(_ephemeral)) {
+				jController.renderEphemeral();
+			}
 		},
 
 		// Render Ephemeral plugins
@@ -322,7 +320,6 @@
 			var _exit = false;
 			// For each declared plugin
 			$.each(_ephemeral, function(pluginName, plugin) {
-
 				_exit = true;
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
