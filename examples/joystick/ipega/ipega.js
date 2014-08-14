@@ -44,6 +44,12 @@ $.jController.import([
 		},
 	});
 
+	function button_callback(label) {
+		return function(data) {
+			console.log("button" + label + " : ", data);
+		}
+	}
+
 	/* Start controller */
 	$("#jController").jController({
 
