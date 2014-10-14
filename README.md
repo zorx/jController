@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # jController
 
 ## A customisable JavaScript multi-devices controller for games/applications
@@ -30,4 +29,3 @@ jController
 ===========
 
 A customisable JavaScript multi-devices controller for games/applications
->>>>>>> 57b462eb77cd83b9299339d358a40de0ea371d6d
