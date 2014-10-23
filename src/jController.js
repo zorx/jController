@@ -277,6 +277,7 @@
 
 		// Clear canvas
 		clearCanvas : function() {
+			console.log("CLEAR");
 			$.jController
 				.getContext()
 				.clearRect(0, 0,

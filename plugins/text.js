@@ -23,6 +23,7 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		var params = self.attr;
+		console.log("draw '"+ params.text +"' (" + params.x + ", " + params.y + ")");
 		$.jController.getHelper("canvasWrite")({
 			x : params.x,
 			y : params.y,

@@ -21,6 +21,7 @@ $(function() {
 		},
 	});
 
+	/*
 	var buttonX = $.jController.button({
 		x : 440,
 		y : 90,
@@ -38,6 +39,7 @@ $(function() {
 			$.jController.trigger("buttonY", {self:self, data:data});
 		},
 	});
+	*/
 
 	/* Start controller */
 	$("#jController").jController({

@@ -20,11 +20,12 @@ $.jController.registerPlugin({
 		$.jController
 			.getContext()
 			.arc(params.x, params.y, params.r,
-				params.angleStart, params.angleEnd);
+			     params.angleStart, params.angleEnd);
 	},
 
 	render : function(self) {
 		var params = self.attr;
+		console.log("draw arc (" + params.x + ", " + params.y + ")");
 		$.jController.getHelper("canvasDraw")({
 			color  : params.color,
 			fill   : params.fill,

@@ -26,7 +26,6 @@ $.jController.registerPlugin({
 			blur  = 5;
 			fill  = "grey";
 			color = "orange";
-			console.log($.jController.getContext().globalCompositeOperation);
 		}
 
 		var circle = self.render('circle', {
