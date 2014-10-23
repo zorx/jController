@@ -125,7 +125,6 @@
 
 			// Draw path
 			(self.getPath())();
-	
 
 			// Check in
 			var result = ctx.isPointInPath(x, y) || (ctx.isPointInStroke && ctx.isPointInStroke (x,y));

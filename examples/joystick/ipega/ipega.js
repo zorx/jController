@@ -1,11 +1,6 @@
 
-/* Import jController files */
-$.jController.import([
-	{ dir : "../../../plugins", files : ["rect", "arc", "circle", "text",] },
-	{ dir : "../../../helpers", files : ["canvas",] },
-]
 /* Ipega controller */
-, function() {
+$(function() {
 
 	/* Ipega components */
 	var buttonA = $.jController.button({
@@ -13,7 +8,7 @@ $.jController.import([
 		y : 130,
 		label : "A",
 		push : function(self, data) {
-			$.jController.trigger("buttonA", {self:self, data:data})
+			$.jController.trigger("buttonA", {self:self, data:data});
 		},
 	});
 
@@ -22,7 +17,7 @@ $.jController.import([
 		y : 90,
 		label : "B",
 		push : function(self, data) {
-			$.jController.trigger("buttonB", {self:self, data:data})
+			$.jController.trigger("buttonB", {self:self, data:data});
 		},
 	});
 
@@ -31,7 +26,7 @@ $.jController.import([
 		y : 90,
 		label : "X",
 		push : function(self, data) {
-			$.jController.trigger("buttonX", {self:self, data:data})
+			$.jController.trigger("buttonX", {self:self, data:data});
 		},
 	});
 
@@ -40,15 +35,9 @@ $.jController.import([
 		y : 50,
 		label : "Y",
 		push : function(self, data) {
-			$.jController.trigger("buttonY", {self:self, data:data})
+			$.jController.trigger("buttonY", {self:self, data:data});
 		},
 	});
-
-	function button_callback(label) {
-		return function(data) {
-			console.log("button" + label + " : ", data);
-		}
-	}
 
 	/* Start controller */
 	$("#jController").jController({
