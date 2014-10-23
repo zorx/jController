@@ -2,12 +2,7 @@
 
 ## A customisable JavaScript multi-devices controller for games/applications
 
-### TODO
-
-Basic plugins, ex : SVG plugin, Image plugin, etc.
-(REF: http://www.w3schools.com/tags/ref_canvas.asp)
-
-More examples : joysticks, etc.
+### DONE
 
 Supported listeners (through hand.js)
 - pointermove
@@ -19,13 +14,15 @@ Supported listeners (through hand.js)
 - pointerleave
 - pointercancel
 
+### TODO
+
+New plugins, ex : SVG plugin, Image plugin, etc.
+(REF: http://www.w3schools.com/tags/ref_canvas.asp)
+
+More examples : joysticks, etc.
+
+
 ## Main developers
 
-Amine OUDJEHIH <amine.oudjehih@gmail.com>
-Sacha WILT <sacha.wilt@gmail.com>
-
-=======
-jController
-===========
-
-A customisable JavaScript multi-devices controller for games/applications
+- Amine OUDJEHIH <amine.oudjehih@gmail.com>
+- Sacha WILT <sacha.wilt@gmail.com>
