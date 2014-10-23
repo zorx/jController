@@ -324,7 +324,7 @@
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
 					
-					if (state != undefined && ! state.isRender) {
+					if (state !== undefined && ! state.isRender) {
 						
 						_exit = false;
 						// Retrieve all events
@@ -352,8 +352,8 @@
 	 	
 	 	$.each(resources, function(i, src) {
 	 		$.each(src.files, function(j, file) {
-	 			var dir = (src.dir != "") ? src.dir + "/" : "";
-				scripts.push($.getScript(dir + file));
+	 			var dir = (src.dir !== "") ? src.dir + "/" : "";
+				scripts.push(function(){ $.getScript(dir + file); });
 		 	});
 	 	});
 
@@ -393,7 +393,7 @@
 
 	/* -- Global Events  -- */
 
-	// Register an event
+	// Register an <event></event>
 	$.jController.registerEvent = function(event) {
 		// Check wether the name has been set
 		if (event.name) {
