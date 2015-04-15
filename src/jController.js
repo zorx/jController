@@ -149,21 +149,19 @@
 				pluginName,
 				index
 			);
-
 			_ephemeral[pluginName].instances.push(_state);
 
 			return _state;
 		},
 		// Remove this instance
 		this.remove = function () {
-
 			_plugins[pluginName].instances[index] = undefined;
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
 				// Remove all onEvent for this instance
 				$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-					$.jController.getCanvas().removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
+					document.removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
 				});
 			}
 		}
@@ -242,7 +240,7 @@
 						.getPlugin(pluginName)
 						.events[eventName].fn;
 
-					if (listenerList != undefined) {
+					if (listenerList !== undefined) {
 
 						listenerList = $.makeArray(listenerList);
 
@@ -294,7 +292,7 @@
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
 
-					if (state != undefined)
+					if (state !== undefined)
 					{
 						if (! state.isRender)
 						{
