@@ -7,7 +7,7 @@
 
 	// Defining request/cancel animation frame
 	// shim layer with setTimeout fallback
-	
+
 	window.requestAnimFrame = (function () {
 		return window.requestAnimationFrame ||
 		window.webkitRequestAnimationFrame  ||
@@ -31,7 +31,7 @@
 	// Private Canvas context
 	var _context;
 
-	// Default value of clearing canvas 
+	// Default value of clearing canvas
 	var _isClearCanvas = true;
 
 	// Index of objets
@@ -54,7 +54,7 @@
 
 	// Global events
 	var _Events = {};
-	
+
 
 	// jQuery jController function definition
 	$.fn.jController = function (attr) {
@@ -62,15 +62,15 @@
 		// Init jController canvas
 		jController.init(this, attr);
 		requestAnimFrame(animate);
-		
+
 		return this;
 	}
 
 	function animate() {
 		if (_isClearCanvas)	{
 			jController.clearCanvas();
-		}		
-		
+		}
+
 	    // Recusively render everything
 	    jController.renderAll();
 	    jController.cleanAll();
@@ -88,7 +88,7 @@
 
 		// Set internal values
 		this.setInternal = function(data) {
-			
+
 			var _data = ($.isPlainObject(_internal[pluginName+index]))
 				? _internal[pluginName+index]
 				: {};
@@ -167,7 +167,7 @@
 				});
 
 			}
-				
+
 		}
 
 		// Trigger
@@ -197,7 +197,7 @@
 		// Creates canvas for jController
 		init : function($obj, attr) {
 			// Unique Canvas id
-			var id = 'jController_' + $('canvas').length; 
+			var id = 'jController_' + $('canvas').length;
 
 			// Canvas jQuery object
 			_$canvas = $('<canvas>')
@@ -230,19 +230,19 @@
 					var eventName = key;
 					// Value is a callback
 					var evtCallback = value;
-					
-					// Listener Name					
+
+					// Listener Name
 					var listenerList = $.jController
 						.getPlugin(pluginName)
 						.events[eventName].listener;
-					
+
 					// Callback for event
 					var callbackEvent = $.jController
 						.getPlugin(pluginName)
 						.events[eventName].fn;
 
 					if (listenerList != undefined) {
-						
+
 						listenerList = $.makeArray(listenerList);
 
 						if (!$.isPlainObject(_onEvent[pluginName])) {
@@ -277,7 +277,6 @@
 
 		// Clear canvas
 		clearCanvas : function() {
-			console.log("CLEAR");
 			$.jController
 				.getContext()
 				.clearRect(0, 0,
@@ -290,10 +289,10 @@
 
 			// For each declared plugin
 			$.each(_plugins, function(pluginName, plugin) {
-				
+
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
-					
+
 					if (state != undefined)
 					{
 						if (! state.isRender)
@@ -323,14 +322,14 @@
 				_exit = true;
 				// Construct and render each one
 				$.each(plugin.instances, function(index, state) {
-					
+
 					if (state !== undefined && ! state.isRender) {
-						
+
 						_exit = false;
 						// Retrieve all events
 						jController.listenEvents(state, pluginName);
 						state.isRender = true;
-					
+
 						// Render plugin
 						$.jController.getPlugin(pluginName).render(state);
 					}
@@ -347,9 +346,9 @@
 
 	// Enhance $.getScript to handle mutiple scripts
 	$.jController.import = function(resources, callback) {
-	 
+
 	    var scripts = [];
-	 	
+
 	 	$.each(resources, function(i, src) {
 	 		$.each(src.files, function(j, file) {
 	 			var dir = (src.dir !== "") ? src.dir + "/" : "";
@@ -382,7 +381,7 @@
 	/* -- Trigger -- */
 
 	$.jController.trigger = function(eventName, data) {
-		
+
 		var callback = _kernelEvents[eventName];
 
 		if ($.isFunction(callback)) {
@@ -437,7 +436,7 @@
 
 	// Retrieve all events of PluginName
 	$.jController.getEvents = function(pluginName) {
-		return ($.jController.isPlugin(pluginName) && 
+		return ($.jController.isPlugin(pluginName) &&
 			$.isPlainObject($.jController.getPlugin(pluginName).events))
 			? $.jController.getPlugin(pluginName).events
 			: null;
@@ -446,8 +445,8 @@
 	// Retrieve a specific pluginName event
 	$.jController.getEvent = function(pluginName, eventName) {
 		// return existing event (null otherwise)
-		return ($.jController.isEvent(pluginName, eventName)) 
-			? _plugins[pluginName].events[eventName] 
+		return ($.jController.isEvent(pluginName, eventName))
+			? _plugins[pluginName].events[eventName]
 			: null;
 	}
 
@@ -479,7 +478,7 @@
 
 	// Register Plugin
 	$.jController.registerPlugin = function(plugin) {
-		
+
 		var pName = plugin.name;
 
 		// Check wether the name has been set
@@ -516,7 +515,7 @@
 
 			return _state;
 		}
-		
+
 	}
 
 })(jQuery); // jController Kernel end

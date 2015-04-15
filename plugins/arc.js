@@ -2,7 +2,7 @@
 // Arc plugin
 $.jController.registerPlugin({
 	name : "arc",
-	
+
 	construct : function(params) {
 		var defaults = {
 			x : 0,
@@ -25,7 +25,6 @@ $.jController.registerPlugin({
 
 	render : function(self) {
 		var params = self.attr;
-		console.log("draw arc (" + params.x + ", " + params.y + ")");
 		$.jController.getHelper("canvasDraw")({
 			color  : params.color,
 			fill   : params.fill,
