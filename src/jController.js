@@ -41,7 +41,7 @@
 	var _plugins = {};
 
 	// Ephemeral plugins (nested plugin calls)
-	var _ephemeral = {};
+	var _ephemeral = [];
 
 	// Private jController helpers list
 	var _helpers = {};
@@ -54,6 +54,9 @@
 
 	// Global events
 	var _Events = {};
+
+	// Private instances
+	var _instances = [];
 
 
 	// jQuery jController function definition
@@ -85,6 +88,11 @@
 		this.id = index;
 		this.attr = attr;
 		this.isRender = false;
+
+		// Get plugin Name
+		this.getPluginName = function() {
+			return pluginName;
+		}
 
 		// Set internal values
 		this.setInternal = function(data) {
@@ -137,25 +145,19 @@
 
 		// Render another plugin (plugin name, params)
 		this.render = function(pluginName, attr) {
-			if (! $.isPlainObject(_ephemeral[pluginName])) {
-				_ephemeral[pluginName] = {
-					instances : [],
-				};
-			}
-
-			var index  = _ephemeral[pluginName].instances.length;
+			var index  = _ephemeral.length;
 			var _state = new state(
 				$.jController.getPlugin(pluginName).construct(attr),
 				pluginName,
 				index
 			);
-			_ephemeral[pluginName].instances.push(_state);
+			_ephemeral.push(_state);
 
 			return _state;
 		},
 		// Remove this instance
 		this.remove = function () {
-			_plugins[pluginName].instances[index] = undefined;
+			_instances[index] = undefined;
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
@@ -218,7 +220,8 @@
 		},
 
 		// Retrieve All events from instances and listen
-		listenEvents : function(state, pluginName) {
+		listenEvents : function(state) {
+			var pluginName = state.getPluginName();
 
 			$.each(state.attr, function(key, value) {
 				// Looking for events on state
@@ -271,7 +274,7 @@
 		cleanAll : function() {
 
 			// For each declared plugin
-			_ephemeral = {};
+			_ephemeral = [];
 		},
 
 		// Clear canvas
@@ -286,28 +289,24 @@
 		// Render all plugins
 		renderAll : function() {
 
-			// For each declared plugin
-			$.each(_plugins, function(pluginName, plugin) {
-
-				// Construct and render each one
-				$.each(plugin.instances, function(index, state) {
-
-					if (state !== undefined)
+			// For each instance
+			$.each(_instances, function(index, state) {
+				var pluginName = state.getPluginName();
+				if (state !== undefined)
+				{
+					if (! state.isRender)
 					{
-						if (! state.isRender)
-						{
-							// Retrieve all events
-							jController.listenEvents(state, pluginName);
-							state.isRender = true;
-						}
-
-						// Render plugin
-						plugin.render(state);
+						// Retrieve all events
+						jController.listenEvents(state);
+						state.isRender = true;
 					}
 
-				})
-			})
-			if(! $.isEmptyObject(_ephemeral)) {
+					// Render plugin
+					$.jController.getPlugin(pluginName).render(state);
+				}
+			});
+
+			if(_ephemeral.length !== 0) {
 				jController.renderEphemeral();
 			}
 		},
@@ -317,23 +316,23 @@
 
 			var _exit = false;
 			// For each declared plugin
-			$.each(_ephemeral, function(pluginName, plugin) {
+			$.each(_ephemeral, function(index, state) {
+
+				var pluginName = state.getPluginName();
+
 				_exit = true;
 				// Construct and render each one
-				$.each(plugin.instances, function(index, state) {
 
-					if (state !== undefined && ! state.isRender) {
+				if (state !== undefined && ! state.isRender) {
 
-						_exit = false;
-						// Retrieve all events
-						jController.listenEvents(state, pluginName);
-						state.isRender = true;
+					_exit = false;
+					// Retrieve all events
+					jController.listenEvents(state);
+					state.isRender = true;
 
-						// Render plugin
-						$.jController.getPlugin(pluginName).render(state);
-					}
-
-				})
+					// Render plugin
+					$.jController.getPlugin(pluginName).render(state);
+				}
 			})
 
 			if (! _exit) {
@@ -508,9 +507,9 @@
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[pName] = function(attr) {
 
-			var index = _plugins[pName].instances.length;
+			var index = _instances.length;
 			var _state = new state(plugin.construct(attr), pName, index);
-			_plugins[pName].instances.push (_state);
+			_instances.push (_state);
 
 			return _state;
 		}
