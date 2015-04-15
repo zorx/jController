@@ -165,23 +165,24 @@
 				$.each(_onEvent[pluginName][index],function(listenerName, fn) {
 					$.jController.getCanvas().removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
 				});
-
 			}
-
 		}
 
 		// Trigger
 		this.trigger = function (eventName, data) {
 
 			var callback = attr[eventName];
-			if ($.jController.isEvent(pluginName, eventName) &&
-				$.isFunction(callback)) {
+			if ($.isFunction(callback)) {
 				// Callback for event
-				var callbackEvent = $.jController
+				if ($.jController.isEvent(pluginName, eventName)) {
+					var callbackEvent = $.jController
 					.getPlugin(pluginName)
 					.events[eventName].fn;
 
-				callbackEvent(this, callback, data);
+					callbackEvent(this, callback, data);
+				}else{
+					callback();
+				}
 			}
 		}
 
