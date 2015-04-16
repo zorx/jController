@@ -18,7 +18,7 @@ $.jController.registerPlugin({
 	},
 
 	render : function(self) {
-		
+
 		// Circles are full arcs
 		var arc = self.render("arc", {
 			x: self.attr.x,
@@ -37,18 +37,18 @@ $.jController.registerPlugin({
 	},
 
 	events : {
-		
+
 		click : {
 
 			listener : "click",
 
 			fn : function (self, callback, data) {
-				
+
 				var canvas = $.jController.getCanvas();
 
 				if (self.inPath(
-					data.pageX - canvas.offsetLeft,
-					data.pageY - canvas.offsetTop
+					data.offsetX,
+					data.offsetY
 				)) {
 
 					callback(self, data);
@@ -61,12 +61,12 @@ $.jController.registerPlugin({
 			listener : "mousemove",
 
 			fn : function (self, callback, data) {
-				
+
 				var canvas = $.jController.getCanvas();
 
 				if (self.inPath(
-					data.pageX - canvas.offsetLeft,
-					data.pageY - canvas.offsetTop
+					data.offsetX,
+					data.offsetY
 				)) {
 					callback(self, data);
 				}
@@ -83,8 +83,8 @@ $.jController.registerPlugin({
 
 				if (! self.getInternal("mousedIn") &&
 					self.inPath(
-					data.pageX - canvas.offsetLeft,
-					data.pageY - canvas.offsetTop
+					data.offsetX,
+					data.offsetY
 				)) {
 					self.setInternal({mousedIn:true});
 					callback(self, data);
@@ -102,8 +102,8 @@ $.jController.registerPlugin({
 
 				if (self.getInternal("mousedIn") &&
 					! self.inPath(
-					data.pageX - canvas.offsetLeft,
-					data.pageY - canvas.offsetTop
+					data.offsetX,
+					data.offsetY
 				)) {
 					callback(self, data);
 					self.setInternal({mousedIn:false});
@@ -111,6 +111,6 @@ $.jController.registerPlugin({
 			}
 
 		},
-		
+
 	},
 })
