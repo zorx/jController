@@ -21,7 +21,6 @@ New plugins, ex : SVG plugin, Image plugin, etc.
 
 More examples : joysticks, etc.
 
-
 ## Main developers
 
 - Amine OUDJEHIH <amine.oudjehih@gmail.com>

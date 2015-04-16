@@ -40,9 +40,6 @@
 	// Private jController plugins list
 	var _plugins = {};
 
-	// Ephemeral plugins (nested plugin calls)
-	var _ephemeral = {};
-
 	// Private jController helpers list
 	var _helpers = {};
 
@@ -54,6 +51,9 @@
 
 	// Global events
 	var _Events = {};
+
+	// Private instances
+	var _instances = {};
 
 
 	// jQuery jController function definition
@@ -72,7 +72,7 @@
 		}
 
 	    // Recusively render everything
-	    jController.renderAll();
+	    jController.renderAll(_instances);
 	    jController.cleanAll();
 
 	    requestAnimFrame(animate);
@@ -85,6 +85,13 @@
 		this.id = index;
 		this.attr = attr;
 		this.isRender = false;
+		// instances of plugin
+		this._instances = {};
+
+		// Get plugin Name
+		this.getPluginName = function() {
+			return pluginName;
+		}
 
 		// Set internal values
 		this.setInternal = function(data) {
@@ -92,7 +99,6 @@
 			var _data = ($.isPlainObject(_internal[pluginName+index]))
 				? _internal[pluginName+index]
 				: {};
-
 			_internal[pluginName+index] = $.extend(true, {}, _data, data);
 		}
 
@@ -137,51 +143,44 @@
 
 		// Render another plugin (plugin name, params)
 		this.render = function(pluginName, attr) {
-			if (! $.isPlainObject(_ephemeral[pluginName])) {
-				_ephemeral[pluginName] = {
-					instances : [],
-				};
-			}
-
-			var index  = _ephemeral[pluginName].instances.length;
+			var index = $.jController.uniqId();
 			var _state = new state(
 				$.jController.getPlugin(pluginName).construct(attr),
 				pluginName,
 				index
 			);
-
-			_ephemeral[pluginName].instances.push(_state);
+			this._instances[index] = _state;
 
 			return _state;
 		},
 		// Remove this instance
 		this.remove = function () {
-
-			_plugins[pluginName].instances[index] = undefined;
+			_instances[index] = undefined;
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
 				// Remove all onEvent for this instance
 				$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-					$.jController.getCanvas().removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
+					document.removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
 				});
-
 			}
-
 		}
 
 		// Trigger
 		this.trigger = function (eventName, data) {
 
 			var callback = attr[eventName];
-			if ($.jController.isEvent(pluginName, eventName) &&
-				$.isFunction(callback)) {
+			if ($.isFunction(callback)) {
 				// Callback for event
-				var callbackEvent = $.jController
+				if ($.jController.isEvent(pluginName, eventName)) {
+					var callbackEvent = $.jController
 					.getPlugin(pluginName)
 					.events[eventName].fn;
 
-				callbackEvent(this, callback, data);
+					callbackEvent(this, callback, data);
+				}else{
+					callback();
+				}
 			}
 		}
 
@@ -189,7 +188,6 @@
 		this.parent = function () {
 			return _plugins[pluginName];
 		}
-
 	};
 
 	// jController
@@ -219,7 +217,8 @@
 		},
 
 		// Retrieve All events from instances and listen
-		listenEvents : function(state, pluginName) {
+		listenEvents : function(state) {
+			var pluginName = state.getPluginName();
 
 			$.each(state.attr, function(key, value) {
 				// Looking for events on state
@@ -241,7 +240,7 @@
 						.getPlugin(pluginName)
 						.events[eventName].fn;
 
-					if (listenerList != undefined) {
+					if (listenerList !== undefined) {
 
 						listenerList = $.makeArray(listenerList);
 
@@ -270,9 +269,12 @@
 
 		// Set every plugins as to be rendered on next frame
 		cleanAll : function() {
-
-			// For each declared plugin
-			_ephemeral = {};
+			// For each instance
+			$.each(_instances, function(index, state) {
+				if (state !== undefined) {
+					state._instances = {};
+				}
+			});
 		},
 
 		// Clear canvas
@@ -285,63 +287,29 @@
 		},
 
 		// Render all plugins
-		renderAll : function() {
-
-			// For each declared plugin
-			$.each(_plugins, function(pluginName, plugin) {
-
-				// Construct and render each one
-				$.each(plugin.instances, function(index, state) {
-
-					if (state != undefined)
+		renderAll : function(_instances) {
+			// For each instance
+			$.each(_instances, function(index, state) {
+				if (state !== undefined)
+				{
+					var pluginName = state.getPluginName();
+					if (! state.isRender)
 					{
-						if (! state.isRender)
-						{
-							// Retrieve all events
-							jController.listenEvents(state, pluginName);
-							state.isRender = true;
-						}
-
-						// Render plugin
-						plugin.render(state);
-					}
-
-				})
-			})
-			if(! $.isEmptyObject(_ephemeral)) {
-				jController.renderEphemeral();
-			}
-		},
-
-		// Render Ephemeral plugins
-		renderEphemeral : function () {
-
-			var _exit = false;
-			// For each declared plugin
-			$.each(_ephemeral, function(pluginName, plugin) {
-				_exit = true;
-				// Construct and render each one
-				$.each(plugin.instances, function(index, state) {
-
-					if (state !== undefined && ! state.isRender) {
-
-						_exit = false;
 						// Retrieve all events
-						jController.listenEvents(state, pluginName);
+						jController.listenEvents(state);
 						state.isRender = true;
-
-						// Render plugin
-						$.jController.getPlugin(pluginName).render(state);
 					}
 
-				})
-			})
+					// Render plugin
+					$.jController.getPlugin(pluginName).render(state);
 
-			if (! _exit) {
-				// Recursive call (for intricate plugins)
-				jController.renderEphemeral();
-			}
-		}
+					if(!$.isEmptyObject(state._instances)) {
+						jController.renderAll(state._instances);
+					}
+				}
+			});
+
+		},
 	}
 
 	// Enhance $.getScript to handle mutiple scripts
@@ -361,6 +329,9 @@
 	    });
 	};
 
+	$.jController.uniqId = function() {
+		return (Math.random() * 1e9).toString(16).substr(0, 6) + (new Date().getTime()).toString(16);
+	}
 
 	$.jController.getCanvasObject = function() {
 		return _$canvas;
@@ -501,7 +472,6 @@
 			events : _Events
 		}
 
-
 		// Create new object of plugin
 		_plugins[pName] = $.extend(true, {}, defaults, plugin);
 
@@ -509,9 +479,9 @@
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[pName] = function(attr) {
 
-			var index = _plugins[pName].instances.length;
+			var index = $.jController.uniqId();
 			var _state = new state(plugin.construct(attr), pName, index);
-			_plugins[pName].instances.push (_state);
+			_instances[index] = _state;
 
 			return _state;
 		}
