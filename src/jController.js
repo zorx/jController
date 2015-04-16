@@ -40,9 +40,6 @@
 	// Private jController plugins list
 	var _plugins = {};
 
-	// Ephemeral plugins (nested plugin calls)
-	var _ephemeral = [];
-
 	// Private jController helpers list
 	var _helpers = {};
 
@@ -56,7 +53,7 @@
 	var _Events = {};
 
 	// Private instances
-	var _instances = [];
+	var _instances = {};
 
 
 	// jQuery jController function definition
@@ -75,7 +72,7 @@
 		}
 
 	    // Recusively render everything
-	    jController.renderAll();
+	    jController.renderAll(_instances);
 	    jController.cleanAll();
 
 	    requestAnimFrame(animate);
@@ -88,6 +85,8 @@
 		this.id = index;
 		this.attr = attr;
 		this.isRender = false;
+		// instances of plugin
+		this._instances = {};
 
 		// Get plugin Name
 		this.getPluginName = function() {
@@ -100,7 +99,6 @@
 			var _data = ($.isPlainObject(_internal[pluginName+index]))
 				? _internal[pluginName+index]
 				: {};
-
 			_internal[pluginName+index] = $.extend(true, {}, _data, data);
 		}
 
@@ -145,13 +143,13 @@
 
 		// Render another plugin (plugin name, params)
 		this.render = function(pluginName, attr) {
-			var index  = _ephemeral.length;
+			var index = $.jController.uniqId();
 			var _state = new state(
 				$.jController.getPlugin(pluginName).construct(attr),
 				pluginName,
 				index
 			);
-			_ephemeral.push(_state);
+			this._instances[index] = _state;
 
 			return _state;
 		},
@@ -190,7 +188,6 @@
 		this.parent = function () {
 			return _plugins[pluginName];
 		}
-
 	};
 
 	// jController
@@ -272,9 +269,12 @@
 
 		// Set every plugins as to be rendered on next frame
 		cleanAll : function() {
-
-			// For each declared plugin
-			_ephemeral = [];
+			// For each instance
+			$.each(_instances, function(index, state) {
+				if (state !== undefined) {
+					state._instances = {};
+				}
+			});
 		},
 
 		// Clear canvas
@@ -287,8 +287,7 @@
 		},
 
 		// Render all plugins
-		renderAll : function() {
-
+		renderAll : function(_instances) {
 			// For each instance
 			$.each(_instances, function(index, state) {
 				if (state !== undefined)
@@ -303,42 +302,14 @@
 
 					// Render plugin
 					$.jController.getPlugin(pluginName).render(state);
+
+					if(!$.isEmptyObject(state._instances)) {
+						jController.renderAll(state._instances);
+					}
 				}
 			});
 
-			if(_ephemeral.length !== 0) {
-				jController.renderEphemeral();
-			}
 		},
-
-		// Render Ephemeral plugins
-		renderEphemeral : function () {
-
-			var _exit = false;
-			// For each declared plugin
-			$.each(_ephemeral, function(index, state) {
-
-				_exit = true;
-				// Construct and render each one
-
-				if (state !== undefined && ! state.isRender) {
-					var pluginName = state.getPluginName();
-
-					_exit = false;
-					// Retrieve all events
-					jController.listenEvents(state);
-					state.isRender = true;
-
-					// Render plugin
-					$.jController.getPlugin(pluginName).render(state);
-				}
-			})
-
-			if (! _exit) {
-				// Recursive call (for intricate plugins)
-				jController.renderEphemeral();
-			}
-		}
 	}
 
 	// Enhance $.getScript to handle mutiple scripts
@@ -358,6 +329,9 @@
 	    });
 	};
 
+	$.jController.uniqId = function() {
+		return (Math.random() * 1e9).toString(16).substr(0, 6) + (new Date().getTime()).toString(16);
+	}
 
 	$.jController.getCanvasObject = function() {
 		return _$canvas;
@@ -498,7 +472,6 @@
 			events : _Events
 		}
 
-
 		// Create new object of plugin
 		_plugins[pName] = $.extend(true, {}, defaults, plugin);
 
@@ -506,9 +479,9 @@
 		// Ex : $.jController.arc({[...]}) adds an arc into the controller
 		$.jController[pName] = function(attr) {
 
-			var index = _instances.length;
+			var index = $.jController.uniqId();
 			var _state = new state(plugin.construct(attr), pName, index);
-			_instances.push (_state);
+			_instances[index] = _state;
 
 			return _state;
 		}
