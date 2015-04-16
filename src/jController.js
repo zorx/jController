@@ -291,9 +291,9 @@
 
 			// For each instance
 			$.each(_instances, function(index, state) {
-				var pluginName = state.getPluginName();
 				if (state !== undefined)
 				{
+					var pluginName = state.getPluginName();
 					if (! state.isRender)
 					{
 						// Retrieve all events
@@ -318,12 +318,11 @@
 			// For each declared plugin
 			$.each(_ephemeral, function(index, state) {
 
-				var pluginName = state.getPluginName();
-
 				_exit = true;
 				// Construct and render each one
 
 				if (state !== undefined && ! state.isRender) {
+					var pluginName = state.getPluginName();
 
 					_exit = false;
 					// Retrieve all events
