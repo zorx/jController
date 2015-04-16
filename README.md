@@ -21,7 +21,20 @@ New plugins, ex : SVG plugin, Image plugin, etc.
 
 More examples : joysticks, etc.
 
-### Commit Message Format
+## Branches
+
+our branches have to be based on `Topic Branches`
+
+http://git-scm.com/book/be/v2/Git-Branching-Branching-Workflows#Topic-Branches
+
+### Example : 
+feature/add-gulp
+
+fix/..
+
+
+
+## Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special
 format that includes a **type**, a **scope** and a **subject**:
 
