@@ -190,7 +190,7 @@
 
 					callbackEvent(this, callback, data);
 				}else{
-					callback();
+					callback(this, data);
 				}
 			}
 		}
