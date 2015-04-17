@@ -155,7 +155,16 @@
 		},
 		// Remove this instance
 		this.remove = function () {
-			_instances[index] = undefined;
+			// delete all the properties of an instance.
+			$.each(_instances[index],function(property, data) {
+				delete _instances[index][property];
+			});
+			// Add removed method to the instance (we can access to this method from outside)
+			_instances[index].removed = function() {
+				return true;
+			}
+			//delete the instance
+			delete _instances[index];
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
@@ -189,6 +198,11 @@
 		// Get parent (plugin "class")
 		this.parent = function () {
 			return _plugins[pluginName];
+		}
+
+		// By default the instance isn't removed
+		this.removed = function () {
+			return false;
 		}
 	};
 
