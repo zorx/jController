@@ -6,7 +6,7 @@ $.jController.registerPlugin({
 	construct : function(params) {
 		var defaults = {
 			x : 0,
-			y : 0, 
+			y : 0,
 			r : 20,
 		}
 
@@ -20,7 +20,7 @@ $.jController.registerPlugin({
 	render : function(self) {
 		var blur  = 2;
 		var fill  = "red";
-		var color = "black"; 
+		var color = "black";
 
 		if (self.getInternal('pushed')) {
 			blur  = 5;
@@ -37,11 +37,11 @@ $.jController.registerPlugin({
 		});
 
 		var label = self.render('text', {
-			x : self.attr.x+20,
+			x : self.attr.x,
 			y : self.attr.y,
 			text : self.attr.label,
 			color : color,
-			font : "20px Arial bold",
+			font : "bold 16px sans-serif",
 			align : "center",
 			baseline : "middle",
 		});

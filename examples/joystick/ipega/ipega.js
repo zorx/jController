@@ -21,7 +21,6 @@ $(function() {
 		},
 	});
 
-	/*
 	var buttonX = $.jController.button({
 		x : 440,
 		y : 90,
@@ -39,7 +38,16 @@ $(function() {
 			$.jController.trigger("buttonY", {self:self, data:data});
 		},
 	});
-	*/
+
+	var buttonHome = $.jController.button({
+		x : 270,
+		y : 90,
+		r : 40,
+		label : "HOME",
+		push : function(self, data) {
+			$.jController.trigger("buttonHome", {self:self, data:data});
+		},
+	});
 
 	/* Start controller */
 	$("#jController").jController({
@@ -64,6 +72,10 @@ $(function() {
 
 			buttonY : function(data) {
 				console.log("buttonY : ", data);
+			},
+
+			buttonHome : function (data) {
+				console.log("buttonHome : ", data);
 			},
 		},
 
