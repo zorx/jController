@@ -67,8 +67,8 @@
       mouseleave : function(self) {
         self.attr.fill = undefined;
       },
-      jump : function (self) {
-        console.log("I'm Green, and i'm jumpping");
+      jump : function (self, data) {
+        console.log("I'm Green, and i'm jumpping", data);
       },
     });
 
@@ -88,7 +88,7 @@
 
     var tmpCircle, tmpCircle2, circleMove;
     // Add rect to jController
-    $.jController.rect({
+    var moveZone = $.jController.rect({
       x: 0,
       y: 0,
       w: 350,
@@ -109,11 +109,18 @@
           r: 35,
           color: "green",
         });
+        circleMove = $.jController.circle({
+            x: data.offsetX,
+            y: data.offsetY,
+            r: 20,
+            color: "blue",
+          });
       },
       pointerup: function(self, data) {
         if (tmpCircle && !tmpCircle.removed()) {
           tmpCircle.remove();
           tmpCircle2.remove();
+          circleMove.remove();
         }
       },
       pointerenter: function() {},
@@ -121,16 +128,18 @@
         if (tmpCircle && !tmpCircle.removed()) {
           tmpCircle.remove();
           tmpCircle2.remove();
+          circleMove.remove();
         }
       },
       pointermove: function(self, data) {
         if (tmpCircle && !tmpCircle.removed()) {
-          	circleMove = self.render('circle', {
-			x: data.offsetX,
-			y: data.offsetY,
-			r: 20,
-			color: "blue",
-          	});
+          circleMove.remove();
+          circleMove = $.jController.circle({
+            x: data.offsetX,
+            y: data.offsetY,
+            r: 20,
+            color: "blue",
+          });
         }
       }
     });
@@ -148,9 +157,7 @@
           console.log("jController - click()",data);
         }
       }
-
     });
-
   });
   --></script>
   <style type="text/css">
