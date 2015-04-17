@@ -6,6 +6,7 @@
 	<script src="../../../lib/hand.min.js"></script>
 	<script src="../../../src/jController.js"></script>
 	<script src="../../../events/drag.js"></script>
+	<script src="../../../events/basics.js"></script>
 	<script src="../../../helpers/canvas.js"></script>
 	<script src="../../../plugins/text.js"></script>
 	<script src="../../../plugins/arc.js"></script>
@@ -24,11 +25,14 @@
 			y: 50,
 			r: 20,
 			color: "red",
-			mousein : function(self) {
+			mouseenter : function(self) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
+			},
+			dblclick : function(self) {
+				self.attr.fill = "green";
 			},
 		});
 
@@ -39,10 +43,10 @@
 			y: 100,
 			r: 20,
 			color: "blue",
-			mousein : function(self,data) {
+			mouseenter : function(self,data) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
 			click : function(self) {
@@ -57,10 +61,10 @@
 			y: 100,
 			r: 20,
 			color: "green",
-			mousein : function(self) {
+			mouseenter : function(self) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
 			jump : function (self) {
@@ -74,14 +78,15 @@
 			y: 150,
 			r: 20,
 			color: "orange",
-			mousein : function(self) {
+			mouseenter : function(self) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
 		});
 
+		var tmpCircle;
 		// Add rect to jController
 		$.jController.rect({
 			x: 0,
@@ -91,13 +96,17 @@
 			color: "white",
 			line : { width: 1, },
 			// Events
-			click: function(self, data) {
-				self.render('circle', {
+			pointerdown: function(self, data) {
+				console.log('pointerdown')
+				tmpCircle = $.jController.circle({
 					x: data.offsetX,
 					y: data.offsetY,
 					r: 20,
 					color: "green",
 				})
+			},
+			pointerup: function(self, data) {
+				tmpCircle.remove();
 			},
 		});
 
