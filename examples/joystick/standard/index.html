@@ -6,6 +6,7 @@
 	<script src="../../../lib/hand.min.js"></script>
 	<script src="../../../src/jController.js"></script>
 	<script src="../../../events/drag.js"></script>
+	<script src="../../../events/basics.js"></script>
 	<script src="../../../helpers/canvas.js"></script>
 	<script src="../../../plugins/text.js"></script>
 	<script src="../../../plugins/arc.js"></script>
@@ -20,157 +21,109 @@
 
 		// Add circle to canvas
 		var redCircle = $.jController.circle({
-			x: 275,
+			x: 425,
 			y: 50,
 			r: 20,
 			color: "red",
-			mousein : function(self) {
+			mouseenter : function(self) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
-			drag : function(self,data) {
-
-			}
+			dblclick : function(self) {
+				self.attr.fill = "green";
+			},
 		});
 
 
 		// Add circle to canvas
 		var blueCircle = $.jController.circle({
-			x: 225,
+			x: 375,
 			y: 100,
 			r: 20,
 			color: "blue",
-			mousein : function(self,data) {
+			mouseenter : function(self,data) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
 			click : function(self) {
 				console.log("Clicked ! blue");
 				$.jController.trigger("click",{data:"yes"});
 			},
-			drag : function(self,data) {
-
-			}
 		});
 
 		// Add circle to canvas
 		var greenCircle = $.jController.circle({
-			x: 325,
+			x: 475,
 			y: 100,
 			r: 20,
 			color: "green",
-			mousein : function(self) {
+			mouseenter : function(self) {
 				self.attr.fill = self.attr.color;
 			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
 			jump : function (self) {
 				console.log("I'm Green, and i'm jumpping");
 			},
-			drag : function(self,data) {
-
-			}
 		});
 
 		// Add circle to canvas
 		var orangeCircle = $.jController.circle({
-			x: 275,
+			x: 425,
 			y: 150,
 			r: 20,
 			color: "orange",
-			fill: "orange",
-			shadow: { color: "green", blur: 3, },
-			click: function(e) {
-				console.log("Small circle - click()")
+			mouseenter : function(self) {
+				self.attr.fill = self.attr.color;
 			},
-			mousein : function(self) {
-				self.attr.shadow.blur = 1;
-			},
-			mouseout : function(self) {
-				self.attr.shadow.blur = 3;
-			},
-			drag : function(self,data) {
-
-			}
-		});
-
-		var magentaCircle = $.jController.circle({
-			x: 50,
-			y: 50,
-			r: 40,
-			color: "magenta",
-			click: function(self){
-				var r = Math.floor(Math.random() * 255);
-				var g = Math.floor(Math.random() * 255);
-				var b = Math.floor(Math.random() * 255);
-				self.attr.fill = "rgb(" + r + "," + g + "," + b + ")";
-
-			},
-			drag : function(self,data) {
-
-			}
-		});
-
-		// Add line to canvas
-		$.jController.line({
-			x: 15,
-			y: 15,
-			w: 165,
-			h: 185,
-			color: "pink",
-			line : { width: 15, },
-			drag : function () {}
-		});
-	
-		// Add rect to jController
-		$.jController.rect({
-			x: 15,
-			y: 100,
-			w: 150,
-			h: 65,
-			color: "grey",
-			shadow: { color: "grey", blur: 10, },
-			line : { width: 3, },
-			// Events
-			click: function(self) {
-				var r = Math.floor(Math.random() * 255);
-				var g = Math.floor(Math.random() * 255);
-				var b = Math.floor(Math.random() * 255);
-				blueCircle.remove();
-				
-				greenCircle.trigger("jump");
-
-				
-				self.attr.fill = "rgb(" + r + "," + g + "," + b + ")"; 
-			},
-			mousein : function(self) {
-				self.attr.fill = "red";
-			},
-			mouseout : function(self) {
+			mouseleave : function(self) {
 				self.attr.fill = undefined;
 			},
-			drag : function (){}
+		});
+
+		var tmpCircle;
+		// Add rect to jController
+		$.jController.rect({
+			x: 0,
+			y: 0,
+			w: 350,
+			h: 170,
+			color: "white",
+			line : { width: 1, },
+			// Events
+			pointerdown: function(self, data) {
+				console.log('pointerdown')
+				tmpCircle = $.jController.circle({
+					x: data.offsetX,
+					y: data.offsetY,
+					r: 20,
+					color: "green",
+				})
+			},
+			pointerup: function(self, data) {
+				tmpCircle.remove();
+			},
 		});
 
 		// Finally call jController
 		$("#controller").jController({
-			
+
 			attr : {
 				width  : 512,
-				height : 512,
+				height : 250,
 			},
-			
+
 			events : {
 				click : function(data) {
 					console.log("jController - click()",data);
 				}
 			}
-		
+
 		});
 
 	});
