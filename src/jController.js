@@ -159,10 +159,12 @@
 
 			if ($.isPlainObject(_onEvent[pluginName]))
 			{
-				// Remove all onEvent for this instance
-				$.each(_onEvent[pluginName][index],function(listenerName, fn) {
-					document.removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
-				});
+				if (_onEvent[pluginName][index]) {
+					// Remove all onEvent for this instance
+					$.each(_onEvent[pluginName][index],function(listenerName, fn) {
+						document.removeEventListener(listenerName, _onEvent[pluginName][index][listenerName], false);
+					});
+				}
 			}
 		}
 
@@ -407,10 +409,14 @@
 
 	// Retrieve all events of PluginName
 	$.jController.getEvents = function(pluginName) {
-		return ($.jController.isPlugin(pluginName) &&
-			$.isPlainObject($.jController.getPlugin(pluginName).events))
-			? $.jController.getPlugin(pluginName).events
-			: null;
+		if (!pluginName) {
+			return _Events;
+		}else{
+			return ($.jController.isPlugin(pluginName) &&
+				$.isPlainObject($.jController.getPlugin(pluginName).events))
+				? $.jController.getPlugin(pluginName).events
+				: null;
+		}
 	}
 
 	// Retrieve a specific pluginName event
